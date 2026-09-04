@@ -1,0 +1,43 @@
+kind: data-model
+layout: star
+entities:
+  - id: sales
+    type: fact
+    name: Sales
+    grain: One row per order line
+    columns:
+      - { name: SalesKey, role: pk }
+      - { name: DateKey, role: fk, ref: dates.DateKey }
+      - { name: ProductKey, role: fk, ref: products.ProductKey }
+      - { name: CustomerKey, role: fk, ref: customers.CustomerKey }
+      - { name: StoreKey, role: fk, ref: stores.StoreKey }
+      - { name: SalesAmount, role: measure }
+  - id: dates
+    type: dimension
+    name: Dates
+    columns:
+      - { name: DateKey, role: pk }
+      - { name: Date, role: attribute }
+  - id: products
+    type: dimension
+    name: Products
+    columns:
+      - { name: ProductKey, role: pk }
+      - { name: ProductName, role: attribute }
+  - id: customers
+    type: dimension
+    name: Customers
+    columns:
+      - { name: CustomerKey, role: pk }
+      - { name: CustomerName, role: attribute }
+  - id: stores
+    type: dimension
+    name: Stores
+    columns:
+      - { name: StoreKey, role: pk }
+      - { name: StoreName, role: attribute }
+relationships:
+  - { from: sales.DateKey, to: dates.DateKey, cardinality: many-to-one }
+  - { from: sales.ProductKey, to: products.ProductKey, cardinality: many-to-one }
+  - { from: sales.CustomerKey, to: customers.CustomerKey, cardinality: many-to-one }
+  - { from: sales.StoreKey, to: stores.StoreKey, cardinality: many-to-one }

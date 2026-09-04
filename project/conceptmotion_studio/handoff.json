@@ -1,0 +1,66 @@
+{
+  "project": "ConceptMotion Studio",
+  "handoff_date": "2026-09-04",
+  "version": "0.4.0-handoff",
+  "goal": "AI-authorable visual explanation and diagram-generation library for SQL, dataframes, DAX/Power BI, modeling, data engineering, pipelines, storage, cloud/Fabric architecture, lineage, algorithms, statistics, ML and DevOps.",
+  "default_theme": "light",
+  "counts": {
+    "catalog_concepts": 186,
+    "domains": 12,
+    "live_scenes": 36,
+    "renderer_families": 28,
+    "printable_sheets": 16,
+    "cross_language_actions": 15,
+    "language_lenses": 8,
+    "recommended_interactive_story": 147,
+    "live_recommended_interactive_story": 33,
+    "planned_recommended_interactive_story": 114
+  },
+  "canonical_scene_version": "1",
+  "canonical_scene_data_location": "data",
+  "legacy_scene_compatibility": true,
+  "primary_handoff_doc": "CODEX_HANDOFF.md",
+  "agent_instructions": "AGENTS.md",
+  "audit": "AUDIT.md",
+  "roadmap": "ROADMAP.md",
+  "qa": "QA_REPORT.md",
+  "research": [
+    "research/visual-references.md",
+    "research/SOURCE_AUDIT.md",
+    "research/user-reference-notes.md",
+    "research/MOVING_VIDEO_SPEC.md"
+  ],
+  "first_commands": [
+    "npm install",
+    "npm run check",
+    "npm run dev"
+  ],
+  "known_environment_limitation": "npm install timed out in the ChatGPT build environment; full Vite/browser QA remains for Codex.",
+  "p0": [
+    "Run full install/build/browser QA and commit lockfile",
+    "Split monolithic renderer registry",
+    "Convert redraw-heavy renderers (including joins) to keyed D3 object-continuity transitions",
+    "Finish canonical scene-schema migration",
+    "Add browser/a11y/visual regression tests",
+    "Implement and browser-test the first cloud/data-model/lineage renderers from the new validated specs"
+  ],
+  "completed_improvements": [
+    "Restored mlweb to its pre-ConceptMotion commit and separated this standalone project",
+    "Added LIVE vs PLANNED catalogue truthfulness and implementation filters",
+    "Expanded live relational join family through RIGHT/FULL/CROSS/semi/anti joins",
+    "Added concrete join result-table semantics with LEFT/RIGHT/FULL/semi/anti invariant tests",
+    "Fixed Bubble Sort to end fully sorted and synchronized operation/code focus",
+    "Fixed DAX REMOVEFILTERS visual/semantic inconsistency",
+    "Expanded paper/handwritten and cross-language cheat-sheet catalogues",
+    "Added provenance/source audit and detailed user-reference descriptions",
+    "Added first-class cloud-diagram, data-model, and lineage spec contracts with pure reference-integrity validation",
+    "Added JSON schemas and seed examples for cloud/Fabric architecture, star schema, and lineage",
+    "Added explicit library-first / lightweight-docs frontend product split to the Codex handoff"
+  ],
+  "generator_contracts": [
+    "cloud-diagram",
+    "data-model",
+    "lineage"
+  ],
+  "generator_renderers_status": "contracts + validation scaffolds added; full live renderers remain Codex work"
+}

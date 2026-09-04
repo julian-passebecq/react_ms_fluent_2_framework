@@ -1,0 +1,20 @@
+{
+  "kind": "lineage",
+  "version": "0.1",
+  "id": "sales-lineage",
+  "title": "Source to Power BI lineage",
+  "layout": "left-to-right",
+  "assets": [
+    { "id": "raw_orders", "type": "table", "layer": "bronze", "label": "raw.orders" },
+    { "id": "stg_orders", "type": "sql-model", "layer": "silver", "label": "stg_orders" },
+    { "id": "fct_sales", "type": "table", "layer": "gold", "label": "fct_sales" },
+    { "id": "semantic_sales", "type": "semantic-model", "layer": "semantic", "label": "Sales model" },
+    { "id": "report_sales", "type": "report", "layer": "report", "label": "Sales dashboard" }
+  ],
+  "flows": [
+    { "from": "raw_orders", "to": "stg_orders", "label": "normalize" },
+    { "from": "stg_orders", "to": "fct_sales", "label": "transform" },
+    { "from": "fct_sales", "to": "semantic_sales", "label": "model" },
+    { "from": "semantic_sales", "to": "report_sales", "label": "visualize" }
+  ]
+}

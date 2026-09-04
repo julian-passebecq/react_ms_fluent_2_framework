@@ -1,0 +1,65 @@
+kind: cloud-diagram
+layout: layered
+providerTheme: fabric
+containers:
+  - id: ingest
+    type: stage
+    label: Ingest
+  - id: process
+    type: stage
+    label: Process
+  - id: serve
+    type: stage
+    label: Serve
+nodes:
+  - id: sources
+    type: data-source
+    label: Source systems
+    container: ingest
+  - id: pipeline
+    type: fabric-pipeline
+    label: Fabric pipeline
+    container: ingest
+  - id: lakehouse
+    type: lakehouse
+    label: Lakehouse
+    container: process
+  - id: notebook
+    type: notebook
+    label: Spark notebook
+    container: process
+  - id: semantic
+    type: semantic-model
+    label: Semantic model
+    container: serve
+  - id: powerbi
+    type: power-bi
+    label: Power BI
+    container: serve
+edges:
+  - from: sources
+    to: pipeline
+    label: ingest
+    style: dashed
+    tone: data
+    animation: { type: packets, speed: medium }
+  - from: pipeline
+    to: lakehouse
+    label: load
+    style: solid
+    tone: data
+  - from: lakehouse
+    to: notebook
+    label: transform
+    style: solid
+    tone: process
+  - from: notebook
+    to: semantic
+    label: curate
+    style: solid
+    tone: process
+  - from: semantic
+    to: powerbi
+    label: serve
+    style: solid
+    tone: serve

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://conceptmotion.dev/schemas/cloud-diagram.schema.json",
+  "title": "ConceptMotion Cloud Diagram Spec",
+  "type": "object",
+  "required": ["kind", "nodes", "edges"],
+  "properties": {
+    "kind": { "const": "cloud-diagram" },
+    "version": { "type": "string" },
+    "id": { "type": "string" },
+    "title": { "type": "string" },
+    "layout": { "type": "string" },
+    "providerTheme": { "type": "string" },
+    "containers": { "type": "array", "items": { "$ref": "#/$defs/container" } },
+    "nodes": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/node" } },
+    "edges": { "type": "array", "items": { "$ref": "#/$defs/edge" } }
+  },
+  "$defs": {
+    "container": {
+      "type": "object",
+      "required": ["id", "label"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "type": { "type": "string" },
+        "tone": { "type": "string" },
+        "children": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "node": {
+      "type": "object",
+      "required": ["id", "label"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "type": { "type": "string" },
+        "icon": { "type": "string" },
+        "provider": { "type": "string" },
+        "container": { "type": "string" },
+        "metadata": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "edge": {
+      "type": "object",
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "string", "minLength": 1 },
+        "to": { "type": "string", "minLength": 1 },
+        "label": { "type": "string" },
+        "direction": { "enum": ["one-way", "two-way"] },
+        "style": { "enum": ["solid", "dashed", "dotted"] },
+        "thickness": { "enum": ["thin", "normal", "heavy"] },
+        "tone": { "type": "string" },
+        "channel": { "type": "string" },
+        "animation": {
+          "type": "object",
+          "properties": {
+            "type": { "enum": ["packets", "march", "pulse", "none"] },
+            "speed": { "type": "string" }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

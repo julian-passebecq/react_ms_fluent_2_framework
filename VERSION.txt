@@ -1,0 +1,3 @@
+ConceptMotion + Fluent foundation Codex handoff v0.7
+Prepared: 2026-09-04
+Purpose: build the reusable foundation before Data Forge v1.

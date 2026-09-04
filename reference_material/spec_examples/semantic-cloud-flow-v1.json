@@ -1,0 +1,24 @@
+{
+  "version": "1-next",
+  "id": "medallion-flow",
+  "figure": {"title": "From source events to a BI model"},
+  "nodes": [
+    {"id": "source", "kind": "source", "label": "Source"},
+    {"id": "bronze", "kind": "store", "label": "Bronze"},
+    {"id": "silver", "kind": "transform", "label": "Silver"},
+    {"id": "gold", "kind": "model", "label": "Gold"},
+    {"id": "bi", "kind": "serve", "label": "BI"},
+    {"id": "orch", "kind": "orchestrator", "label": "Orchestrator"}
+  ],
+  "edges": [
+    {"id": "e1", "source": "source", "target": "bronze", "kind": "stream"},
+    {"id": "e2", "source": "bronze", "target": "silver", "kind": "data"},
+    {"id": "e3", "source": "silver", "target": "gold", "kind": "data"},
+    {"id": "e4", "source": "gold", "target": "bi", "kind": "batch"},
+    {"id": "c1", "source": "orch", "target": "silver", "kind": "control"}
+  ],
+  "steps": [
+    {"caption": "Streaming events land in Bronze", "actions": [{"action": "flow", "from": "source", "to": "bronze", "flowKind": "stream"}]},
+    {"caption": "The orchestrator starts the Silver transform", "actions": [{"action": "flow", "from": "orch", "to": "silver", "flowKind": "control"}]}
+  ]
+}

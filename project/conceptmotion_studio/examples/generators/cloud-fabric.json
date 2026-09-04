@@ -1,0 +1,26 @@
+{
+  "kind": "cloud-diagram",
+  "version": "0.1",
+  "id": "fabric-ingest-serve",
+  "title": "Fabric ingest to serve",
+  "layout": "layered",
+  "providerTheme": "fabric",
+  "containers": [
+    { "id": "ingest", "type": "stage", "label": "Ingest" },
+    { "id": "process", "type": "stage", "label": "Process" },
+    { "id": "serve", "type": "stage", "label": "Serve" }
+  ],
+  "nodes": [
+    { "id": "sources", "type": "data-source", "label": "Source systems", "container": "ingest" },
+    { "id": "pipeline", "type": "fabric-pipeline", "label": "Fabric pipeline", "container": "ingest" },
+    { "id": "lakehouse", "type": "lakehouse", "label": "Lakehouse", "container": "process" },
+    { "id": "semantic", "type": "semantic-model", "label": "Semantic model", "container": "serve" },
+    { "id": "powerbi", "type": "power-bi", "label": "Power BI", "container": "serve" }
+  ],
+  "edges": [
+    { "from": "sources", "to": "pipeline", "label": "ingest", "style": "dashed", "animation": { "type": "packets", "speed": "medium" } },
+    { "from": "pipeline", "to": "lakehouse", "label": "load" },
+    { "from": "lakehouse", "to": "semantic", "label": "curate" },
+    { "from": "semantic", "to": "powerbi", "label": "serve" }
+  ]
+}

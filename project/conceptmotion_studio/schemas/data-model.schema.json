@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://conceptmotion.dev/schemas/data-model.schema.json",
+  "title": "ConceptMotion Data Model Spec",
+  "type": "object",
+  "required": ["kind", "entities", "relationships"],
+  "properties": {
+    "kind": { "const": "data-model" },
+    "version": { "type": "string" },
+    "id": { "type": "string" },
+    "title": { "type": "string" },
+    "layout": { "type": "string" },
+    "entities": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/entity" } },
+    "relationships": { "type": "array", "items": { "$ref": "#/$defs/relationship" } }
+  },
+  "$defs": {
+    "entity": {
+      "type": "object",
+      "required": ["id", "name", "columns"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["fact", "dimension", "bridge", "entity", "semantic", "calculated"] },
+        "subtitle": { "type": "string" },
+        "grain": { "type": "string" },
+        "columns": { "type": "array", "items": { "$ref": "#/$defs/column" } }
+      },
+      "additionalProperties": true
+    },
+    "column": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "role": { "enum": ["pk", "fk", "measure", "attribute", "technical"] },
+        "dataType": { "type": "string" },
+        "ref": { "type": "string" },
+        "hidden": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "relationship": {
+      "type": "object",
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "string", "minLength": 1 },
+        "to": { "type": "string", "minLength": 1 },
+        "cardinality": { "enum": ["one-to-one", "one-to-many", "many-to-one", "many-to-many"] },
+        "filterDirection": { "enum": ["single", "both", "none"] },
+        "active": { "type": "boolean" },
+        "label": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,18 @@
+{
+  "version": "1-next",
+  "id": "table-filter-late-orders",
+  "figure": {
+    "title": "Filtering removes orders that do not match the predicate",
+    "subtitle": "status == late",
+    "takeaway": "Rows keep their identity as they leave or remain in the result."
+  },
+  "entities": [
+    {"id": "order-101", "kind": "row", "data": {"status": "late", "amount": 120}},
+    {"id": "order-102", "kind": "row", "data": {"status": "ok", "amount": 80}},
+    {"id": "order-103", "kind": "row", "data": {"status": "late", "amount": 45}}
+  ],
+  "steps": [
+    {"caption": "Start with all orders", "actions": []},
+    {"caption": "Evaluate the filter", "actions": [{"action": "filter", "target": "orders", "predicate": "status == 'late'"}]}
+  ]
+}

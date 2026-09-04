@@ -1,0 +1,23 @@
+{
+  "name": "conceptmotion-studio",
+  "version": "0.4.0-handoff",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check:offline": "node tests/catalog-smoke.mjs && node tests/scene-smoke.mjs && node tests/data-integrity.mjs && node tests/generator-spec-smoke.mjs && node tests/handoff-smoke.mjs && python3 tests/python-smoke.py",
+    "check": "npm run check:offline && vite build",
+    "report": "node scripts/report.mjs"
+  },
+  "dependencies": {
+    "d3": "7.9.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "5.0.4",
+    "vite": "7.1.7"
+  }
+}
