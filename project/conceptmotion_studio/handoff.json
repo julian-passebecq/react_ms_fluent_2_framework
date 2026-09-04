@@ -1,7 +1,7 @@
 {
-  "project": "ConceptMotion Studio",
+  "project": "Datapass Visual Platform Foundation",
   "handoff_date": "2026-09-04",
-  "version": "0.4.0-handoff",
+  "version": "1.1.0",
   "goal": "AI-authorable visual explanation and diagram-generation library for SQL, dataframes, DAX/Power BI, modeling, data engineering, pipelines, storage, cloud/Fabric architecture, lineage, algorithms, statistics, ML and DevOps.",
   "default_theme": "light",
   "counts": {
@@ -21,9 +21,13 @@
   "legacy_scene_compatibility": true,
   "primary_handoff_doc": "CODEX_HANDOFF.md",
   "agent_instructions": "AGENTS.md",
-  "audit": "AUDIT.md",
+  "audit": "../../V1_AUDIT_SELF_REVIEW.md",
   "roadmap": "ROADMAP.md",
-  "qa": "QA_REPORT.md",
+  "qa": "../../V1_TEST_REPORT.md",
+  "v1_reports": {
+    "migration": "../../V1_MIGRATION_LOG.md",
+    "api_surface": "../../V1_API_SURFACE.md"
+  },
   "research": [
     "research/visual-references.md",
     "research/SOURCE_AUDIT.md",
@@ -31,19 +35,12 @@
     "research/MOVING_VIDEO_SPEC.md"
   ],
   "first_commands": [
-    "npm install",
-    "npm run check",
-    "npm run dev"
+    "pnpm install --frozen-lockfile",
+    "pnpm run check",
+    "pnpm run dev"
   ],
-  "known_environment_limitation": "npm install timed out in the ChatGPT build environment; full Vite/browser QA remains for Codex.",
-  "p0": [
-    "Run full install/build/browser QA and commit lockfile",
-    "Split monolithic renderer registry",
-    "Convert redraw-heavy renderers (including joins) to keyed D3 object-continuity transitions",
-    "Finish canonical scene-schema migration",
-    "Add browser/a11y/visual regression tests",
-    "Implement and browser-test the first cloud/data-model/lineage renderers from the new validated specs"
-  ],
+  "known_environment_limitation": null,
+  "p0": [],
   "completed_improvements": [
     "Restored mlweb to its pre-ConceptMotion commit and separated this standalone project",
     "Added LIVE vs PLANNED catalogue truthfulness and implementation filters",
@@ -55,12 +52,16 @@
     "Added provenance/source audit and detailed user-reference descriptions",
     "Added first-class cloud-diagram, data-model, and lineage spec contracts with pure reference-integrity validation",
     "Added JSON schemas and seed examples for cloud/Fabric architecture, star schema, and lineage",
-    "Added explicit library-first / lightweight-docs frontend product split to the Codex handoff"
+    "Added explicit library-first / lightweight-docs frontend product split to the Codex handoff",
+    "Added pure TypeScript ConceptMotion core and Datapass knowledge packages",
+    "Added framework-independent keyed SVG renderers and thin React adapters",
+    "Added Fluent Catalog, Workbench, Explainer, Workflow, Challenge and Knowledge Atlas surfaces",
+    "Added local Monaco editors, deterministic fixtures, EN/NO chrome and browser QA"
   ],
   "generator_contracts": [
     "cloud-diagram",
     "data-model",
     "lineage"
   ],
-  "generator_renderers_status": "contracts + validation scaffolds added; full live renderers remain Codex work"
+  "generator_renderers_status": "Legacy contracts remain supported; Foundation v1.1 adds reusable diagram, lineage and workflow renderers without implementing Data Forge generation."
 }

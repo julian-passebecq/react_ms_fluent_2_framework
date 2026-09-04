@@ -1,5 +1,7 @@
 # QA report — handoff build
 
+> Historical baseline report. Foundation v1.1 production, legacy, semantic, boundary, accessibility, and browser results are recorded in [`../../V1_TEST_REPORT.md`](../../V1_TEST_REPORT.md).
+
 Date: 2026-09-04
 
 ## Tests executed successfully

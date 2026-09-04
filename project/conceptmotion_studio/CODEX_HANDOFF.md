@@ -1,5 +1,7 @@
 # Codex handoff — ConceptMotion Studio
 
+> Foundation v1.1 was completed on 2026-09-04. This file remains the preserved pre-v1.1 baseline handoff; use [`../../V1_MIGRATION_LOG.md`](../../V1_MIGRATION_LOG.md), [`../../V1_API_SURFACE.md`](../../V1_API_SURFACE.md), [`../../V1_TEST_REPORT.md`](../../V1_TEST_REPORT.md), and [`../../V1_AUDIT_SELF_REVIEW.md`](../../V1_AUDIT_SELF_REVIEW.md) for the implemented result.
+
 **Read this first.** This ZIP is intended to be taken over by Codex as a standalone repository. It is not part of the ML website anymore.
 
 ## 1. Project goal

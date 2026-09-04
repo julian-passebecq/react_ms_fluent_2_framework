@@ -1,23 +1,46 @@
 {
-  "name": "conceptmotion-studio",
-  "version": "0.4.0-handoff",
+  "name": "datapass-visual-platform",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "check:offline": "node tests/catalog-smoke.mjs && node tests/scene-smoke.mjs && node tests/data-integrity.mjs && node tests/generator-spec-smoke.mjs && node tests/handoff-smoke.mjs && python3 tests/python-smoke.py",
-    "check": "npm run check:offline && vite build",
+    "dev": "vite --config apps/studio/vite.config.ts",
+    "dev:legacy": "vite --config vite.config.js",
+    "build": "pnpm run typecheck && vite build --config apps/studio/vite.config.ts",
+    "build:legacy": "vite build --config vite.config.js --outDir dist-legacy",
+    "preview": "vite preview --config apps/studio/vite.config.ts",
+    "test": "vitest run",
+    "test:unit": "vitest run --coverage",
+    "test:legacy": "node tests/catalog-smoke.mjs && node tests/scene-smoke.mjs && node tests/data-integrity.mjs && node tests/generator-spec-smoke.mjs && node tests/handoff-smoke.mjs && node scripts/run-python-smoke.mjs",
+    "test:browser": "playwright test",
+    "test:browser:update": "playwright test --update-snapshots",
+    "typecheck": "tsc -b --pretty false",
+    "check:boundaries": "node scripts/check-boundaries.mjs",
+    "check:offline": "pnpm run test:legacy && pnpm run test:unit && pnpm run check:boundaries",
+    "check": "pnpm run check:offline && pnpm run build && pnpm run build:legacy && pnpm run test:browser",
     "report": "node scripts/report.mjs"
   },
   "dependencies": {
     "d3": "7.9.0",
-    "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "5.0.4",
-    "vite": "7.1.7"
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.62.1",
+    "@types/d3": "7.4.3",
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "@vitejs/plugin-react": "6.1.1",
+    "@vitest/coverage-v8": "5.0.0",
+    "jsdom": "30.0.1",
+    "typescript": "7.0.2",
+    "vite": "8.2.2",
+    "vitest": "5.0.0"
   }
 }

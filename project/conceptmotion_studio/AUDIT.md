@@ -1,5 +1,7 @@
 # Audit — ConceptMotion Studio v0.3 handoff
 
+> Historical baseline audit: its unverified build/browser findings describe the state before Foundation v1.1. See [`../../V1_AUDIT_SELF_REVIEW.md`](../../V1_AUDIT_SELF_REVIEW.md) and [`../../V1_TEST_REPORT.md`](../../V1_TEST_REPORT.md) for the completed implementation and current evidence.
+
 Date: 2026-09-04
 
 ## Executive assessment
