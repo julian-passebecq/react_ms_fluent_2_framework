@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "allowJs": false,
+    "composite": false,
+    "noEmit": true,
+    "types": ["vite/client"]
+  },
+  "include": [
+    "../.storybook/**/*.ts",
+    "../.storybook/**/*.tsx",
+    "./**/*.ts",
+    "./**/*.tsx"
+  ]
+}

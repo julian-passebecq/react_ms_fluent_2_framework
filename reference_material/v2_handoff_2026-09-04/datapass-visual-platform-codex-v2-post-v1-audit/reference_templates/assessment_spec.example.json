@@ -1,0 +1,20 @@
+{
+  "id": "sql-first-query-check",
+  "title": "First query check",
+  "mode": "practice",
+  "questions": [
+    {
+      "id": "q-select-columns",
+      "type": "single-choice",
+      "prompt": "Which clause chooses the columns returned by the query?",
+      "options": [
+        {"id": "a", "label": "SELECT"},
+        {"id": "b", "label": "FROM"},
+        {"id": "c", "label": "WHERE"}
+      ],
+      "correctOptionIds": ["a"],
+      "explanation": "SELECT defines the projected columns.",
+      "conceptIds": ["sql.select"]
+    }
+  ]
+}

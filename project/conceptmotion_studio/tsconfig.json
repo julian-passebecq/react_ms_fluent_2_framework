@@ -2,10 +2,18 @@
   "files": [],
   "references": [
     { "path": "./packages/core" },
+    { "path": "./packages/content" },
     { "path": "./packages/knowledge" },
+    { "path": "./packages/notebook-import" },
     { "path": "./packages/svg" },
     { "path": "./packages/react" },
     { "path": "./packages/ui" },
-    { "path": "./apps/studio" }
+    { "path": "./packages/code" },
+    { "path": "./packages/progress" },
+    { "path": "./packages/figure" },
+    { "path": "./packages/learning" },
+    { "path": "./packages/scaffold" },
+    { "path": "./apps/studio" },
+    { "path": "./apps/dubreu-formation" }
   ]
 }

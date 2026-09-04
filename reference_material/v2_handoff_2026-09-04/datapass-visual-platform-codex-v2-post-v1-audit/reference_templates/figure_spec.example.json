@@ -1,0 +1,14 @@
+{
+  "id": "figure-sql-filter",
+  "kind": "concept",
+  "rendererId": "table.transform",
+  "title": {"en": "WHERE keeps only matching rows", "no": "WHERE beholder bare matchende rader"},
+  "takeaway": "Stable row identities make the filtering decision visible.",
+  "spec": {
+    "sceneId": "sql-where-example"
+  },
+  "conceptIds": ["sql.where"],
+  "fallbackText": "A table where non-matching rows are removed and matching rows remain.",
+  "staticState": 1,
+  "profile": "professional"
+}

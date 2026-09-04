@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { LocaleProvider } from '@datapass/ui';
 import '@datapass/ui/styles.css';
 import { App } from './App';
-import './monaco';
 import './styles.css';
 
 const root = document.getElementById('root');

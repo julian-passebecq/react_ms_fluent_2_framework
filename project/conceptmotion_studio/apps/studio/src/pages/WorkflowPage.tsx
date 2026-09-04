@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import Editor from '@monaco-editor/react';
+import { JsonSpecEditor } from '@datapass/code';
 import {
   Badge,
   Button,
@@ -237,14 +237,18 @@ export function WorkflowPage() {
           </div>
         </div>
         <div className="monaco-frame monaco-frame--compact">
-          <Editor
+          <JsonSpecEditor
             height="430px"
-            language="json"
             value={source}
             onChange={(value) => setSource(value ?? '')}
             path="sales-refresh.workflow.json"
-            theme="vs"
-            options={{ ariaLabel: 'WorkflowSpec JSON editor', minimap: { enabled: false }, fontSize: 12, lineNumbersMinChars: 3, scrollBeyondLastLine: false, automaticLayout: true, tabSize: 2 }}
+            ariaLabel="WorkflowSpec JSON editor"
+            diagnostics={editorIssues.map((issue) => ({
+              severity: issue.severity === 'warning' ? 'warning' : 'error',
+              message: `${issue.path} — ${issue.message}`,
+              source: issue.code,
+            }))}
+            options={{ fontSize: 12 }}
           />
         </div>
         <div className="validation-panel" role="status" aria-live="polite">

@@ -1,6 +1,8 @@
 node_modules/
 dist/
 dist-legacy/
+dist-*/
+storybook-static/
 .vite/
 coverage/
 playwright-report/

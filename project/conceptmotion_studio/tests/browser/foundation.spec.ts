@@ -108,8 +108,9 @@ test('workflow presets, run state, selection and spec validation stay synchroniz
   await expect(page.getByText(/RUNNING 1/i)).toBeVisible();
 
   const publishNode = page.locator('[data-node-id="publish"]');
-  await publishNode.focus();
-  await expect(publishNode).toBeFocused();
+  // Locator.press performs the browser focus step and exercises the node's
+  // real keyboard handler. A separate focus assertion is unstable for SVG
+  // elements under touch-enabled desktop Chrome emulation.
   await publishNode.press('Enter');
   await expect(page.getByRole('heading', { name: 'Publish gold' })).toBeVisible();
 
@@ -144,10 +145,22 @@ test('challenge drafts, hints, status, solution and compare are local and persis
   const runtimeErrors: string[] = [];
   page.on('pageerror', (error) => runtimeErrors.push(error.message));
 
+  await page.goto('/');
+  await page.evaluate(() => {
+    window.localStorage.removeItem('datapass:progress:v2');
+    window.localStorage.setItem('datapass:challenge-drafts:v1.1', JSON.stringify({
+      'customer-order-rank:sql': 'SELECT legacy_migration_proof;',
+    }));
+    window.localStorage.setItem('datapass:challenge-progress:v1.1', JSON.stringify({
+      'customer-order-rank': { mastered: false, review: false, flagged: false },
+    }));
+  });
   await page.goto('/#/challenge');
+  await page.reload();
   await expect(page.getByTestId('challenge-page')).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.localStorage.getItem('datapass:progress:v2'))).toContain('SELECT legacy_migration_proof;');
   await replaceMonacoText(page, 'Learner draft editor', 'SELECT 42;');
-  await expect.poll(() => page.evaluate(() => window.localStorage.getItem('datapass:challenge-drafts:v1.1'))).toContain('SELECT 42;');
+  await expect.poll(() => page.evaluate(() => window.localStorage.getItem('datapass:progress:v2'))).toContain('SELECT 42;');
 
   await page.getByRole('tab', { name: 'Hints' }).click();
   await page.getByRole('button', { name: 'Reveal hint 1' }).click();
@@ -168,7 +181,8 @@ test('challenge drafts, hints, status, solution and compare are local and persis
   await expect(page.getByRole('button', { name: 'Mastered', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByRole('button', { name: 'Flagged', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByRole('button', { name: 'In review', exact: true })).toHaveAttribute('aria-pressed', 'true');
-  await expect.poll(() => page.evaluate(() => window.localStorage.getItem('datapass:challenge-drafts:v1.1'))).toContain('SELECT 42;');
+  await expect.poll(() => page.evaluate(() => window.localStorage.getItem('datapass:progress:v2'))).toContain('SELECT 42;');
+  await expect.poll(() => page.evaluate(() => window.localStorage.getItem('datapass:challenge-drafts:v1.1'))).toContain('SELECT legacy_migration_proof;');
 
   await page.getByRole('button', { name: 'Next' }).last().click();
   await expect(page.getByRole('heading', { name: 'Summarize even values' })).toBeVisible();

@@ -1,0 +1,81 @@
+name: Datapass visual platform CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: datapass-v2-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: project/conceptmotion_studio
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.19.0
+          cache: pnpm
+          cache-dependency-path: project/conceptmotion_studio/pnpm-lock.yaml
+
+      - name: Frozen dependency install
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript project references
+        run: pnpm run typecheck
+
+      - name: Unit and semantic coverage
+        run: pnpm run test:unit
+
+      - name: Package boundary audit
+        run: pnpm run check:boundaries
+
+      - name: Generated application scaffold smoke
+        run: pnpm run test:scaffold
+
+      - name: Studio production build and bundle assertions
+        run: pnpm run build
+
+      - name: Dubreu Formation consumer build
+        run: pnpm run build:consumer
+
+      - name: Preserved legacy build
+        run: pnpm run build:legacy
+
+      - name: Preserved legacy smoke
+        run: pnpm run test:legacy
+
+      - name: Storybook Golden Gallery build
+        run: pnpm run build:storybook
+
+      - name: Install Chrome for Playwright
+        run: pnpm exec playwright install --with-deps chrome
+
+      - name: Desktop and phone browser smoke
+        run: pnpm run test:browser
+
+      - name: Upload browser diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: project/conceptmotion_studio/playwright-report
+          if-no-files-found: ignore

@@ -1,112 +1,151 @@
 # Datapass Visual Platform / ConceptMotion Studio
 
-This directory is the runnable Foundation v1.1 workspace. It turns the earlier ConceptMotion Studio into a side-by-side package foundation for semantic visual explanations, technical diagrams, workflow teaching, challenges, and source-aware documentation.
+This directory is the runnable **Foundation V2** workspace. V2 extends the completed Foundation v1.1 baseline with reusable content, notebook, figure, learning, progress, catalog, and application-scaffold contracts. It does not restart or replace the v1.1 semantic/rendering foundation.
 
-The default app is the TypeScript/Fluent Studio in `apps/studio`. The earlier JavaScript/D3 Studio in `src` is preserved and has dedicated `dev:legacy` and `build:legacy` commands.
+The default application is the TypeScript/Fluent Studio in `apps/studio`. `apps/dubreu-formation` is the first serious proof consumer. The earlier JavaScript/D3 Studio in `src` remains available through the legacy commands.
 
-## Workspace packages
+## What V2 adds
+
+- one shared, lazy `@datapass/code` boundary for Monaco editor, JSON editor, and diff surfaces;
+- serializable `FigureSpec`, course, lesson, notebook-cell, assessment, project, runtime-target, vocabulary, and article contracts in pure `@datapass/content`;
+- a deterministic, non-executing `.ipynb` importer with source hashes, stable cell IDs, saved-output provenance, safe media handling, and Deepnote SQL wrapper extraction;
+- a renderer-adapter registry in `@datapass/figure`, keeping `FigureFrame` and content specs renderer-neutral;
+- reusable notebook lessons, guided Try → Hint → Reveal → Compare exercises, assessment UI, runtime launchers, and progress summaries in `@datapass/learning`;
+- versioned local progress, V1.1 challenge migration, assessment attempts, and domain/concept breakdowns in pure `@datapass/progress`;
+- a validated Project Registry, Project Hub, URL-backed catalog/explorer primitives, and deterministic app recipes;
+- a Storybook Golden Gallery and repository CI for the preserved and new gates.
+
+## Workspace boundaries
 
 | Package | Boundary |
 | --- | --- |
-| `@conceptmotion/core` | Pure TypeScript semantics. No React, Fluent, Monaco, browser DOM, D3 or product host APIs. |
-| `@conceptmotion/svg` | Framework-independent browser SVG rendering, keyed updates, semantic layout/theme roles, renderer registry and freeze/export. Depends only on core. |
-| `@conceptmotion/react` | Thin React host for SVG renderer lifecycle, reduced-motion preference, selection and accessible fallbacks. |
-| `@datapass/ui` | Fluent v9 application composites and EN/NO chrome. It owns layout, not visualization semantics. |
-| `@datapass/knowledge` | Pure TypeScript source/feature/content/change contracts, validation, freshness and deterministic impact resolution. No UI or network behavior. |
-| `@datapass/studio` | Consumer app that composes all five packages with local fixtures. |
+| `@conceptmotion/core` | Preserved v1.1 pure TypeScript semantics. No React, Fluent, Monaco, browser DOM, D3, or product host APIs. |
+| `@conceptmotion/svg` | Preserved v1.1 browser SVG lifecycle, keyed updates, layouts, themes, renderer registry, and freeze/export. Depends only on core. |
+| `@conceptmotion/react` | Preserved thin React host for ConceptMotion renderers and reduced-motion behavior. |
+| `@datapass/knowledge` | Preserved v1.1 pure source/feature/content/change contracts. No React, Fluent, DOM, fetch, crawler, or AI dependency. |
+| `@datapass/content` | Pure serializable V2 content contracts, validation, localization, and canonical JSON. No UI, DOM, Monaco, fetch, or runtime execution. |
+| `@datapass/notebook-import` | Pure deterministic `.ipynb` conversion into content contracts. It parses files and saved outputs; it never runs cells. |
+| `@datapass/code` | The shared lazy Monaco boundary for challenge/spec editing and diff surfaces. Monaco does not belong to `@datapass/ui`. |
+| `@datapass/figure` | React adapter registry that maps `FigureSpec.rendererId` to ConceptMotion, workflow, or safe static renderers. |
+| `@datapass/progress` | Pure versioned progress state, migration, serialization, operations, and guarded storage adapters. |
+| `@datapass/learning` | Fluent/React notebook, exercise, assessment, progress, and external-runtime presentation components. |
+| `@datapass/ui` | Fluent v9 shell, explorer/catalog, Knowledge Atlas, challenge/workflow, and renderer-neutral figure primitives. |
+| `@datapass/scaffold` | Deterministic recipes and generated files for `knowledge`, `learning`, `catalog`, and `portfolio-hub` applications. |
 
-See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the dependency and lifecycle details and the repository-level [`V1_API_SURFACE.md`](../../V1_API_SURFACE.md) for public exports.
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for dependency direction and lifecycle details. The repository-level [`V2_API_SURFACE.md`](../../V2_API_SURFACE.md) records the public exports; [`V1_API_SURFACE.md`](../../V1_API_SURFACE.md) remains the historical v1.1 record.
 
-## Studio surfaces
+## Applications
 
-- **Catalog** — searchable inventory of the v1.1 demonstrations and extension points.
-- **Workbench** — table filter/sort teaching with stable row identity, timeline controls and inspector.
-- **Explainers** — join fan-out, loop state, regression residuals, data/control flow, model lineage and column lineage.
-- **Workflow** — one generic `WorkflowSpec`, deterministic run playback, group focus, task inspector, Airflow/Fabric-ADF/Lakeflow presentation presets and a validated Monaco JSON playground.
-- **Challenge** — local challenge catalog, progressive hints, ConceptMotion explanation, Monaco code/solution/diff, static optional diagnostics and local draft/progress persistence.
-- **Knowledge Atlas** — source-linked article shell, status/version/freshness badges, embedded figure, official source list and deterministic local change impact.
+### Studio
 
-These are demonstration consumers, not separate semantic engines.
+The Studio keeps every v1.1 surface and adds the V2 Project Hub:
+
+- **Catalog** — searchable demonstration inventory; it loads without Monaco.
+- **Workbench** — table filtering/sorting with stable identity, timeline, and inspector.
+- **Explainers** — joins, loops, regression, data/control flow, model lineage, and column lineage.
+- **Workflow** — one provider-neutral workflow model, deterministic run playback, and a lazy JSON spec editor.
+- **Challenge** — progressive hints, ConceptMotion explanation, lazy code/solution/diff surfaces, and migrated local progress.
+- **Knowledge Atlas** — local source/status/version/change fixtures and deterministic impact resolution; it loads without Monaco.
+- **Project Hub** — validated, source-controlled destinations with search, facets, sort/view state, and direct links. Registry status is metadata, not live monitoring.
+
+### Dubreu Formation
+
+`apps/dubreu-formation` demonstrates Python, SQL, advanced SQL, and display-only PySpark lessons using the shared content and learning packages. It includes imported notebooks, a ConceptMotion figure embedded as a notebook cell, editable guided exercises, QCM/assessment, local progress import/export/reset, original-source downloads, and an optional external Colab link.
+
+The available source attachments did not include the private Dubreu course corpus. The consumer therefore uses clearly attributed original representative fixtures rather than claiming conversion of unavailable material.
+
+PySpark, Python, and SQL are **display, explanation, editing, and text comparison only** inside the site. Saved outputs are labeled reference evidence. There is no Spark execution, Python/SQL execution, Jupyter kernel, universal judge, or hidden runtime.
+
+See [`apps/dubreu-formation/README.md`](apps/dubreu-formation/README.md) for consumer details.
 
 ## Requirements and commands
 
-Use Node 22.12 or later and pnpm 11.
+Use Node 22.12 or later and pnpm 11. Run commands from this directory.
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm run dev
+pnpm run check
 ```
-
-The main commands are:
 
 | Command | Purpose |
 | --- | --- |
-| `pnpm run dev` | Run the Foundation v1.1 Studio |
-| `pnpm run dev:legacy` | Run the preserved JavaScript/D3 Studio |
-| `pnpm run typecheck` | Type-check all workspace references |
-| `pnpm run test` | Run the v1.1 Vitest suites |
-| `pnpm run test:legacy` | Run preserved catalog, scene, data, generator, handoff and Python smoke tests |
-| `pnpm run check:boundaries` | Reject forbidden package dependencies/imports |
-| `pnpm run check:offline` | Run legacy smoke tests, unit coverage and boundary checks |
-| `pnpm run build` | Type-check and produce the v1.1 production bundle in `dist` |
-| `pnpm run build:legacy` | Produce the legacy production bundle in `dist-legacy` |
-| `pnpm run test:browser` | Run Playwright desktop and phone checks |
-| `pnpm run check` | Run the complete required QA sequence |
+| `pnpm run dev` | Run the Foundation V2 Studio. |
+| `pnpm run dev:consumer` | Deterministically import reference notebooks, then run Dubreu Formation. |
+| `pnpm run dev:legacy` | Run the preserved JavaScript/D3 Studio. |
+| `pnpm run storybook` | Run the Storybook Golden Gallery on port 6006. |
+| `pnpm run import:reference` | Rebuild canonical Dubreu notebook JSON and public source downloads without execution. |
+| `pnpm run typecheck` | Import reference notebooks, then type-check all workspace references. |
+| `pnpm run test:unit` | Run the coverage-enabled unit and component suites. |
+| `pnpm run test:legacy` | Run preserved catalog, scene, data, generator, handoff, and Python smoke tests. |
+| `pnpm run check:boundaries` | Reject forbidden package dependencies and imports. |
+| `pnpm run test:scaffold` | Generate, test, type-check, and build the app recipe proofs. |
+| `pnpm run test:bundle` | Assert route/Monaco chunk boundaries in the Studio manifest. |
+| `pnpm run build` | Type-check and build the Studio, then run bundle assertions. |
+| `pnpm run build:consumer` | Import reference notebooks and build Dubreu Formation. |
+| `pnpm run build:legacy` | Build the preserved legacy application into `dist-legacy`. |
+| `pnpm run build:storybook` | Build the Golden Gallery into `storybook-static`. |
+| `pnpm run test:browser` | Run Playwright desktop and 390px phone checks. |
+| `pnpm run check:offline` | Run legacy, coverage, boundary, and scaffold gates. |
+| `pnpm run check` | Run the complete required V2 QA sequence. |
 
-Exact delivery results are recorded in [`V1_TEST_REPORT.md`](../../V1_TEST_REPORT.md), not inferred from this README.
+GitHub Actions mirrors the material gates in [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml). Exact delivery results belong in [`V2_TEST_REPORT.md`](../../V2_TEST_REPORT.md); this README does not infer a passing result.
+
+To scaffold a sibling consumer:
+
+```bash
+pnpm scaffold:app --name my-learning-site --preset learning
+```
+
+Valid presets are `knowledge`, `learning`, `catalog`, and `portfolio-hub`. Generation is deterministic and refuses an existing target directory.
 
 ## Authoring model
 
-Author semantic state and stable IDs first. The renderer owns visual geometry; React owns application state and renderer lifecycle.
+Author stable IDs, content relationships, and semantic state before visual geometry:
 
-```ts
-import {
-  compileTableSort,
-  planTransitions,
-  type TableData,
-} from '@conceptmotion/core';
-
-const orders: TableData = {
-  id: 'orders',
-  columns: [{ id: 'amount', label: 'Amount' }],
-  rows: [
-    { id: 'order-17', values: { amount: 80 } },
-    { id: 'order-22', values: { amount: 140 } },
-  ],
-};
-
-const first = compileTableSort(orders, [{ columnId: 'amount', direction: 'asc' }]);
-const next = compileTableSort(orders, [{ columnId: 'amount', direction: 'desc' }]);
-const transition = planTransitions(first.snapshot, next.snapshot);
+```text
+ContentCatalog / NotebookSpec / LessonSpec
+                    |
+             FigureSpec.rendererId
+                    |
+          FigureRendererRegistry adapter
+                    |
+       renderer-neutral FigureFrame surface
 ```
 
-`order-17` and `order-22` remain the entity identities even when their display slots change.
+Reference notebooks are imported into canonical JSON at build/test time. The application renders the generated contracts; it does not evaluate notebook code. Runtime targets are explicit downloads or external launch links and must state where execution would occur.
 
-## Compatibility
+## V1.1 compatibility and deliberate limits
 
-Foundation v1.1 supplements rather than rewrites the baseline:
+Foundation V2 preserves the v1.1 gates:
 
-- the legacy catalog, 36 live scenes, 28 renderer families, printable sheets, Python authoring helper, schemas and generator research remain in place;
-- legacy flat scenes and canonical v1 `data` payloads continue to be normalized by `src/lib/scene.js` in the legacy app;
-- the new default registry is a deliberately smaller seven-renderer foundation, not a claim that every legacy family was migrated;
-- legacy generator contracts stay supported, while Data Forge itself remains outside this pass.
+- the legacy catalog, 36 live scenes, 28 renderer families, printable sheets, Python authoring helper, schemas, and generator research remain side by side;
+- stable entity identity, semantic specs, the shared Airflow/Fabric-ADF/Lakeflow workflow model, column-lineage readiness, semantic icon fallbacks, reduced motion, and EN/NO application locale infrastructure remain intact;
+- ConceptMotion core stays independent of React, Fluent, Monaco, Power BI, and browser DOM;
+- Knowledge stays independent of React, Fluent, DOM, crawlers, fetch, and AI services;
+- generic controls use Fluent v9, while Monaco remains limited to challenge/spec editing and diffs;
+- package entry points are private workspace TypeScript sources, not prepared npm publications.
 
-The package entry points currently export TypeScript source for workspace consumption. They are private v1.1 packages, not a prepared npm publication.
+V2 does not add pipeline execution, notebook execution, a Spark runtime, a Jupyter kernel, a universal code judge, live monitoring/crawling, cloud accounts/sync, DAX Formatter calls, SQL parser integration, Data Forge generation, D3 SDK v2, GeoStory/Narrative Story, Canvas rendering, Web Components, or a Power BI adapter rewrite.
 
-## Deliberate limitations
+## Reports and history
 
-All workflow runs, knowledge changes, challenge content and column lineage are deterministic local fixtures. There is no pipeline execution, universal code judge, live monitoring/crawling, DAX Formatter call, SQL parser, Data Forge generator, D3 SDK v2/GeoStory implementation, Canvas backend, Web Component adapter, or Power BI adapter rewrite.
+The required V2 delivery reports are:
 
-EN/NO support covers reusable application chrome and selected demonstration copy; it is not a full content translation program.
+- [`V2_TEST_REPORT.md`](../../V2_TEST_REPORT.md)
+- [`V2_AUDIT_SELF_REVIEW.md`](../../V2_AUDIT_SELF_REVIEW.md)
+- [`V2_MIGRATION_LOG.md`](../../V2_MIGRATION_LOG.md)
+- [`V2_API_SURFACE.md`](../../V2_API_SURFACE.md)
+- [`V2_BUNDLE_REPORT.md`](../../V2_BUNDLE_REPORT.md)
+- [`V2_CONSUMER_VALIDATION.md`](../../V2_CONSUMER_VALIDATION.md)
 
-## Legacy references
+The preserved v1.1 reports and legacy maintenance references remain useful historical evidence:
 
-The preserved baseline documentation remains useful when maintaining `src`:
-
+- [`V1_TEST_REPORT.md`](../../V1_TEST_REPORT.md)
+- [`V1_AUDIT_SELF_REVIEW.md`](../../V1_AUDIT_SELF_REVIEW.md)
+- [`V1_MIGRATION_LOG.md`](../../V1_MIGRATION_LOG.md)
+- [`V1_API_SURFACE.md`](../../V1_API_SURFACE.md)
 - [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md)
 - [`AUDIT.md`](AUDIT.md)
 - [`ROADMAP.md`](ROADMAP.md)
 - [`QA_REPORT.md`](QA_REPORT.md)
 - [`docs/AUTHORING_CONTRACT.md`](docs/AUTHORING_CONTRACT.md)
-- [`research/SOURCE_AUDIT.md`](research/SOURCE_AUDIT.md)
-- [`research/MOVING_VIDEO_SPEC.md`](research/MOVING_VIDEO_SPEC.md)

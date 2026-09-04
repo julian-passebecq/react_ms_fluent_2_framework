@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
-import Editor, { DiffEditor } from '@monaco-editor/react';
+import { CodeDiff, CodeEditor } from '@datapass/code';
+import { setChallengeDraft, updateChallengeProgress } from '@datapass/progress';
 import {
   Badge,
   Button,
@@ -41,17 +42,11 @@ import {
 import { joinLessonFrames, joinSceneSpec } from '../data/semanticFixtures';
 import { analyzeDraft } from '../lib/challengeDiagnostics';
 import { figureLabels, timelineLabels } from '../lib/localizedChrome';
-import { usePersistentState } from '../lib/usePersistentState';
+import { useProgressStore } from '../lib/useProgressStore';
 import { useTimeline } from '../lib/useTimeline';
 
 type LeftMode = 'description' | 'visualize' | 'hints';
 type RightMode = 'code' | 'solution' | 'compare';
-
-interface ChallengeProgress {
-  mastered?: boolean;
-  flagged?: boolean;
-  review?: boolean;
-}
 
 const difficultyColor = {
   Easy: 'success',
@@ -69,15 +64,21 @@ export function ChallengePage() {
   const [rightMode, setRightMode] = useState<RightMode>('code');
   const [revealed, setRevealed] = useState<Record<string, boolean>>({});
   const [hintCount, setHintCount] = useState<Record<string, number>>({});
-  const [drafts, setDrafts] = usePersistentState<Record<string, string>>('datapass:challenge-drafts:v1.1', {});
-  const [progress, setProgress] = usePersistentState<Record<string, ChallengeProgress>>('datapass:challenge-progress:v1.1', {});
+  const { state: learningProgress, update: updateLearningProgress } = useProgressStore();
   const joinTimeline = useTimeline(joinLessonFrames.length, 'challenge-join');
 
   const challenge = challengeCatalog.find((item) => item.id === selectedId) ?? challengeCatalog[0];
   const variant = challenge.variants.find((item) => item.id === variantId) ?? challenge.variants[0];
   const draftKey = `${challenge.id}:${variant.id}`;
-  const draft = drafts[draftKey] ?? variant.starter;
-  const currentProgress = progress[challenge.id] ?? {};
+  const draft = learningProgress.challenges[challenge.id]?.drafts[variant.id] ?? variant.starter;
+  const currentProgress = learningProgress.challenges[challenge.id] ?? {
+    id: challenge.id,
+    status: 'not-started' as const,
+    drafts: {},
+    mastered: false,
+    review: false,
+    flagged: false,
+  };
   const diagnostics = useMemo(() => analyzeDraft(draft), [draft]);
 
   const filtered = useMemo(() => {
@@ -96,14 +97,13 @@ export function ChallengePage() {
     setRightMode('code');
   };
 
-  const updateDraft = (value: string | undefined) => {
-    setDrafts((current) => ({ ...current, [draftKey]: value ?? '' }));
+  const updateDraft = (value: string) => {
+    updateLearningProgress((current) => setChallengeDraft(current, challenge.id, variant.id, value));
   };
 
-  const updateProgress = (field: keyof ChallengeProgress) => {
-    setProgress((current) => ({
-      ...current,
-      [challenge.id]: { ...current[challenge.id], [field]: !current[challenge.id]?.[field] },
+  const updateProgress = (field: 'mastered' | 'flagged' | 'review') => {
+    updateLearningProgress((current) => updateChallengeProgress(current, challenge.id, {
+      [field]: !current.challenges[challenge.id]?.[field],
     }));
   };
 
@@ -182,7 +182,7 @@ export function ChallengePage() {
                 aria-pressed={item.id === challenge.id}
               >
                 <span><b>{item.title}</b><small>{item.domain} · {item.difficulty}</small></span>
-                {progress[item.id]?.mastered ? <CheckmarkCircle20Filled aria-label="Mastered" /> : null}
+                {learningProgress.challenges[item.id]?.mastered ? <CheckmarkCircle20Filled aria-label="Mastered" /> : null}
               </Button>
             ))}
             {!filtered.length ? <p className="challenge-empty">No challenge matches these filters.</p> : null}
@@ -248,14 +248,13 @@ export function ChallengePage() {
         <div className="challenge-editor-pane">
           {rightMode === 'code' ? (
             <>
-              <Editor
+              <CodeEditor
                 height="100%"
                 path={`learner/${draftKey}`}
                 language={variant.monacoLanguage}
                 value={draft}
                 onChange={updateDraft}
-                theme="vs"
-                options={editorOptions('Learner draft editor')}
+                ariaLabel="Learner draft editor"
               />
               <div className="challenge-editor-actions">
                 <span>{locale === 'no' ? 'Utkast lagret lokalt · ingen kodekjøring' : 'Draft saved locally · no code execution'}</span>
@@ -265,25 +264,26 @@ export function ChallengePage() {
           ) : null}
           {rightMode === 'solution' ? (
             revealed[draftKey] ? (
-              <Editor
+              <CodeEditor
                 height="100%"
                 path={`reference/${draftKey}`}
                 language={variant.monacoLanguage}
                 value={variant.solution}
-                theme="vs"
-                options={{ ...editorOptions('Read-only reference solution'), readOnly: true }}
+                ariaLabel="Read-only reference solution"
+                readOnly
               />
             ) : <RevealSolution onReveal={() => setRevealed((current) => ({ ...current, [draftKey]: true }))} />
           ) : null}
           {rightMode === 'compare' ? (
             revealed[draftKey] ? (
-              <DiffEditor
+              <CodeDiff
                 height="100%"
                 original={variant.solution}
                 modified={draft}
                 language={variant.monacoLanguage}
-                theme="vs"
-                options={{ ...editorOptions('Learner and reference diff'), originalEditable: false, readOnly: true, renderSideBySide: true }}
+                path={`comparison/${draftKey}`}
+                ariaLabel="Learner and reference diff"
+                readOnly
               />
             ) : <RevealSolution onReveal={() => setRevealed((current) => ({ ...current, [draftKey]: true }))} compare />
           ) : null}
@@ -378,20 +378,4 @@ function RevealSolution({ onReveal, compare = false }: { onReveal(): void; compa
       <Button appearance="primary" onClick={onReveal}>{locale === 'no' ? 'Vis referanseløsning' : 'Reveal reference solution'}</Button>
     </div>
   );
-}
-
-function editorOptions(ariaLabel: string) {
-  return {
-    ariaLabel,
-    automaticLayout: true,
-    fontFamily: 'Cascadia Code, Consolas, monospace',
-    fontSize: 13,
-    lineNumbersMinChars: 3,
-    minimap: { enabled: false },
-    padding: { top: 12 },
-    renderWhitespace: 'selection' as const,
-    scrollBeyondLastLine: false,
-    tabSize: 2,
-    wordWrap: 'on' as const,
-  };
 }

@@ -1,0 +1,129 @@
+.project-hub {
+  min-width: 0;
+}
+
+.project-hub__controls,
+.project-hub__drawer-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.project-hub__controls {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.project-hub__facets {
+  min-width: 0;
+}
+
+.project-hub__source-note {
+  margin: 1rem 0 0;
+  padding-top: 0.875rem;
+  border-top: 1px solid #e1e7e8;
+  color: #53666b;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.project-hub__icon {
+  display: grid;
+  min-height: 5.25rem;
+  place-items: center;
+  border: 1px solid #d5e1e2;
+  border-radius: 6px;
+  background: linear-gradient(145deg, #edf6f6, #f8faf9);
+  color: #075a5e;
+}
+
+.project-hub__icon svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.project-hub__table-project {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 12rem;
+}
+
+.project-hub__table-project span:last-child {
+  color: #5d6f73;
+  overflow-wrap: anywhere;
+}
+
+.project-hub__facts {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.project-hub__facts > div {
+  display: grid;
+  gap: 0.375rem;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid #e1e7e8;
+}
+
+.project-hub__facts dt {
+  color: #5d6f73;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.project-hub__facts dd {
+  min-width: 0;
+  margin: 0;
+  color: #203438;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.project-hub__visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+@media (max-width: 42rem) {
+  .project-hub__controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .project-hub__controls > * {
+    width: 100%;
+  }
+
+  .project-hub .dp-entity-card__footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .project-hub .dp-entity-card__actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-hub *,
+  .project-hub *::before,
+  .project-hub *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

@@ -4,7 +4,7 @@ import { mergeClassNames } from './internal';
 
 export interface CatalogShellProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'results'> {
   header?: ReactNode;
-  filters: ReactNode;
+  filters?: ReactNode;
   results: ReactNode;
   detail?: ReactNode;
   filtersLabel?: string;
@@ -22,11 +22,9 @@ export function CatalogShell({
   ...rest
 }: CatalogShellProps) {
   return (
-    <div className={mergeClassNames('dp-catalog-shell', className)} {...rest}>
+    <div className={mergeClassNames('dp-catalog-shell', className)} data-has-filters={filters ? 'true' : 'false'} {...rest}>
       {header ? <div className="dp-catalog-shell__header">{header}</div> : null}
-      <aside className="dp-catalog-shell__filters" aria-label={filtersLabel}>
-        {filters}
-      </aside>
+      {filters ? <aside className="dp-catalog-shell__filters" aria-label={filtersLabel}>{filters}</aside> : null}
       <section className="dp-catalog-shell__results" aria-label={resultsLabel}>
         {results}
       </section>

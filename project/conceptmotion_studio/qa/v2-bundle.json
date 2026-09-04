@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "assertions": {
+    "catalogInitialExcludesMonaco": true,
+    "knowledgeExcludesMonaco": true,
+    "workflowLoadsMonacoDynamically": true,
+    "challengeLoadsMonacoDynamically": true
+  },
+  "initialStaticBytes": 691833,
+  "knowledgeStaticBytes": 823485,
+  "workflowStaticBytes": 813348,
+  "challengeStaticBytes": 832855,
+  "editorLazyBytes": 3906487,
+  "monacoFiles": [
+    "assets/MonacoSurfaces-CofPhXZ4.js",
+    "assets/csharp-BKxtCVv1.js",
+    "assets/jsonMode-B8O__DpN.js",
+    "assets/powershell-DmHpPYUd.js",
+    "assets/python-3Y4giUf3.js",
+    "assets/shell-CC2rA5mh.js",
+    "assets/sql-NEE52Syq.js"
+  ]
+}

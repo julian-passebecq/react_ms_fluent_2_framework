@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Badge, Button, Text } from '@fluentui/react-components';
 import { ArrowReset20Regular, CheckmarkCircle20Regular, Open20Regular } from '@fluentui/react-icons';
-import { ConceptScene } from '@conceptmotion/react';
+import { toCanonicalJsonValue, type FigureSpec } from '@datapass/content';
+import { FigureView } from '@datapass/figure';
 import { computeFreshnessState, resolveLocalizedText as resolveKnowledgeText } from '@datapass/knowledge';
 import {
   ChangeImpactPanel,
   DocsNavigation,
   FeatureStatusBadge,
-  FigureFrame,
   FreshnessBadge,
   KnowledgeHeader,
   KnowledgeShell,
@@ -25,7 +25,6 @@ import {
   runtimeImpact,
   runtimeKnowledgeEntry,
 } from '../data/knowledgeFixtures';
-import { figureLabels } from '../lib/localizedChrome';
 import { usePersistentState } from '../lib/usePersistentState';
 import { useReducedMotion } from '../lib/useTimeline';
 
@@ -38,6 +37,30 @@ export function KnowledgePage() {
   const visualRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
   const diagram = useMemo(() => createPipelineDiagram(flowKind), [flowKind]);
+  const knowledgeFigure = useMemo<FigureSpec>(() => ({
+    id: 'figure.fabric.runtime-medallion',
+    kind: 'diagram',
+    rendererId: 'diagram.flow',
+    title: locale === 'no' ? 'Dataflyt og kontroll er forskjellige ting' : 'Data flow and control are different things',
+    subtitle: locale === 'no' ? 'Samme topologi, tre inntakssemantikker.' : 'The same topology supports three ingestion semantics.',
+    takeaway: flowKind === 'data-batch'
+      ? 'Batch moves bounded groups on a schedule.'
+      : flowKind === 'data-stream'
+        ? 'Streaming represents a continuing event channel.'
+        : 'CDC carries discrete insert, update and delete changes.',
+    spec: toCanonicalJsonValue(diagram),
+    sourceIds: knowledgeSources.map((source) => source.id),
+    conceptIds: ['concept.fabric.runtime-boundary', 'concept.medallion.flow'],
+    featureIds: runtimeKnowledgeEntry.featureIds,
+    verifiedAt: '2026-07-15T09:00:00Z',
+    status: 'source-aware-local-fixture',
+    fallbackText: locale === 'no'
+      ? 'Kildedata går gjennom bronse, sølv og gull til en semantisk modell. Kontroll- og feilbaner er separate.'
+      : 'Source data moves through Bronze, Silver and Gold to a semantic model. Control and failure paths remain separate.',
+    reducedMotionState: 0,
+    staticState: 0,
+    profile: 'professional',
+  }), [diagram, flowKind, locale]);
 
   useEffect(() => {
     const scrollToRouteSection = () => {
@@ -89,13 +112,6 @@ export function KnowledgePage() {
     </OnThisPage>
   );
 
-  const figureFallback = (
-    <div>
-      <p>Source data enters Bronze, is validated in Silver, curated in Gold, then served through a semantic model to BI.</p>
-      <p>The orchestrator uses a control edge. Invalid records follow a separately patterned failure route to quarantine.</p>
-    </div>
-  );
-
   const article = (
     <div className="article-prose">
       <section id="overview">
@@ -112,16 +128,13 @@ export function KnowledgePage() {
         <p>{locale === 'no'
           ? 'Medaljonglagene beskriver datakvalitet og ansvar. Kjøretiden beskriver motoren som flytter data mellom lagene. De bør kunne endres uavhengig.'
           : 'Medallion layers describe data quality and responsibility. The runtime describes the engine that moves data between those layers. They should be able to evolve independently.'}</p>
-        <div ref={visualRef} className="knowledge-figure-host">
-          <FigureFrame
-            {...figureLabels(locale)}
-            title={locale === 'no' ? 'Dataflyt og kontroll er forskjellige ting' : 'Data flow and control are different things'}
-            subtitle={locale === 'no' ? 'Samme topologi, tre inntakssemantikker.' : 'The same topology supports three ingestion semantics.'}
-            takeaway={flowKind === 'data-batch'
-              ? 'Batch moves bounded groups on a schedule.'
-              : flowKind === 'data-stream'
-                ? 'Streaming represents a continuing event channel.'
-                : 'CDC carries discrete insert, update and delete changes.'}
+        <div ref={visualRef} className="knowledge-figure-host" data-testid="knowledge-figure">
+          <FigureView
+            figure={knowledgeFigure}
+            locale={locale}
+            reducedMotion={reducedMotion}
+            selectedId={selectedId}
+            onSelect={setSelectedId}
             toolbar={(
               <div className="toolbar-row" role="group" aria-label="Ingestion flow kind">
                 {pipelineFlowKinds.map((mode) => (
@@ -130,24 +143,9 @@ export function KnowledgePage() {
               </div>
             )}
             exportAction={<SvgExportButton hostRef={visualRef} filename={`fabric-${flowKind}.svg`} />}
-            source="Microsoft Learn source links listed below · diagram text is original"
-            note="Control, failure and recovery paths remain visually distinct without color."
-            fallback={figureFallback}
             fallbackMode="details"
             minimumHeight="24rem"
-          >
-            <div className="visual-host" data-testid="knowledge-figure">
-              <ConceptScene
-                spec={diagram}
-                reducedMotion={reducedMotion}
-                selectedId={selectedId}
-                onSelect={setSelectedId}
-                options={{ locale }}
-                ariaLabel="Source to Bronze, Silver, Gold, semantic model and BI with separate data, control and failure paths"
-                fallback={figureFallback}
-              />
-            </div>
-          </FigureFrame>
+          />
         </div>
       </section>
 

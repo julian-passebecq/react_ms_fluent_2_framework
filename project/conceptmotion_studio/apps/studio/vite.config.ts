@@ -12,12 +12,12 @@ export default defineConfig({
   build: {
     outDir: '../../dist',
     emptyOutDir: true,
+    manifest: true,
     sourcemap: true,
     target: 'es2022',
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('monaco-editor')) return 'monaco';
           if (id.includes('@fluentui')) return 'fluent';
           return undefined;
         }

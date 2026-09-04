@@ -1,8 +1,14 @@
 {
   "project": "Datapass Visual Platform Foundation",
   "handoff_date": "2026-09-04",
-  "version": "1.1.0",
-  "goal": "AI-authorable visual explanation and diagram-generation library for SQL, dataframes, DAX/Power BI, modeling, data engineering, pipelines, storage, cloud/Fabric architecture, lineage, algorithms, statistics, ML and DevOps.",
+  "version": "2.0.0",
+  "foundation_base_version": "1.1.0",
+  "baseline": {
+    "repository": "julian-passebecq/react_ms_fluent_2_framework",
+    "branch": "main",
+    "commit": "d4435f55eb64eb02147e8ff0d51e3014c189fa75"
+  },
+  "goal": "Reusable visual-learning, source-aware documentation, deterministic notebook-content, assessment/progress, project-registry and application-scaffold foundation for Datapass consumers.",
   "default_theme": "light",
   "counts": {
     "catalog_concepts": 186,
@@ -19,15 +25,29 @@
   "canonical_scene_version": "1",
   "canonical_scene_data_location": "data",
   "legacy_scene_compatibility": true,
-  "primary_handoff_doc": "CODEX_HANDOFF.md",
+  "primary_handoff_doc": "README.md",
+  "historical_handoff_doc": "CODEX_HANDOFF.md",
+  "v2_source_handoff": "../../reference_material/v2_handoff_2026-09-04/datapass-visual-platform-codex-v2-post-v1-audit/START_HERE.md",
   "agent_instructions": "AGENTS.md",
-  "audit": "../../V1_AUDIT_SELF_REVIEW.md",
+  "architecture": "docs/ARCHITECTURE.md",
+  "audit": "../../V2_AUDIT_SELF_REVIEW.md",
+  "qa": "../../V2_TEST_REPORT.md",
   "roadmap": "ROADMAP.md",
-  "qa": "../../V1_TEST_REPORT.md",
+  "v2_reports": {
+    "test": "../../V2_TEST_REPORT.md",
+    "audit": "../../V2_AUDIT_SELF_REVIEW.md",
+    "migration": "../../V2_MIGRATION_LOG.md",
+    "api_surface": "../../V2_API_SURFACE.md",
+    "bundle": "../../V2_BUNDLE_REPORT.md",
+    "consumer_validation": "../../V2_CONSUMER_VALIDATION.md"
+  },
   "v1_reports": {
+    "test": "../../V1_TEST_REPORT.md",
+    "audit": "../../V1_AUDIT_SELF_REVIEW.md",
     "migration": "../../V1_MIGRATION_LOG.md",
     "api_surface": "../../V1_API_SURFACE.md"
   },
+  "ci_workflow": "../../.github/workflows/ci.yml",
   "research": [
     "research/visual-references.md",
     "research/SOURCE_AUDIT.md",
@@ -37,10 +57,21 @@
   "first_commands": [
     "pnpm install --frozen-lockfile",
     "pnpm run check",
-    "pnpm run dev"
+    "pnpm run dev",
+    "pnpm run dev:consumer"
   ],
+  "source_material_status": "The private Dubreu course corpus was not present in the supplied attachments; the V2 consumer uses attributed original representative fixtures and does not claim private-course conversion.",
+  "execution_policy": "Python, SQL and PySpark are display, explanation, editing and text-comparison content only. Foundation V2 includes no Spark execution, notebook execution, Python/SQL execution, Jupyter kernel or universal code judge.",
   "known_environment_limitation": null,
   "p0": [],
+  "v1_1_gates": [
+    "Preserve ConceptMotion core independence from React, Fluent, Monaco, Power BI and browser DOM",
+    "Preserve Datapass knowledge independence from React, Fluent, DOM, crawlers, fetch and AI services",
+    "Preserve semantic-first specs, stable object identity and renderer-owned geometry",
+    "Preserve the shared Airflow/Fabric-ADF/Lakeflow workflow semantic model",
+    "Preserve Fluent v9 generic controls, EN/NO chrome, reduced motion and accessible fallbacks",
+    "Preserve legacy application, scene normalization, renderer families, schemas, fixtures and smoke gates"
+  ],
   "completed_improvements": [
     "Restored mlweb to its pre-ConceptMotion commit and separated this standalone project",
     "Added LIVE vs PLANNED catalogue truthfulness and implementation filters",
@@ -56,12 +87,21 @@
     "Added pure TypeScript ConceptMotion core and Datapass knowledge packages",
     "Added framework-independent keyed SVG renderers and thin React adapters",
     "Added Fluent Catalog, Workbench, Explainer, Workflow, Challenge and Knowledge Atlas surfaces",
-    "Added local Monaco editors, deterministic fixtures, EN/NO chrome and browser QA"
+    "Added local Monaco editors, deterministic fixtures, EN/NO chrome and browser QA",
+    "Centralized Monaco in a shared lazy code package and route-level lazy application surfaces",
+    "Added pure serializable content, figure, notebook, course, assessment, project, runtime, vocabulary and article contracts",
+    "Added deterministic non-executing IPYNB import with Deepnote SQL extraction, stable IDs, canonical JSON and source provenance",
+    "Added a FigureSpec adapter registry with ConceptMotion, workflow and guarded static renderers",
+    "Added reusable notebook, guided exercise, assessment, runtime and progress learning surfaces",
+    "Added progress schema V2 with V1.1 challenge migration, local import/export and domain/concept breakdowns",
+    "Added the Dubreu Formation Python/SQL/advanced-SQL/display-only-PySpark proof consumer",
+    "Added a validated Project Registry, Project Hub, URL-backed explorer state and deterministic application presets",
+    "Added the Storybook Golden Gallery and repository CI workflow"
   ],
   "generator_contracts": [
     "cloud-diagram",
     "data-model",
     "lineage"
   ],
-  "generator_renderers_status": "Legacy contracts remain supported; Foundation v1.1 adds reusable diagram, lineage and workflow renderers without implementing Data Forge generation."
+  "generator_renderers_status": "Legacy contracts remain supported; Foundation V2 adds reusable content/figure adapters and a deterministic application scaffold without implementing Data Forge generation."
 }

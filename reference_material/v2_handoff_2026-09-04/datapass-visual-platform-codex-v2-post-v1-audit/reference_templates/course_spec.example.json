@@ -1,0 +1,22 @@
+{
+  "id": "dubreu-sql",
+  "title": {"en": "SQL Course", "no": "SQL-kurs"},
+  "summary": "Structured lesson view imported from source notebooks.",
+  "modules": [
+    {
+      "id": "sql-foundations",
+      "title": "SQL Foundations",
+      "lessons": [
+        {
+          "id": "sql-first-query",
+          "title": "First query",
+          "notebookId": "nb-sql-first-query",
+          "conceptIds": ["sql.select", "sql.from"],
+          "figureIds": [],
+          "assessmentIds": ["sql-first-query-check"]
+        }
+      ]
+    }
+  ],
+  "sourceIds": ["source-dubreu-sql"]
+}

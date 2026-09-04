@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Button,
   Caption1,
@@ -24,13 +24,15 @@ import {
 } from '@datapass/ui';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { CatalogPage } from './pages/CatalogPage';
-import { ChallengePage } from './pages/ChallengePage';
-import { ExplainersPage } from './pages/ExplainersPage';
-import { KnowledgePage } from './pages/KnowledgePage';
-import { WorkbenchPage } from './pages/WorkbenchPage';
-import { WorkflowPage } from './pages/WorkflowPage';
 
-export type ViewId = 'catalog' | 'workbench' | 'explainers' | 'workflow' | 'challenge' | 'knowledge';
+const ChallengePage = lazy(() => import('./pages/ChallengePage').then((module) => ({ default: module.ChallengePage })));
+const ExplainersPage = lazy(() => import('./pages/ExplainersPage').then((module) => ({ default: module.ExplainersPage })));
+const KnowledgePage = lazy(() => import('./pages/KnowledgePage').then((module) => ({ default: module.KnowledgePage })));
+const ProjectHubPage = lazy(() => import('./pages/ProjectHubPage').then((module) => ({ default: module.ProjectHubPage })));
+const WorkbenchPage = lazy(() => import('./pages/WorkbenchPage').then((module) => ({ default: module.WorkbenchPage })));
+const WorkflowPage = lazy(() => import('./pages/WorkflowPage').then((module) => ({ default: module.WorkflowPage })));
+
+export type ViewId = 'catalog' | 'workbench' | 'explainers' | 'workflow' | 'challenge' | 'knowledge' | 'projects';
 
 const views: Array<{ id: ViewId; label: { en: string; no: string }; icon: typeof AppsListDetail24Regular }> = [
   { id: 'catalog', label: { en: 'Catalog', no: 'Katalog' }, icon: AppsListDetail24Regular },
@@ -39,6 +41,7 @@ const views: Array<{ id: ViewId; label: { en: string; no: string }; icon: typeof
   { id: 'workflow', label: { en: 'Workflow', no: 'Arbeidsflyt' }, icon: Flow24Regular },
   { id: 'challenge', label: { en: 'Challenge', no: 'Oppgave' }, icon: Code24Regular },
   { id: 'knowledge', label: { en: 'Knowledge Atlas', no: 'Kunnskapsatlas' }, icon: BookOpen24Regular },
+  { id: 'projects', label: { en: 'Project Hub', no: 'Prosjekthub' }, icon: AppsListDetail24Regular },
 ];
 
 function routeFromHash(): ViewId {
@@ -92,8 +95,8 @@ export function App() {
         <div className="foundation-note">
           <Braces24Regular aria-hidden />
           <div>
-            <Text weight="semibold">Foundation v1.1</Text>
-            <Caption1 block>Semantic specs · local fixtures</Caption1>
+            <Text weight="semibold">Foundation v2</Text>
+            <Caption1 block>V1.1 gates · semantic specs</Caption1>
           </div>
         </div>
       )}
@@ -142,14 +145,17 @@ export function App() {
       mainLabel={locale === 'no' ? 'Datapass arbeidsområde' : 'Datapass workspace'}
       skipLinkLabel={locale === 'no' ? 'Hopp til innhold' : 'Skip to content'}
     >
-      <ErrorBoundary key={view}>
-        {view === 'catalog' && <CatalogPage onNavigate={navigate} />}
-        {view === 'workbench' && <WorkbenchPage />}
-        {view === 'explainers' && <ExplainersPage />}
-        {view === 'workflow' && <WorkflowPage />}
-        {view === 'challenge' && <ChallengePage />}
-        {view === 'knowledge' && <KnowledgePage />}
-      </ErrorBoundary>
+      <Suspense fallback={<div role="status" aria-live="polite">{locale === 'no' ? `Laster ${currentLabel}…` : `Loading ${currentLabel}…`}</div>}>
+        <ErrorBoundary key={view}>
+          {view === 'catalog' && <CatalogPage onNavigate={navigate} />}
+          {view === 'workbench' && <WorkbenchPage />}
+          {view === 'explainers' && <ExplainersPage />}
+          {view === 'workflow' && <WorkflowPage />}
+          {view === 'challenge' && <ChallengePage />}
+          {view === 'knowledge' && <KnowledgePage />}
+          {view === 'projects' && <ProjectHubPage />}
+        </ErrorBoundary>
+      </Suspense>
     </AppShell>
   );
 }

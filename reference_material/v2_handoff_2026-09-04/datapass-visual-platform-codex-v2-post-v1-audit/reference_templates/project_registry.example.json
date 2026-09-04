@@ -1,0 +1,20 @@
+[
+  {
+    "id": "portfolio",
+    "title": "Datapass Portfolio",
+    "url": "https://datapassj.com/",
+    "status": "active",
+    "kind": "portfolio",
+    "features": ["experience", "portfolio", "certifications"],
+    "technologies": ["web"],
+    "featured": true
+  },
+  {
+    "id": "d3-studio",
+    "title": "D3 Visual Studio",
+    "url": "https://d3ecosite.netlify.app/sandbox/",
+    "status": "active",
+    "kind": "visualization-studio",
+    "features": ["D3", "editorial charts", "generator"]
+  }
+]

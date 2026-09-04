@@ -1,0 +1,30 @@
+{
+  "id": "nb-sql-first-query",
+  "title": "First query",
+  "language": "sql",
+  "execution": "none",
+  "source": {
+    "file": "1. Première Requête.ipynb",
+    "sha256": "dccb2a11713f8094745ea40b6badb6f71712712e7445b32b0f65d34273be5531"
+  },
+  "cells": [
+    {
+      "id": "nb-sql-first-query:intro",
+      "type": "markdown",
+      "content": "Introduction to SELECT and FROM."
+    },
+    {
+      "id": "nb-sql-first-query:query-1",
+      "type": "code",
+      "language": "sql",
+      "source": "SELECT productID, category FROM 'controlGest/product.csv'",
+      "editable": true,
+      "execution": "none"
+    },
+    {
+      "id": "nb-sql-first-query:figure-1",
+      "type": "figure",
+      "figureId": "figure-sql-select-columns"
+    }
+  ]
+}

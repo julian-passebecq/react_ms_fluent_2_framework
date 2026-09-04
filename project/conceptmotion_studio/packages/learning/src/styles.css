@@ -1,0 +1,295 @@
+.dp-learning-eyebrow {
+  margin: 0 0 0.25rem;
+  color: var(--colorBrandForeground1, #0f6cbd);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+}
+
+.dp-notebook-lesson,
+.dp-assessment-runner,
+.dp-runtime-launcher,
+.dp-progress-summary {
+  min-width: 0;
+}
+
+.dp-notebook-lesson__header,
+.dp-assessment-runner__header,
+.dp-guided-exercise__header,
+.dp-runtime-launcher__header,
+.dp-progress-summary > header,
+.dp-progress-summary__lesson-progress > div,
+.dp-assessment-runner__footer,
+.dp-assessment-result,
+.dp-notebook-cell__label,
+.dp-notebook-output__notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dp-notebook-lesson__header,
+.dp-assessment-runner__header {
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.dp-notebook-lesson :where(h1, h2, h3, p),
+.dp-assessment-runner :where(h1, h2, h3, p),
+.dp-guided-exercise :where(h2, h3, p),
+.dp-runtime-launcher :where(h2, p),
+.dp-progress-summary :where(h2, p) {
+  margin-block-start: 0;
+}
+
+.dp-notebook-provenance {
+  display: grid;
+  gap: 0.375rem;
+  min-width: min(100%, 20rem);
+  margin: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--colorNeutralStroke2, #e0e0e0);
+  border-radius: var(--borderRadiusMedium, 4px);
+  background: var(--colorNeutralBackground2, #fafafa);
+  font-size: 0.75rem;
+}
+
+.dp-notebook-provenance > div {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: 0.5rem;
+}
+
+.dp-notebook-provenance dt { color: var(--colorNeutralForeground3, #616161); }
+.dp-notebook-provenance dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+
+.dp-notebook-lesson__cells {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.dp-notebook-cell {
+  min-width: 0;
+}
+
+.dp-notebook-cell--markdown,
+.dp-notebook-cell--text-output,
+.dp-notebook-cell--table-output,
+.dp-notebook-cell--image-output {
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+  border: 1px solid var(--colorNeutralStroke2, #e0e0e0);
+  border-radius: var(--borderRadiusLarge, 6px);
+  background: var(--colorNeutralBackground1, #fff);
+}
+
+.dp-notebook-markdown { line-height: 1.65; }
+.dp-notebook-markdown > :last-child { margin-bottom: 0; }
+
+.dp-notebook-cell pre,
+.dp-guided-exercise pre,
+.dp-assessment-code {
+  max-width: 100%;
+  padding: 0.75rem;
+  overflow-x: auto;
+  border: 1px solid var(--colorNeutralStroke2, #e0e0e0);
+  border-radius: var(--borderRadiusMedium, 4px);
+  background: var(--colorNeutralBackground3, #f5f5f5);
+  color: var(--colorNeutralForeground1, #242424);
+  font: 0.8rem/1.55 "Cascadia Code", Consolas, monospace;
+}
+
+.dp-notebook-cell__label,
+.dp-notebook-output__notice {
+  justify-content: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.dp-notebook-output__notice {
+  align-items: flex-start;
+  padding: 0.625rem;
+  border-left: 3px solid var(--colorBrandStroke1, #0f6cbd);
+  background: var(--colorNeutralBackground2, #fafafa);
+  font-size: 0.8rem;
+}
+
+.dp-notebook-table-wrap { max-width: 100%; overflow-x: auto; }
+
+.dp-notebook-table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.dp-notebook-table-wrap caption {
+  padding: 0.5rem 0;
+  color: var(--colorNeutralForeground3, #616161);
+  text-align: left;
+}
+
+.dp-notebook-table-wrap :where(th, td) {
+  padding: 0.5rem 0.625rem;
+  border-bottom: 1px solid var(--colorNeutralStroke2, #e0e0e0);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.dp-notebook-output img { display: block; max-width: 100%; height: auto; }
+
+.dp-guided-exercise {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.875rem;
+  min-width: 0;
+  padding: 1rem;
+}
+
+.dp-guided-exercise__header { align-items: flex-start; }
+
+.dp-guided-exercise__editor,
+.dp-guided-exercise__comparison {
+  min-width: 0;
+  min-height: 12rem;
+  overflow: hidden;
+  border: 1px solid var(--colorNeutralStroke2, #e0e0e0);
+  border-radius: var(--borderRadiusMedium, 4px);
+}
+
+.dp-guided-exercise__comparison { padding: 0.75rem; }
+
+.dp-guided-exercise__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.dp-guided-exercise__hints,
+.dp-guided-exercise__solution {
+  padding: 0.875rem;
+  border-left: 3px solid var(--colorPaletteDarkOrangeBorderActive, #a15c00);
+  background: var(--colorNeutralBackground2, #fafafa);
+}
+
+.dp-guided-exercise__hints > :last-child,
+.dp-guided-exercise__solution > :last-child { margin-bottom: 0; }
+
+.dp-assessment-runner__questions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  margin-block: 1.25rem;
+}
+
+.dp-assessment-question {
+  min-width: 0;
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid var(--colorNeutralStroke2, #e0e0e0);
+  border-radius: var(--borderRadiusLarge, 6px);
+}
+
+.dp-assessment-question > legend {
+  max-width: calc(100% - 1rem);
+  padding-inline: 0.25rem;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.dp-assessment-options,
+.dp-assessment-matching {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.5rem;
+}
+
+.dp-assessment-option {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--colorNeutralStroke2, #e0e0e0);
+  border-radius: var(--borderRadiusMedium, 4px);
+}
+
+.dp-assessment-option .dp-figure-frame { margin-top: 0.5rem; }
+.dp-assessment-code { width: 100%; min-width: 0; }
+
+.dp-assessment-ordering {
+  display: grid;
+  gap: 0.5rem;
+  padding-left: 1.75rem;
+}
+
+.dp-assessment-ordering > li,
+.dp-assessment-matching > label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--colorNeutralStroke2, #e0e0e0);
+}
+
+.dp-assessment-ordering__buttons { display: flex; gap: 0.375rem; }
+.dp-assessment-question > [role="alert"],
+.dp-assessment-question > [role="status"] { margin-top: 0.75rem; }
+
+.dp-assessment-result { justify-content: flex-start; }
+
+.dp-runtime-launcher { margin-top: 1.25rem; }
+.dp-runtime-launcher__header { align-items: flex-start; }
+.dp-runtime-launcher__targets { display: grid; gap: 0.75rem; }
+.dp-runtime-target { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.75rem; padding: 0.875rem; }
+.dp-runtime-target p { margin: 0.25rem 0; }
+.dp-runtime-target__requirements { grid-column: 1 / -1; margin: 0; }
+
+.dp-progress-summary {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--colorNeutralStroke2, #e0e0e0);
+  border-radius: var(--borderRadiusLarge, 6px);
+  background: var(--colorNeutralBackground1, #fff);
+}
+
+.dp-progress-summary__lesson-progress { display: grid; gap: 0.375rem; }
+.dp-progress-summary__metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; margin: 0; }
+.dp-progress-summary__metrics > div { padding: 0.625rem; background: var(--colorNeutralBackground2, #fafafa); }
+.dp-progress-summary__metrics dt { color: var(--colorNeutralForeground3, #616161); font-size: 0.75rem; }
+.dp-progress-summary__metrics dd { margin: 0.25rem 0 0; font-weight: 700; }
+
+@media (max-width: 50rem) {
+  .dp-notebook-lesson__header,
+  .dp-assessment-runner__header,
+  .dp-guided-exercise__header,
+  .dp-runtime-launcher__header,
+  .dp-assessment-runner__footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .dp-runtime-target { grid-template-columns: minmax(0, 1fr); }
+  .dp-progress-summary__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 32rem) {
+  .dp-notebook-provenance > div,
+  .dp-progress-summary__metrics { grid-template-columns: minmax(0, 1fr); }
+  .dp-assessment-ordering > li,
+  .dp-assessment-matching > label { align-items: stretch; flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dp-notebook-lesson *,
+  .dp-guided-exercise *,
+  .dp-assessment-runner *,
+  .dp-runtime-launcher *,
+  .dp-progress-summary * {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
