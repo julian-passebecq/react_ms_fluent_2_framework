@@ -20,8 +20,8 @@ The Studio's preserved manifest audit reports initial Catalog closure **705,177 
 ## Meaningful lazy payloads
 
 - Code Sandbox's full public practice chunk is **706.54 kB raw / 127.17 kB gzip**, down from the pre-projection raw-source chunk of 1050.51 / 148.64. The full 323 items and 500 variants remain; redundant private/raw provenance is outside the public graph.
-- Code Interview's lazy Session chunk is **902.03 kB raw / 181.86 kB gzip**. Its initial session selection does not load the full corpus/editor.
-- Pilot's Projects, Ideas and Backups are separate lazy routes. Projects is **131.47 kB raw / 37.54 kB gzip**.
+- Code Interview's lazy Session chunk is **902.03 kB raw / 181.87 kB gzip**. Its initial session selection does not load the full corpus/editor.
+- Pilot's Projects, Ideas and Backups are separate lazy routes. Projects is **131.47 kB raw / 37.53 kB gzip**.
 - Shared Monaco implementation is approximately **2676.21 kB raw / 689.06 kB gzip** in coding consumers; JSON language service is about **1207.73 / 307.21**. The Studio audit counts **3,906,487 lazy editor bytes** including language chunks. Local editor/JSON workers are separate assets.
 
 Vite's >500 kB warnings remain visible. V3 does not hide them by inflating the warning limit or blocking release solely on the intentionally lazy Monaco payload. The bounded initial-route ceilings prevent an editor or full corpus from silently becoming an entry dependency.

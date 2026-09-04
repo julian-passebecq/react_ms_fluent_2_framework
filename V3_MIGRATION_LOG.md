@@ -38,6 +38,14 @@ Retained every old QA gate and added full-corpus reconciliation, all-scene seman
 
 See the test/audit reports for final evidence. No deployment beyond the explicitly requested repository commit/push and hosted GitHub Actions was performed.
 
+### 6. Hosted cross-platform verification
+
+The first V3 implementation commit `f7737fbc0825323408c88e2534f7a5fcd0083604` passed all non-browser hosted stages and 34 of 36 browser cases in [run 33921026472](https://github.com/julian-passebecq/react_ms_fluent_2_framework/actions/runs/33921026472). The two failures were Linux phone horizontal overflow in Sandbox's native track selector and Pilot's backup form. Existing screenshot comparisons passed. Downloaded failure images isolated platform-font intrinsic widths; no screenshot tolerance or browser assertion was relaxed.
+
+Commit `57a79fca5fe4ff3a78b08cc18b2bce98d7a68074` adds scoped width constraints and font-stress regressions. The Sandbox regression reproduced 18 pixels of overflow locally before its fix; all 12 targeted Sandbox/Interview/Pilot browser cases passed afterward. The complete matrix now has 40 cases, including 390/360/320-pixel Sandbox checks and a long-filename Pilot restore with wider select metrics. Final full local and hosted outcomes are recorded in the test report.
+
+[Run 33923038383](https://github.com/julian-passebecq/react_ms_fluent_2_framework/actions/runs/33923038383) concluded **success**, including all 40 Linux browser cases in 6.1 minutes and every earlier gate. Final screenshot review then strengthened submitted Interview answer-label styling against Fluent's disabled-state specificity, with an explicit red/green computed-color regression preserving disabled semantics. The delivery commit records observed evidence and still requires its own hosted green check before handoff.
+
 ## Migration/rollback notes
 
 Existing V1.1/V2 keys and IDs remain readable. Formation's filesystem rename is the intentional path change; use `pnpm run dev:consumer` and `dist-formation`. New apps own distinct local keys. Pilot and practice backups are explicit local files; preserve them before clearing browser data. No automatic migration from the old external trainer's browser storage is claimed. Historical V1/V2 reports and source handoffs remain unchanged.

@@ -90,6 +90,12 @@ test('Code Interview uses distinct sessions, submission review, flags and domain
   await page.getByRole('button', { name: 'Flag question 1', exact: true }).click();
   await page.getByRole('button', { name: 'Submit assessment' }).click();
   await expect(page.getByText('2 / 4', { exact: true })).toBeVisible();
+  const submittedRadios = page.getByRole('radio');
+  await expect(submittedRadios).toHaveCount(6);
+  for (const radio of await submittedRadios.all()) await expect(radio).toBeDisabled();
+  const answerLabels = page.locator('.dp-assessment-question .fui-Radio__label');
+  await expect(answerLabels).toHaveCount(6);
+  for (const label of await answerLabels.all()) await expect(label).toHaveCSS('color', 'rgb(23, 43, 66)');
   await accessible(page);
   await page.screenshot({ path: `qa/screenshots/v3-code-interview-${info.project.name}.png`, animations: 'disabled' });
   await page.getByRole('button', { name: 'Progress', exact: true }).click();

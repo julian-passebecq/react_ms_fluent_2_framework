@@ -16,6 +16,8 @@ The desktop/phone matrix is 1440×1000 and 390×844 in Chrome, with reduced-moti
 
 The full browser matrix requires zero serious/critical Axe findings and no page-level horizontal overflow on primary surfaces. Primary controls have keyboard paths. Narrow FigurePlayer canvases retain readable marks in a keyboard-focusable horizontal pan region; surrounding prose/captions remain full-width and readable. Panning does not create page overflow. The existing V2 table/workflow screenshot assertions remain enabled.
 
+Cross-platform regressions additionally stress native select font metrics: Sandbox selects its longest track option at 390, 360 and 320 pixels; Pilot previews an overlay file with a long filename and checks every backup control against the panel bounds. These reproduce the intrinsic-width mechanism found by Linux CI without hiding overflow or weakening accessibility assertions.
+
 ## Visual language and review
 
 The bundled Formation image was used as direction, not copied as a literal page. Shared Fluent controls sit on warm neutral surfaces with navy text, restrained teal and sparse amber. Message-first titles/takeaways and textual explanations carry the lesson. Professional Figure profiles use shared renderer tokens; default V2 geometry is unchanged. No theme engine, neon hero or decorative force simulation was added.

@@ -25,7 +25,7 @@ Preserved gates include pure ConceptMotion core, pure knowledge, semantic-first 
 
 - Missing Linux baseline images: restored from reviewed failed-run artifacts; hosted V2 green proved separately.
 - Pilot inline navigation overlap and phone filter density: scoped layout and collapsible filters.
-- Submitted Interview answer labels: readable contrast despite disabled controls.
+- Submitted Interview answer labels: readable contrast despite disabled controls. Final screenshot review exposed Fluent's higher-specificity disabled rule; a targeted sibling selector and explicit computed-color assertions now verify all six read-only labels while preserving disabled semantics.
 - Monaco browser edits: keyboard-focus the actual accessible native edit context instead of the inactive textarea.
 - Figure export: unavailable/fallback renderers no longer advertise SVG export; filenames sanitized.
 - Mobile scenes: scoped pannable production canvas plus accessible text/captions and keyboard region.
@@ -34,6 +34,7 @@ Preserved gates include pure ConceptMotion core, pure knowledge, semantic-first 
 - Private source repository links: visibility audit drives removal from public runtime output and an emitted-file privacy gate.
 - Visual Sandbox resource safety: joins are rejected before multiplicative compilation when candidate pairs/cells exceed the preview budget; table cells, nesting, arrays, frames and UTF-8 input bytes are bounded.
 - Multi-figure accessibility: per-instance SVG title/description references avoid same-family collisions in long lessons.
+- Hosted Linux phone overflow: native select option widths exposed an intrinsic-width issue in Sandbox filters and Pilot's backup grid. Scoped shrinkable controls and an explicit `minmax(0, 1fr)` grid track address the cause; new fallback-font/control-bound regressions retain all options, Axe checks and the original one-pixel overflow limit.
 
 ## Intentional limitations
 
