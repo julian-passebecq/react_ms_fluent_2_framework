@@ -1,0 +1,31 @@
+{
+  "kind": "workflow",
+  "version": "1",
+  "id": "lakeflow-medallion-job",
+  "title": "Lakeflow job preset example",
+  "preset": "databricks-lakeflow",
+  "layout": { "direction": "lr", "density": "compact" },
+  "nodes": [
+    { "id": "ingest", "label": "Ingest Bronze", "taskType": "notebook", "providerType": "Notebook task", "metadata": { "compute": "serverless" } },
+    { "id": "silver", "label": "Transform Silver", "taskType": "pipeline", "providerType": "Pipeline task" },
+    { "id": "dbt", "label": "Build marts", "taskType": "dbt", "providerType": "dbt task" },
+    { "id": "quality", "label": "Quality checks", "taskType": "sql", "providerType": "SQL task" }
+  ],
+  "edges": [
+    { "from": "ingest", "to": "silver", "condition": "dependency", "dataFlowKind": "stream" },
+    { "from": "silver", "to": "dbt", "condition": "dependency", "dataFlowKind": "lineage" },
+    { "from": "dbt", "to": "quality", "condition": "dependency" }
+  ],
+  "runs": [
+    {
+      "id": "run-success",
+      "label": "Successful run",
+      "frames": [
+        { "id": "f0", "states": { "ingest": { "status": "running" }, "silver": { "status": "pending" }, "dbt": { "status": "pending" }, "quality": { "status": "pending" } } },
+        { "id": "f1", "states": { "ingest": { "status": "success" }, "silver": { "status": "running" }, "dbt": { "status": "pending" }, "quality": { "status": "pending" } } },
+        { "id": "f2", "states": { "ingest": { "status": "success" }, "silver": { "status": "success" }, "dbt": { "status": "running" }, "quality": { "status": "pending" } } },
+        { "id": "f3", "states": { "ingest": { "status": "success" }, "silver": { "status": "success" }, "dbt": { "status": "success" }, "quality": { "status": "success" } } }
+      ]
+    }
+  ]
+}

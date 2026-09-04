@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://conceptmotion.dev/schemas/challenge.reference.schema.json",
+  "title": "DataPass Challenge reference draft",
+  "type": "object",
+  "required": ["id", "title", "domain", "concepts", "difficulty", "description", "variants"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "domain": { "type": "string", "minLength": 1 },
+    "concepts": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "difficulty": { "enum": ["beginner", "intermediate", "advanced"] },
+    "description": { "type": "string" },
+    "schema": {},
+    "input": {},
+    "expectedOutput": {},
+    "hints": { "type": "array", "items": { "type": "string" } },
+    "visualSceneId": { "type": "string" },
+    "variants": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["starter", "solution"],
+        "properties": {
+          "starter": { "type": "string" },
+          "solution": { "type": "string" },
+          "explanation": { "type": "string" },
+          "languageId": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

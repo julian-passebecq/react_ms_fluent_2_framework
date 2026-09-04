@@ -1,61 +1,61 @@
 # ConceptMotion product contract
 
-## What the library is for
+ConceptMotion is a semantic visual-explanation library for technical and data concepts.
 
-ConceptMotion explains technical state changes visually. Its durable abstraction is not a chart type; it is **objects + semantics + time + explanation**.
+## It is responsible for
 
-A useful scene answers four questions:
+- interactive explanatory figures;
+- stable object identity through state changes;
+- semantic timelines/actions;
+- table transformations;
+- algorithm/programming state;
+- statistics/ML explanations;
+- cloud/data flow explanations;
+- lineage/data models;
+- orchestration DAG/pipeline topology and simulated run state;
+- deterministic static freeze/export;
+- provider-independent structured specs that AI/tools can author;
+- optional localized explanatory text values where inexpensive.
 
-1. What objects exist?
-2. What changed?
-3. Why did it change?
-4. What should the learner notice?
+## It is not responsible for
 
-## Primary domains
+- replacing React;
+- replacing Fluent;
+- replacing Monaco;
+- generic form/navigation controls;
+- actual code execution/judging;
+- actual Airflow/Fabric/ADF/Databricks execution;
+- universal free-form diagram editing;
+- becoming a wrapper around every chart library;
+- owning the general analytical/editorial chart grammar;
+- owning the future D3 GeoStory/world-map grammar;
+- owning Power BI host APIs.
 
-- Programming and algorithms
-- SQL / BI / DAX
-- Data transformation
-- Statistics / ML / data science
-- Data engineering / orchestration
-- Cloud architecture
-- Data modeling / lineage
-- Editorial data visualization
+General analytical charts, temporal world maps and Power BI chart generation belong to the sibling D3 SDK / future `@datapass/charts` track. ConceptMotion may later embed those outputs inside a teaching sequence.
 
-## Required interaction model
+## Primary web product composition
 
-Every animated scene can expose some subset of:
+```text
+Fluent application shell
+        +
+@conceptmotion/react
+        +
+@conceptmotion/svg
+        +
+@conceptmotion/core
+```
 
-- play / pause;
-- previous / next step;
-- scrub timeline;
-- playback speed;
-- restart;
-- hover/focus inspection;
-- click/pin selection;
-- parameter input when pedagogically meaningful;
-- compare/before-after mode.
+Challenge/spec code surfaces may additionally use Monaco at the application layer.
 
-The scene itself must remain understandable in a static frozen state.
+## Visual promise
 
-## Motion semantics
+The default output should be:
 
-Allowed motion must communicate at least one of:
-
-- object continuity;
-- ordering;
-- causality;
-- flow;
-- transformation;
-- selection/focus;
-- entry/exit;
-- success/failure/status;
-- comparison/progression.
-
-Avoid ambient animation that communicates none of the above.
-
-## Distinction from standard charting
-
-Use Fluent React Charts or another standard chart renderer for ordinary dashboard charts when no pedagogical transformation is required.
-
-Use ConceptMotion when the value is in explaining **how a system, algorithm or dataset changes over time**.
+- serious;
+- concise;
+- modern;
+- editorially disciplined;
+- explainable without motion;
+- richer with meaningful motion;
+- accessible;
+- reusable across multiple applications.

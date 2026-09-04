@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Reusable D3.js visualization generator with factorized animation primitives for editorial charts, React, Power BI, Fabric, Databricks and notebooks." />
+  <title>D3 Viz Generator · Animated patterns to React, Power BI & notebooks</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script type="module" src="./sandbox.js"></script>
+</head>
+<body>
+  <div class="brand-rule"></div>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="D3 Viz Generator home"><span class="brand-mark">D3</span><span><strong>Viz Generator</strong><small>one spec · reusable motion · many runtimes</small></span></a>
+    <nav class="top-tabs" aria-label="Primary">
+      <button class="active" data-tab="studio">Studio</button>
+      <button data-tab="showcase">Showcase</button>
+      <button data-tab="patterns">Patterns</button>
+      <button data-tab="architecture">Architecture</button>
+      <button data-tab="legacy">Legacy lab</button>
+    </nav>
+    <div class="header-badges"><span>D3 7.9</span><span>motion primitives</span><span>SVG-first</span></div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <span class="eyebrow">EDITORIAL VISUALIZATION SDK · V7</span>
+        <h1>Hard D3 interactions become reusable patterns.</h1>
+        <p>Earthquake playback, metro route drawing, ranking transitions, force networks, hierarchy zoom and geographic flows now share a small motion layer. AI should mostly generate a chart spec and data mapping—not a new animation engine for every request.</p>
+      </div>
+      <div class="hero-flow" aria-label="Platform flow">
+        <div><span>DATA</span><b>SQL · Spark · pandas · Polars</b></div><i>→</i>
+        <div class="flow-core"><span>SPEC + D3</span><b>mark · theme · motion primitive</b></div><i>→</i>
+        <div><span>TARGET</span><b>React · Power BI · Fabric · notebooks</b></div>
+      </div>
+    </section>
+
+    <section id="studio" class="tab-panel active">
+      <div class="studio-shell">
+        <aside class="library-panel panel-card">
+          <div class="panel-title-row"><div><span class="micro">EXAMPLES</span><h2>Chart library</h2></div><button class="small-button" id="open-data">Import data</button></div>
+          <p class="panel-copy">Start from an editorial or animated pattern. Advanced patterns lock their mark because they use a specific structural contract.</p>
+          <div id="example-list" class="example-list"></div>
+          <div class="library-note"><b>V7 principle</b><span>Reuse playback, zoom, path drawing and particle motion before adding another bespoke renderer.</span></div>
+        </aside>
+
+        <section class="preview-column">
+          <div class="preview-card panel-card">
+            <div class="preview-toolbar">
+              <div><span class="micro">LIVE D3 PREVIEW</span><strong id="preview-name">GDP per hour</strong></div>
+              <div class="toolbar-actions">
+                <label>Theme<select id="theme-select"><option value="economist">Economist inspired</option><option value="bbc">BBC inspired</option><option value="newsroom">Newsroom neutral</option></select></label>
+                <button id="download-svg">SVG</button><button id="download-png">PNG</button>
+              </div>
+            </div>
+            <div id="chart-stage" class="chart-stage" aria-live="polite"></div>
+            <div id="render-status" class="render-status">Ready</div>
+          </div>
+
+          <div class="export-card panel-card">
+            <div class="panel-title-row export-head"><div><span class="micro">CODE GENERATOR</span><h2>Export target</h2></div><div class="code-actions"><button id="copy-code">Copy</button><button id="download-code">Download</button></div></div>
+            <div id="target-tabs" class="target-tabs" role="tablist">
+              <button class="active" data-target="react">React</button><button data-target="powerbi">Power BI</button><button data-target="fabric">Fabric</button><button data-target="databricks">Databricks</button><button data-target="jupyter">Jupyter</button><button data-target="bigquery">BigQuery</button><button data-target="html">HTML</button><button data-target="spec">Spec JSON</button>
+            </div>
+            <div class="code-meta"><span id="code-label">React component</span><span id="code-lines"></span></div>
+            <pre class="code-view"><code id="code-output"></code></pre>
+            <div class="adapter-strip"><div><span class="micro">DATA ADAPTERS</span><b>Preparation stays separate from rendering</b></div><button data-adapter="pandas">pandas</button><button data-adapter="polars">Polars</button><button data-adapter="pyspark">PySpark</button></div>
+            <pre class="adapter-code"><code id="adapter-output"></code></pre>
+          </div>
+        </section>
+
+        <aside class="inspector-panel panel-card">
+          <div class="panel-title-row"><div><span class="micro">SPEC INSPECTOR</span><h2>Configure</h2></div><span id="spec-valid" class="valid-badge">valid</span></div>
+          <label class="field"><span>Title</span><input id="title-input" /></label>
+          <label class="field"><span>Subtitle</span><input id="subtitle-input" /></label>
+          <label class="field"><span>Source</span><input id="source-input" /></label>
+          <div class="field-grid">
+            <label class="field"><span>Mark</span><select id="mark-select">
+              <option value="line">Line</option><option value="bar">Bar</option><option value="dot">Dot plot</option><option value="scatter">Scatter</option>
+              <option value="metro">Metro map</option><option value="geoBubble">Geo playback</option><option value="barRace">Bar race</option><option value="force">Force network</option><option value="pack">Zoomable pack</option><option value="flowMap">Flow map</option>
+            </select></label>
+            <label class="field"><span>Accent</span><input id="accent-input" type="color" value="#e3120b" /></label>
+          </div>
+          <div id="encoding-controls" class="encoding-controls">
+            <label class="field"><span>X field</span><select id="x-field"></select></label><label class="field"><span>Y field</span><select id="y-field"></select></label><label class="field"><span>Series</span><select id="series-field"><option value="">None</option></select></label>
+          </div>
+          <div class="toggle-grid"><label><input id="animate-toggle" type="checkbox" checked /><span>Animate</span></label><label><input id="labels-toggle" type="checkbox" checked /><span>Direct labels</span></label></div>
+          <div class="spec-summary" id="spec-summary"></div>
+          <div class="platform-note"><span class="micro">PLATFORM RULE</span><p><b>Never collect an unbounded Spark table into the browser.</b> Aggregate in SQL/Spark first, then pass a compact result to D3.</p></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="showcase" class="tab-panel">
+      <div class="section-heading"><span class="eyebrow">STYLE + MOTION SYSTEMS</span><h2>Reusable patterns, not screenshots or one-off demos.</h2><p>Editorial themes remain separate from geometry. Motion primitives are shared across marks and honor reduced-motion preferences.</p></div>
+      <div id="showcase-grid" class="showcase-grid"></div>
+    </section>
+
+    <section id="patterns" class="tab-panel">
+      <div class="section-heading"><span class="eyebrow">MOTION GRAMMAR</span><h2>Factor the difficult part once, then let AI compose it.</h2><p>The machine-readable catalog lives at <code>lib/pattern-catalog.json</code>. The AI handoff is in <code>AI_VISUALIZATION_PROMPT.md</code>.</p></div>
+      <div class="decision-grid">
+        <article><span>PLAYBACK</span><b>One controller for temporal stories.</b><p>Play/pause, scrubber, frame stepping and cleanup are shared by earthquake playback and ranked timelines.</p></article>
+        <article><span>PATH DRAW</span><b>One reveal primitive for lines and routes.</b><p>Metro lines, flow routes and conventional time-series reveals reuse stroke-dash animation with stagger and reduced-motion fallback.</p></article>
+        <article><span>ZOOM + PAN</span><b>One interaction behavior.</b><p>Networks and geographic flows share D3 zoom rather than reimplementing wheel, touch and pan handling.</p></article>
+        <article><span>PATH PARTICLES</span><b>Motion along any SVG route.</b><p>Flights, trade, logistics or data replication can reuse path-length sampling and phased particles.</p></article>
+      </div>
+      <div class="legacy-grid">
+        <article><span>barRace</span><h3>Ranked temporal transitions</h3><p>Keyed enter/update/exit + shared playback.</p><button data-load-example="bar-race">Open in Studio</button></article>
+        <article><span>force</span><h3>Lineage / dependency network</h3><p>Simulation + collision + drag + zoom + cleanup.</p><button data-load-example="lineage-force">Open in Studio</button></article>
+        <article><span>pack</span><h3>Zoomable hierarchy</h3><p>D3 hierarchy/pack + click zoom + label transitions.</p><button data-load-example="zoom-pack">Open in Studio</button></article>
+        <article><span>flowMap</span><h3>Animated geographic flows</h3><p>Projected great-arc routes + path reveal + moving particles.</p><button data-load-example="flow-map">Open in Studio</button></article>
+      </div>
+    </section>
+
+    <section id="architecture" class="tab-panel">
+      <div class="section-heading"><span class="eyebrow">ARCHITECTURE</span><h2>Separate computation, visual intent, motion and runtime adapters.</h2></div>
+      <div class="architecture-board">
+        <div class="arch-column"><span>1 · DATA ENGINES</span><article><b>SQL / BigQuery</b><small>filter · aggregate · window</small></article><article><b>PySpark / Fabric / Databricks</b><small>distributed transforms · lakehouse</small></article><article><b>pandas / Polars</b><small>local shaping · stats</small></article></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-column core-column"><span>2 · SPEC + MOTION</span><article><b>mark + encoding</b><small>what should be shown</small></article><article><b>theme</b><small>how it should look</small></article><article><b>motion primitive</b><small>how it changes / moves</small></article><code>{ mark, data, encoding, theme, options }</code></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-column"><span>3 · RUNTIME ADAPTERS</span><article><b>React / web</b><small>D3 renderer + app UI</small></article><article><b>Power BI</b><small>pbiviz + pattern-specific roles</small></article><article><b>Notebook HTML</b><small>Fabric · Databricks · Jupyter</small></article></div>
+      </div>
+      <div class="decision-grid">
+        <article><span>React?</span><b>Use it for product UI.</b><p>Do not make React the chart grammar. D3 remains reusable outside React.</p></article>
+        <article><span>Power BI?</span><b>Keep a platform adapter.</b><p>Basic marks can generate pbiviz starters. Advanced marks require pattern-specific data roles, selection and tooltip adapters rather than a false generic fallback.</p></article>
+        <article><span>Fabric / Databricks?</span><b>Use them as data + notebook targets.</b><p>Spark does heavy work; D3 receives compact results through HTML.</p></article>
+        <article><span>AI?</span><b>Generate specs before code.</b><p>If an existing pattern fits, create data mapping + spec only. Add renderer code only when a new reusable behavior is genuinely missing.</p></article>
+      </div>
+    </section>
+
+    <section id="legacy" class="tab-panel">
+      <div class="section-heading"><span class="eyebrow">PRESERVED WORK</span><h2>RATP and earthquake are now reference patterns for the motion layer.</h2><p>The recovered datasets and archive stay intact; the animation mechanics are reusable elsewhere.</p></div>
+      <div class="legacy-grid">
+        <article><span>RATP</span><h3>Paris Metro traffic</h3><p>Projection, route drawing and traffic-scaled stations.</p><button data-load-example="ratp">Open in Studio</button></article>
+        <article><span>EARTHQUAKES</span><h3>1901–2020 playback</h3><p>World projection, magnitude bubbles and the shared playback controller.</p><button data-load-example="earthquakes">Open in Studio</button></article>
+        <article><span>RECOVERY</span><h3>Manifest</h3><p>Recovered vs reconstructed source material.</p><a href="./RECOVERY_MANIFEST.md">Open manifest</a></article>
+        <article><span>AI HANDOFF</span><h3>Extension prompt</h3><p>Rules for adding visuals without destroying the factorized architecture.</p><a href="./AI_VISUALIZATION_PROMPT.md">Open prompt</a></article>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="data-dialog" class="data-dialog">
+    <form method="dialog" class="dialog-card">
+      <div class="dialog-head"><div><span class="micro">CUSTOM DATA</span><h2>Paste CSV or JSON</h2></div><button value="cancel" aria-label="Close">×</button></div>
+      <p>Paste a compact plotting dataset. Numeric strings are converted automatically. Basic charts are inferred; advanced structural patterns should start from their example spec.</p>
+      <textarea id="data-input" spellcheck="false" placeholder="year,country,value&#10;2022,France,106&#10;2023,France,107"></textarea>
+      <div class="dialog-actions"><span id="data-error"></span><button type="button" id="load-data">Load into generator</button></div>
+    </form>
+  </dialog>
+
+  <footer class="site-footer"><span>D3 Viz Generator V7 · factorized animated visualization SDK</span><span>D3 7.9.0 · editorial themes are inspired patterns, not publisher products.</span></footer>
+</body>
+</html>

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NarrativeStorySpec future reference draft",
+  "description": "V2 reference only. Do not implement a D3 narrative renderer in Foundation v1.1.",
+  "type": "object",
+  "required": ["id", "title", "entities", "events"],
+  "properties": {
+    "id": {"type": "string"},
+    "title": {"$ref": "#/$defs/localizedText"},
+    "summary": {"$ref": "#/$defs/localizedText"},
+    "defaultView": {"enum": ["map", "timeline", "network", "dashboard"]},
+    "entities": {"type": "array", "items": {"$ref": "#/$defs/entity"}},
+    "events": {"type": "array", "items": {"$ref": "#/$defs/event"}},
+    "chapters": {"type": "array", "items": {"$ref": "#/$defs/chapter"}},
+    "sourceIds": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "localizedText": {
+      "oneOf": [
+        {"type": "string"},
+        {"type": "object", "additionalProperties": {"type": "string"}}
+      ]
+    },
+    "entity": {
+      "type": "object",
+      "required": ["id", "kind", "label"],
+      "properties": {
+        "id": {"type": "string"},
+        "kind": {"enum": ["person", "organization", "place", "object", "topic", "event-group"]},
+        "label": {"$ref": "#/$defs/localizedText"},
+        "metadata": {"type": "object"}
+      },
+      "additionalProperties": true
+    },
+    "event": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {"type": "string"},
+        "time": {"type": "string"},
+        "endTime": {"type": "string"},
+        "place": {
+          "type": "object",
+          "properties": {
+            "label": {"type": "string"},
+            "lon": {"type": "number"},
+            "lat": {"type": "number"},
+            "city": {"type": "string"},
+            "country": {"type": "string"}
+          },
+          "additionalProperties": true
+        },
+        "actorIds": {"type": "array", "items": {"type": "string"}},
+        "targetIds": {"type": "array", "items": {"type": "string"}},
+        "actionType": {"type": "string"},
+        "category": {"type": "string"},
+        "value": {"type": "number"},
+        "label": {"$ref": "#/$defs/localizedText"},
+        "sourceIds": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "chapter": {
+      "type": "object",
+      "required": ["id", "title"],
+      "properties": {
+        "id": {"type": "string"},
+        "title": {"$ref": "#/$defs/localizedText"},
+        "eventIds": {"type": "array", "items": {"type": "string"}},
+        "entityIds": {"type": "array", "items": {"type": "string"}},
+        "caption": {"$ref": "#/$defs/localizedText"},
+        "camera": {"type": "object"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://conceptmotion.dev/schemas/workflow.reference.schema.json",
+  "title": "ConceptMotion WorkflowSpec reference draft",
+  "type": "object",
+  "required": ["kind", "id", "title", "nodes", "edges"],
+  "properties": {
+    "kind": { "const": "workflow" },
+    "version": { "type": "string" },
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "description": { "type": "string" },
+    "preset": { "enum": ["generic", "airflow", "fabric-data-factory", "azure-data-factory", "databricks-lakeflow"] },
+    "layout": {
+      "type": "object",
+      "properties": {
+        "direction": { "enum": ["lr", "tb"] },
+        "density": { "enum": ["compact", "comfortable"] }
+      },
+      "additionalProperties": true
+    },
+    "schedule": { "type": "object" },
+    "parameters": { "type": "object" },
+    "groups": { "type": "array", "items": { "$ref": "#/$defs/group" } },
+    "nodes": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/node" } },
+    "edges": { "type": "array", "items": { "$ref": "#/$defs/edge" } },
+    "runs": { "type": "array", "items": { "$ref": "#/$defs/run" } }
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "required": ["id", "label"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "taskType": { "type": "string" },
+        "providerType": { "type": "string" },
+        "groupId": { "type": "string" },
+        "icon": { "type": "string" },
+        "metadata": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "group": {
+      "type": "object",
+      "required": ["id", "label"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["group", "foreach", "condition", "switch", "until", "task-group"] },
+        "parentId": { "type": "string" },
+        "childNodeIds": { "type": "array", "items": { "type": "string" } },
+        "childGroupIds": { "type": "array", "items": { "type": "string" } },
+        "metadata": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "edge": {
+      "type": "object",
+      "required": ["from", "to"],
+      "properties": {
+        "id": { "type": "string" },
+        "from": { "type": "string", "minLength": 1 },
+        "to": { "type": "string", "minLength": 1 },
+        "condition": { "enum": ["dependency", "success", "failure", "completion", "skip", "true", "false"] },
+        "label": { "type": "string" },
+        "dataFlowKind": { "enum": ["none", "data", "batch", "stream", "cdc", "lineage"] },
+        "metadata": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "state": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["pending", "queued", "running", "success", "failed", "retrying", "skipped", "upstream_failed"] },
+        "attempt": { "type": "integer", "minimum": 0 },
+        "durationMs": { "type": "number", "minimum": 0 },
+        "message": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "run": {
+      "type": "object",
+      "required": ["id", "frames"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string" },
+        "startedAt": { "type": "string" },
+        "frames": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "states"],
+            "properties": {
+              "id": { "type": "string" },
+              "at": { "type": "number" },
+              "states": { "type": "object", "additionalProperties": { "$ref": "#/$defs/state" } }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

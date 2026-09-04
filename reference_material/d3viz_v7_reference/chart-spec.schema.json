@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d3ecosite.netlify.app/sandbox/lib/chart-spec.schema.json",
+  "title": "D3 Viz Generator canonical chart spec",
+  "type": "object",
+  "required": ["version", "mark", "theme", "data"],
+  "properties": {
+    "version": {"const": "1.0"},
+    "mark": {"enum": ["line", "bar", "dot", "scatter", "metro", "geoBubble", "barRace", "force", "pack", "flowMap"]},
+    "theme": {"enum": ["economist", "bbc", "newsroom"]},
+    "title": {"type": "string"},
+    "subtitle": {"type": "string"},
+    "source": {"type": "string"},
+    "accent": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+    "width": {"type": "number", "minimum": 320},
+    "height": {"type": "number", "minimum": 240},
+    "data": {"type": "array"},
+    "links": {"type": "array"},
+    "hierarchy": {"type": "object"},
+    "geography": {},
+    "encoding": {
+      "type": "object",
+      "properties": {
+        "x": {"$ref": "#/$defs/encoding"}, "y": {"$ref": "#/$defs/encoding"},
+        "series": {"$ref": "#/$defs/encoding"}, "color": {"$ref": "#/$defs/encoding"}, "size": {"$ref": "#/$defs/encoding"},
+        "time": {"$ref": "#/$defs/encoding"}, "source": {"$ref": "#/$defs/encoding"}, "target": {"$ref": "#/$defs/encoding"}
+      },
+      "additionalProperties": true
+    },
+    "options": {"type": "object", "additionalProperties": true}
+  },
+  "$defs": {
+    "encoding": {
+      "type": "object", "required": ["field", "type"],
+      "properties": {"field": {"type": "string"}, "type": {"enum": ["quantitative", "nominal", "temporal", "ordinal", "geo"]}},
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

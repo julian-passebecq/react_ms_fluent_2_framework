@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KnowledgeEntry reference draft",
+  "type": "object",
+  "required": ["id", "slug", "title"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "slug": {"type": "string", "minLength": 1},
+    "title": {"$ref": "#/$defs/localizedText"},
+    "summary": {"$ref": "#/$defs/localizedText"},
+    "sectionIds": {"type": "array", "items": {"type": "string"}},
+    "tags": {"type": "array", "items": {"type": "string"}},
+    "productIds": {"type": "array", "items": {"type": "string"}},
+    "featureIds": {"type": "array", "items": {"type": "string"}},
+    "sourceIds": {"type": "array", "items": {"type": "string"}},
+    "figureIds": {"type": "array", "items": {"type": "string"}},
+    "challengeIds": {"type": "array", "items": {"type": "string"}},
+    "status": {"enum": ["ga", "preview", "deprecated", "retired", "unknown"]},
+    "appliesTo": {"type": "array", "items": {"type": "string"}},
+    "verifiedAt": {"type": "string"}
+  },
+  "$defs": {
+    "localizedText": {
+      "oneOf": [
+        {"type": "string"},
+        {
+          "type": "object",
+          "properties": {"en": {"type": "string"}, "no": {"type": "string"}},
+          "additionalProperties": {"type": "string"}
+        }
+      ]
+    }
+  },
+  "additionalProperties": true
+}

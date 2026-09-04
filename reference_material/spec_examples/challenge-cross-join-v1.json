@@ -1,0 +1,30 @@
+{
+  "id": "sql-cross-join-sizes-brands",
+  "title": "Build every size x brand combination",
+  "domain": "sql",
+  "concepts": ["cross-join", "cartesian-product"],
+  "difficulty": "beginner",
+  "description": "Return every possible size and brand combination.",
+  "schema": {
+    "sizes": ["XS", "M", "L", "XL"],
+    "brands": ["Nike", "Asphalte", "Abercrombie", "Lewis"]
+  },
+  "expectedOutput": { "rowCount": 16 },
+  "hints": [
+    "Think about a Cartesian product.",
+    "This join does not need a matching-key predicate."
+  ],
+  "visualSceneId": "join-cross-product",
+  "variants": {
+    "tsql": {
+      "languageId": "sql",
+      "starter": "SELECT\n    -- columns\nFROM dbo.sizes AS s\n-- join dbo.brands",
+      "solution": "SELECT s.size_code, b.brand_name\nFROM dbo.sizes AS s\nCROSS JOIN dbo.brands AS b;"
+    },
+    "bigquery": {
+      "languageId": "sql",
+      "starter": "SELECT\n  -- columns\nFROM `project.dataset.sizes` AS s",
+      "solution": "SELECT s.size_code, b.brand_name\nFROM `project.dataset.sizes` AS s\nCROSS JOIN `project.dataset.brands` AS b;"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "runtime": "D3 7.9.0",
+  "principle": "AI should compose a canonical spec and reuse motion primitives instead of hand-writing bespoke animation loops.",
+  "motionPrimitives": [
+    {"id":"pathDraw","module":"lib/motion.js","useFor":["routes","metro lines","time-series reveal"],"factorizes":["stroke dash setup","duration","stagger","reduced-motion fallback"]},
+    {"id":"playback","module":"lib/motion.js","useFor":["earthquakes","ranking over time","historical maps"],"factorizes":["play/pause","scrubber","frame stepping","timer cleanup","reduced-motion fallback"]},
+    {"id":"zoomPan","module":"lib/motion.js","useFor":["maps","networks","dense diagrams"],"factorizes":["pointer/touch zoom","pan","scale extent","transform updates"]},
+    {"id":"pathParticles","module":"lib/motion.js","useFor":["traffic","trade","data replication","flight routes"],"factorizes":["path length sampling","moving particles","timer cleanup","phase staggering"]}
+  ],
+  "advancedMarks": [
+    {"mark":"barRace","useWhen":"entities change rank across discrete time","required":{"data":"[{time,name,value}]","options":["timeField","nameField","valueField"]},"hardPartsFactorized":["keyed enter/update/exit","reordering transitions","timeline playback"]},
+    {"mark":"force","useWhen":"relationships, lineage, dependencies or topology matter","required":{"data":"node array","links":"[{source,target,value?}]"},"hardPartsFactorized":["force simulation","collision","dragging","zoom","simulation cleanup"]},
+    {"mark":"pack","useWhen":"nested hierarchy and relative size matter","required":{"hierarchy":"nested object with children/value"},"hardPartsFactorized":["d3.hierarchy","d3.pack","click zoom","label visibility transitions"]},
+    {"mark":"flowMap","useWhen":"origin-to-destination movement matters","required":{"data":"[{source:[lon,lat],target:[lon,lat],value}]","geography":"GeoJSON or Sphere"},"hardPartsFactorized":["geographic projection","great-arc paths","path reveal","moving particles","zoom"]}
+  ],
+  "selectionGuide": [
+    {"question":"Does time drive the story?","choose":["geoBubble","barRace"]},
+    {"question":"Do connections drive the story?","choose":["force","metro"]},
+    {"question":"Does nested structure drive the story?","choose":["pack"]},
+    {"question":"Does movement between locations drive the story?","choose":["flowMap"]},
+    {"question":"Is it primarily a conventional editorial comparison?","choose":["line","bar","dot","scatter"]}
+  ]
+}

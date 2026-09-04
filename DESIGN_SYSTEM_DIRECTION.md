@@ -57,3 +57,22 @@ No mandatory marketing hero.
 Use Fluent primitives directly whenever the problem is generic UI. Do not create `DpButton`, `DpInput`, `DpDialog`, etc. merely to rename Fluent components.
 
 Create custom components only when they encode recurring product composition or information architecture.
+
+## Challenge and workflow surfaces
+
+The same visual system must support dense learning/workbench screens without looking like a marketing site.
+
+- use progressive disclosure rather than showing every panel at once;
+- allow split-pane layouts with predictable tab states;
+- keep inspectors compact;
+- use status color only semantically;
+- prefer toolbars and tabs from Fluent over custom chrome;
+- keep visual canvases white/near-white unless a dark mode is explicitly introduced later.
+
+## Bilingual chrome
+
+A compact EN/NO toggle can reuse the portfolio's interaction idea, but it should be optional per application/page. Do not make bilingual content a visual burden.
+
+## Future D3 chart integration
+
+Figure framing must stay visually consistent whether its content is ConceptMotion or the future D3 chart SDK. The shell should not change just because the renderer changes.

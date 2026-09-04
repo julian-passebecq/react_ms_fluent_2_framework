@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ChangeEvent reference draft",
+  "type": "object",
+  "required": ["id", "sourceId", "detectedAt", "title", "kind", "severity", "featureIds"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "sourceId": {"type": "string", "minLength": 1},
+    "detectedAt": {"type": "string"},
+    "publishedAt": {"type": "string"},
+    "title": {"type": "string"},
+    "url": {"type": "string"},
+    "kind": {"enum": ["feature", "version", "deprecation", "retirement", "docs", "api", "pricing", "security", "unknown"]},
+    "severity": {"enum": ["info", "review", "breaking"]},
+    "featureIds": {"type": "array", "items": {"type": "string"}},
+    "evidence": {"type": "string"}
+  },
+  "additionalProperties": true
+}

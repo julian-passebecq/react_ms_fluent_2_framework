@@ -1,0 +1,40 @@
+{
+  "kind": "workflow",
+  "version": "1",
+  "id": "fabric-ingest-quality",
+  "title": "Fabric / ADF pipeline dependency example",
+  "preset": "fabric-data-factory",
+  "layout": { "direction": "lr", "density": "comfortable" },
+  "groups": [
+    { "id": "foreach-files", "label": "ForEach files", "kind": "foreach", "childNodeIds": ["copy-file", "validate-file"] }
+  ],
+  "nodes": [
+    { "id": "lookup", "label": "Lookup files", "taskType": "sql" },
+    { "id": "copy-file", "label": "Copy data", "taskType": "copy", "groupId": "foreach-files" },
+    { "id": "validate-file", "label": "Validate", "taskType": "notebook", "groupId": "foreach-files" },
+    { "id": "publish", "label": "Publish model", "taskType": "pipeline" },
+    { "id": "notify-failure", "label": "Notify failure", "taskType": "notify" },
+    { "id": "audit", "label": "Write audit", "taskType": "sql" }
+  ],
+  "edges": [
+    { "from": "lookup", "to": "copy-file", "condition": "success" },
+    { "from": "copy-file", "to": "validate-file", "condition": "success", "dataFlowKind": "batch" },
+    { "from": "validate-file", "to": "publish", "condition": "success" },
+    { "from": "validate-file", "to": "notify-failure", "condition": "failure" },
+    { "from": "publish", "to": "audit", "condition": "completion" },
+    { "from": "notify-failure", "to": "audit", "condition": "completion" }
+  ],
+  "runs": [
+    {
+      "id": "run-failure-branch",
+      "label": "Validation failure",
+      "frames": [
+        { "id": "f0", "states": { "lookup": { "status": "running" }, "copy-file": { "status": "pending" }, "validate-file": { "status": "pending" }, "publish": { "status": "pending" }, "notify-failure": { "status": "pending" }, "audit": { "status": "pending" } } },
+        { "id": "f1", "states": { "lookup": { "status": "success" }, "copy-file": { "status": "running" }, "validate-file": { "status": "pending" }, "publish": { "status": "pending" }, "notify-failure": { "status": "pending" }, "audit": { "status": "pending" } } },
+        { "id": "f2", "states": { "lookup": { "status": "success" }, "copy-file": { "status": "success" }, "validate-file": { "status": "running" }, "publish": { "status": "pending" }, "notify-failure": { "status": "pending" }, "audit": { "status": "pending" } } },
+        { "id": "f3", "states": { "lookup": { "status": "success" }, "copy-file": { "status": "success" }, "validate-file": { "status": "failed" }, "publish": { "status": "skipped" }, "notify-failure": { "status": "running" }, "audit": { "status": "pending" } } },
+        { "id": "f4", "states": { "lookup": { "status": "success" }, "copy-file": { "status": "success" }, "validate-file": { "status": "failed" }, "publish": { "status": "skipped" }, "notify-failure": { "status": "success" }, "audit": { "status": "success" } } }
+      ]
+    }
+  ]
+}

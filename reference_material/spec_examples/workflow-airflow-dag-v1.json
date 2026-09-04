@@ -1,0 +1,41 @@
+{
+  "kind": "workflow",
+  "version": "1",
+  "id": "airflow-daily-orders",
+  "title": "Daily orders DAG",
+  "preset": "airflow",
+  "layout": { "direction": "lr", "density": "compact" },
+  "schedule": { "kind": "cron", "expression": "0 6 * * *", "label": "Daily 06:00" },
+  "groups": [
+    { "id": "quality", "label": "quality_checks", "kind": "task-group", "childNodeIds": ["row_count", "freshness"] }
+  ],
+  "nodes": [
+    { "id": "extract", "label": "extract_orders", "taskType": "python" },
+    { "id": "transform", "label": "transform_orders", "taskType": "pyspark" },
+    { "id": "row_count", "label": "row_count", "taskType": "sql", "groupId": "quality" },
+    { "id": "freshness", "label": "freshness", "taskType": "sql", "groupId": "quality" },
+    { "id": "publish", "label": "publish_gold", "taskType": "notebook" }
+  ],
+  "edges": [
+    { "from": "extract", "to": "transform", "condition": "dependency" },
+    { "from": "transform", "to": "row_count", "condition": "dependency" },
+    { "from": "transform", "to": "freshness", "condition": "dependency" },
+    { "from": "row_count", "to": "publish", "condition": "dependency" },
+    { "from": "freshness", "to": "publish", "condition": "dependency" }
+  ],
+  "runs": [
+    {
+      "id": "run-retry",
+      "label": "Retry example",
+      "frames": [
+        { "id": "f0", "states": { "extract": { "status": "queued" }, "transform": { "status": "pending" }, "row_count": { "status": "pending" }, "freshness": { "status": "pending" }, "publish": { "status": "pending" } } },
+        { "id": "f1", "states": { "extract": { "status": "running" }, "transform": { "status": "pending" }, "row_count": { "status": "pending" }, "freshness": { "status": "pending" }, "publish": { "status": "pending" } } },
+        { "id": "f2", "states": { "extract": { "status": "success" }, "transform": { "status": "running" }, "row_count": { "status": "pending" }, "freshness": { "status": "pending" }, "publish": { "status": "pending" } } },
+        { "id": "f3", "states": { "extract": { "status": "success" }, "transform": { "status": "failed", "attempt": 1 }, "row_count": { "status": "upstream_failed" }, "freshness": { "status": "upstream_failed" }, "publish": { "status": "upstream_failed" } } },
+        { "id": "f4", "states": { "extract": { "status": "success" }, "transform": { "status": "retrying", "attempt": 2 }, "row_count": { "status": "pending" }, "freshness": { "status": "pending" }, "publish": { "status": "pending" } } },
+        { "id": "f5", "states": { "extract": { "status": "success" }, "transform": { "status": "success", "attempt": 2 }, "row_count": { "status": "running" }, "freshness": { "status": "running" }, "publish": { "status": "pending" } } },
+        { "id": "f6", "states": { "extract": { "status": "success" }, "transform": { "status": "success", "attempt": 2 }, "row_count": { "status": "success" }, "freshness": { "status": "success" }, "publish": { "status": "success" } } }
+      ]
+    }
+  ]
+}
