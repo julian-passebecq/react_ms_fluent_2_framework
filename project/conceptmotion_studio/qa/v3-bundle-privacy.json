@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "reports": [
+    {
+      "output": "dist",
+      "scannedFiles": 72,
+      "skippedBinaryFiles": 2
+    },
+    {
+      "output": "dist-formation",
+      "scannedFiles": 53,
+      "skippedBinaryFiles": 2
+    },
+    {
+      "output": "dist-code-sandbox",
+      "scannedFiles": 49,
+      "skippedBinaryFiles": 1
+    },
+    {
+      "output": "dist-code-interview",
+      "scannedFiles": 35,
+      "skippedBinaryFiles": 1
+    },
+    {
+      "output": "dist-algorithm-atlas",
+      "scannedFiles": 10,
+      "skippedBinaryFiles": 0
+    },
+    {
+      "output": "dist-architecture-atlas",
+      "scannedFiles": 10,
+      "skippedBinaryFiles": 0
+    },
+    {
+      "output": "dist-pilot-center",
+      "scannedFiles": 20,
+      "skippedBinaryFiles": 0
+    },
+    {
+      "output": "storybook-static",
+      "scannedFiles": 58,
+      "skippedBinaryFiles": 9
+    },
+    {
+      "output": "dist-legacy",
+      "scannedFiles": 4,
+      "skippedBinaryFiles": 0
+    }
+  ],
+  "violations": []
+}

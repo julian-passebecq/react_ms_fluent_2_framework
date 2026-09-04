@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "../../node_modules/.cache/formation.tsbuildinfo"
+  },
+  "include": [
+    "src",
+    "../../content/visuals",
+    "vite.config.ts"
+  ]
+}

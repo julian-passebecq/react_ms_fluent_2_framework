@@ -1,4 +1,4 @@
-import type { EntityId, FlowKind } from '@conceptmotion/core';
+import type { DiagramLayoutResult, EntityId, FlowKind } from '@conceptmotion/core';
 
 import { ensureChild, keyedChildren, round, setAttributes, setSvgTransform, setText, type SvgSurface } from '../dom.js';
 import { ensureFlowMarkers, flowVisualStyle } from '../flow-style.js';
@@ -46,6 +46,9 @@ export interface GraphGroupModel {
 
 export interface GraphRenderModel {
   id: string;
+  layoutResult?: DiagramLayoutResult;
+  /** Generic diagrams describe concepts, not task execution. */
+  semanticOnly?: boolean;
   direction?: LayoutDirection;
   nodes: readonly GraphNodeModel[];
   edges: readonly GraphEdgeModel[];
@@ -99,7 +102,7 @@ export function renderGraph(
   durationMs: number,
 ): Map<EntityId, PositionedEntity> {
   const direction = model.direction ?? 'lr';
-  const layout = layoutLayeredGraph(
+  const layout = model.layoutResult ? new Map(model.layoutResult.nodes.map(node => [node.id, { ...node }])) : layoutLayeredGraph(
     model.nodes.map((node) => ({ id: node.id, preferredRank: node.preferredRank })),
     model.edges.map((edge) => ({ from: edge.from.nodeId, to: edge.to.nodeId })),
     {
@@ -112,7 +115,16 @@ export function renderGraph(
     },
   );
   // Account for heading space without introducing spec-level coordinates.
-  layout.forEach((rect) => { rect.y += 58; });
+  if (model.layoutResult) {
+    const result = model.layoutResult;
+    const scale = Math.min(surface.viewport.width / result.width, (surface.viewport.height - 68) / result.height);
+    root.setAttribute('transform', `translate(${round((surface.viewport.width - result.width * scale) / 2)} 58) scale(${round(scale, 5)})`);
+    root.setAttribute('data-layout-provider', 'contract');
+  } else {
+    root.removeAttribute('transform');
+    root.removeAttribute('data-layout-provider');
+    layout.forEach((rect) => { rect.y += 58; });
+  }
   const nodeById = new Map(model.nodes.map((node) => [node.id, node]));
   ensureFlowMarkers(surface.defs, surface.theme, `${model.id}-marker`);
 
@@ -122,6 +134,8 @@ export function renderGraph(
   const nodesLayer = ensureChild(root, 'g[data-layer="nodes"]', 'g', { 'data-layer': 'nodes' });
 
   const groupLayouts = (model.groups ?? []).flatMap((group) => {
+    const provided = model.layoutResult?.groups?.find(entry => entry.id === group.id);
+    if (provided) return [{ group, x: provided.x, y: provided.y, width: provided.width, height: provided.height }];
     const children = group.childNodeIds.flatMap((id) => {
       const rect = layout.get(id);
       return rect ? [rect] : [];
@@ -174,6 +188,12 @@ export function renderGraph(
     const sourceNode = nodeById.get(edge.from.nodeId);
     const targetNode = nodeById.get(edge.to.nodeId);
     if (!sourceRect || !targetRect || !sourceNode || !targetNode) return [];
+    const route = model.layoutResult?.edgeRoutes[edge.id];
+    if (route?.length) {
+      const source = route[0];
+      const target = route[route.length - 1];
+      return [{ edge, source, target, path: route.map((point, index) => `${index ? 'L' : 'M'}${round(point.x)},${round(point.y)}`).join(' '), midpoint: pathMidpoint(source, target) }];
+    }
     const sourceSide = portSide(sourceNode, edge.from.portId, inferredSide('source', direction));
     const targetSide = portSide(targetNode, edge.to.portId, inferredSide('target', direction));
     const source = edgeAnchor(sourceRect, sourceSide);
@@ -286,7 +306,7 @@ export function renderGraph(
         'data-entering': entering ? 'true' : undefined,
       });
       setSvgTransform(nodeGroup, rect.x, rect.y, reducedMotion, durationMs);
-      makeSelectable(nodeGroup, node.id, `${node.label}, ${node.kind ?? 'node'}, status ${status}`, options);
+      makeSelectable(nodeGroup, node.id, `${node.label}, ${node.kind ?? 'node'}${model.semanticOnly ? status === 'running' ? ', active' : status === 'failed' ? ', issue' : '' : `, status ${status}`}`, options);
       const background = ensureChild(nodeGroup, 'rect[data-role="background"]', 'rect', {
         'data-role': 'background',
         width: rect.width,
@@ -335,7 +355,7 @@ export function renderGraph(
         'font-weight': 750,
         'text-anchor': 'end',
       });
-      setText(statusBadge, `${STATUS_GLYPH[status] ?? '•'} ${(node.statusLabel ?? status).replaceAll('_', ' ').toUpperCase()}`);
+      setText(statusBadge, model.semanticOnly ? status === 'running' ? 'ACTIVE' : status === 'failed' ? 'ISSUE' : '' : `${STATUS_GLYPH[status] ?? '•'} ${(node.statusLabel ?? status).replaceAll('_', ' ').toUpperCase()}`);
 
       const ports = node.ports ?? [
         { id: 'in', side: inferredSide('target', direction) },

@@ -1,6 +1,7 @@
 import {
   resolveLocalizedText,
   validateDiagramSpec,
+  layoutDiagram,
   type DiagramSpec,
   type EntityId,
   type FlowKind,
@@ -45,6 +46,8 @@ export class DiagramRenderer extends BaseSvgRenderer<DiagramRendererInput> {
     const failedNodes = new Set(input.failedNodeIds ?? []);
     const model: GraphRenderModel = {
       id: input.spec.id,
+      layoutResult: input.spec.layout?.provider ? layoutDiagram(input.spec) : undefined,
+      semanticOnly: Boolean(input.spec.layout?.provider),
       direction: input.spec.layout?.direction,
       focusedGroupId: input.focusedGroupId,
       nodes: input.spec.nodes.map((node) => ({

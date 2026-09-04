@@ -22,7 +22,8 @@
     "@datapass/code": "workspace:*",
     "@datapass/content": "workspace:*",
     "@datapass/figure": "workspace:*",
-    "@datapass/progress": "workspace:*"
+    "@datapass/progress": "workspace:*",
+    "@datapass/ui": "workspace:*"
   },
   "peerDependencies": {
     "@fluentui/react-components": ">=9.0.0 <10.0.0",

@@ -1,41 +1,5 @@
-export type ChallengeLanguage =
-  | 'python'
-  | 'pandas'
-  | 'pyspark'
-  | 'sql'
-  | 'tsql'
-  | 'bigquery'
-  | 'dax'
-  | 'csharp'
-  | 'powershell'
-  | 'bash';
-
-export type ChallengeDifficulty = 'Easy' | 'Medium' | 'Hard';
-
-export interface ChallengeVariant {
-  id: string;
-  language: ChallengeLanguage;
-  label: string;
-  monacoLanguage: string;
-  starter: string;
-  solution: string;
-}
-
-export interface ChallengeDefinition {
-  id: string;
-  title: string;
-  domain: string;
-  difficulty: ChallengeDifficulty;
-  tags: string[];
-  summary: string;
-  schema: string;
-  input: string;
-  example: string;
-  expectedOutput: string;
-  hints: string[];
-  visualization?: 'join';
-  variants: ChallengeVariant[];
-}
+import type { ChallengeDefinition, ChallengeLanguage } from '@datapass/content';
+export type { ChallengeDefinition, ChallengeLanguage, ChallengeDifficulty, ChallengeVariant } from '@datapass/content';
 
 export const challengeCatalog: ChallengeDefinition[] = [
   {

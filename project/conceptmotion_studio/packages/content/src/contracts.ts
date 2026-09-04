@@ -316,7 +316,7 @@ export interface AssessmentSpec {
   readonly sourceIds?: readonly ContentId[];
 }
 
-export type ProjectStatus = 'active' | 'experimental' | 'legacy' | 'archived';
+export type ProjectStatus = 'active' | 'experimental' | 'legacy' | 'archived' | 'building' | 'planned';
 
 export interface ProjectRecord {
   readonly id: ContentId;

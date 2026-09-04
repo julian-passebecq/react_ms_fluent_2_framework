@@ -11,6 +11,10 @@ export type DiagramDirection = 'lr' | 'rl' | 'tb' | 'bt';
 export type DiagramDensity = 'compact' | 'comfortable';
 
 export interface DiagramLayoutSpec {
+  /** Opt-in provider; omitted preserves the V1/V2 renderer layout. */
+  readonly provider?: 'layered' | 'radial';
+  /** Semantic center for hub-and-spoke diagrams, never a coordinate. */
+  readonly hubId?: string;
   readonly direction?: DiagramDirection;
   readonly density?: DiagramDensity;
   readonly preferredRanks?: Readonly<Record<string, number>>;
@@ -90,6 +94,7 @@ export interface DiagramLayoutResult {
   readonly height: number;
   readonly nodes: readonly DiagramLayoutNode[];
   readonly edgeRoutes: Readonly<Record<string, readonly DiagramRoutePoint[]>>;
+  readonly groups?: readonly DiagramLayoutNode[];
 }
 
 export interface DiagramLayoutContract {
@@ -277,6 +282,12 @@ export function validateDiagramSpec(input: unknown): ValidationResult {
     if (!isRecord(spec.layout)) {
       issues.push(validationError('diagram.layout.invalid', 'layout', 'Diagram layout must be an object.'));
     } else {
+      if (spec.layout.provider !== undefined && !['layered', 'radial'].includes(String(spec.layout.provider))) {
+        issues.push(validationError('diagram.layout.provider.invalid', 'layout.provider', 'Layout provider must be layered or radial.'));
+      }
+      if (spec.layout.hubId !== undefined && (typeof spec.layout.hubId !== 'string' || !nodeById.has(spec.layout.hubId))) {
+        issues.push(validationError('diagram.layout.hub.unknown', 'layout.hubId', 'Hub must reference a diagram node.'));
+      }
       if (spec.layout.direction !== undefined && !DIAGRAM_DIRECTIONS.includes(spec.layout.direction as DiagramDirection)) {
         issues.push(validationError('diagram.layout.direction.invalid', 'layout.direction', `Unknown layout direction "${String(spec.layout.direction)}".`));
       }

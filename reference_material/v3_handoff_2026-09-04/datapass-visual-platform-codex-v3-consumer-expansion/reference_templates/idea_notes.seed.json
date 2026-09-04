@@ -1,0 +1,28 @@
+[
+  {
+    "id": "idea.spark-connect-later",
+    "title": "Re-evaluate Spark Connect later",
+    "body": "Keep external PySpark execution for now; revisit only after Formation and Code Sandbox prove the learning UX.",
+    "domain": "data-engineering",
+    "context": "project",
+    "priority": "later",
+    "status": "idea",
+    "projectId": "project.formation",
+    "tags": ["spark", "runtime"],
+    "createdAt": "2026-09-04T00:00:00Z",
+    "updatedAt": "2026-09-04T00:00:00Z"
+  },
+  {
+    "id": "idea.visual-migration",
+    "title": "Migrate reusable trainer visuals",
+    "body": "Classify the 19 trainer scene families against existing ConceptMotion families before adding new renderers.",
+    "domain": "data-engineering",
+    "context": "project",
+    "priority": "urgent",
+    "status": "todo",
+    "projectId": "project.algorithm-atlas",
+    "tags": ["conceptmotion", "reuse"],
+    "createdAt": "2026-09-04T00:00:00Z",
+    "updatedAt": "2026-09-04T00:00:00Z"
+  }
+]

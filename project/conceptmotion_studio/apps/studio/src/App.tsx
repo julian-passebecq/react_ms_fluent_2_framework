@@ -31,8 +31,9 @@ const KnowledgePage = lazy(() => import('./pages/KnowledgePage').then((module) =
 const ProjectHubPage = lazy(() => import('./pages/ProjectHubPage').then((module) => ({ default: module.ProjectHubPage })));
 const WorkbenchPage = lazy(() => import('./pages/WorkbenchPage').then((module) => ({ default: module.WorkbenchPage })));
 const WorkflowPage = lazy(() => import('./pages/WorkflowPage').then((module) => ({ default: module.WorkflowPage })));
+const VisualSandboxPage = lazy(() => import('./pages/VisualSandboxPage').then((module) => ({ default: module.VisualSandboxPage })));
 
-export type ViewId = 'catalog' | 'workbench' | 'explainers' | 'workflow' | 'challenge' | 'knowledge' | 'projects';
+export type ViewId = 'catalog' | 'workbench' | 'explainers' | 'workflow' | 'challenge' | 'knowledge' | 'projects' | 'visual-sandbox';
 
 const views: Array<{ id: ViewId; label: { en: string; no: string }; icon: typeof AppsListDetail24Regular }> = [
   { id: 'catalog', label: { en: 'Catalog', no: 'Katalog' }, icon: AppsListDetail24Regular },
@@ -42,6 +43,7 @@ const views: Array<{ id: ViewId; label: { en: string; no: string }; icon: typeof
   { id: 'challenge', label: { en: 'Challenge', no: 'Oppgave' }, icon: Code24Regular },
   { id: 'knowledge', label: { en: 'Knowledge Atlas', no: 'Kunnskapsatlas' }, icon: BookOpen24Regular },
   { id: 'projects', label: { en: 'Project Hub', no: 'Prosjekthub' }, icon: AppsListDetail24Regular },
+  { id: 'visual-sandbox', label: { en: 'Visual Sandbox', no: 'Visuell sandkasse' }, icon: Braces24Regular },
 ];
 
 function routeFromHash(): ViewId {
@@ -154,6 +156,7 @@ export function App() {
           {view === 'challenge' && <ChallengePage />}
           {view === 'knowledge' && <KnowledgePage />}
           {view === 'projects' && <ProjectHubPage />}
+          {view === 'visual-sandbox' && <VisualSandboxPage />}
         </ErrorBoundary>
       </Suspense>
     </AppShell>

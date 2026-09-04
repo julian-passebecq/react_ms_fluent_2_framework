@@ -1,0 +1,17 @@
+html, body, #root { margin: 0; min-height: 100%; background: #f8f7f4; color: #172b42; }
+* { box-sizing: border-box; }
+.dp-app-shell__main { padding: 1.5rem; width: 100%; max-width: 1400px; margin: 0 auto; }
+.dp-page-header { margin-bottom: 1.5rem; }
+.interview-domain { max-width: 400px; margin-bottom: 1.25rem; }
+.interview-modes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1rem; }
+.interview-boundary { margin-top: 2rem; color: #546476; }
+.interview-session-tools, .interview-flags { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin: .5rem 0 1.25rem; }
+.interview-session-tools [role=timer] { font-size: 1.3rem; font-variant-numeric: tabular-nums; padding: .4rem .7rem; border: 1px solid #d7dce2; }
+.interview-review, .interview-coding, .interview-backup { border: 1px solid #d7dce2; border-radius: .4rem; background: #fff; padding: 1.2rem; margin-top: 1.5rem; }
+.interview-coding > h2, .interview-review > h2 { font-size: 1.2rem; }
+.interview-domain-results { padding: 1rem 2rem; background: #fff; border: 1px solid #d7dce2; line-height: 2; }
+.interview-backup { max-width: 900px; }
+.interview-coding .dp-practice-workbench { margin-top: 1.25rem; }
+/* Submitted answers remain disabled, but their labels must stay readable during review. */
+.dp-assessment-question .fui-Radio__label { color: #172b42; }
+@media (max-width: 700px) { .dp-app-shell__main { padding: .75rem; } .interview-review, .interview-coding { padding: .75rem; } }

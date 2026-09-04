@@ -14,6 +14,11 @@
     { "path": "./packages/learning" },
     { "path": "./packages/scaffold" },
     { "path": "./apps/studio" },
-    { "path": "./apps/dubreu-formation" }
+    { "path": "./apps/formation" },
+    { "path": "./apps/code-sandbox" },
+    { "path": "./apps/code-interview" },
+    { "path": "./apps/algorithm-atlas" },
+    { "path": "./apps/architecture-atlas" },
+    { "path": "./apps/pilot-center" }
   ]
 }

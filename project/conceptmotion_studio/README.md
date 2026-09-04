@@ -1,10 +1,18 @@
 # Datapass Visual Platform / ConceptMotion Studio
 
-This directory is the runnable **Foundation V2** workspace. V2 extends the completed Foundation v1.1 baseline with reusable content, notebook, figure, learning, progress, catalog, and application-scaffold contracts. It does not restart or replace the v1.1 semantic/rendering foundation.
+This directory is the runnable **V3 consumer-expansion** workspace. V3 extends the completed Foundation v1.1 baseline with reusable content, notebook, figure, learning, progress, catalog, and application-scaffold contracts. It does not restart or replace the v1.1 semantic/rendering foundation.
 
-The default application is the TypeScript/Fluent Studio in `apps/studio`. `apps/dubreu-formation` is the first serious proof consumer. The earlier JavaScript/D3 Studio in `src` remains available through the legacy commands.
+The default application is the TypeScript/Fluent Studio in `apps/studio`. `apps/formation` is the first serious proof consumer. The earlier JavaScript/D3 Studio in `src` remains available through the legacy commands.
 
-## What V2 adds
+## What V3 adds
+
+Seven application entry points share the existing platform. Formation gains Think in SQL and Think in Python for Data Engineering; Code Sandbox migrates all 323 pinned source items without the old UI; Code Interview provides a distinct session/review flow. Algorithm Atlas shares 30 semantic Figure artifacts with learning consumers. Architecture Atlas and Pilot Center reuse the same deterministic radial/layered Diagram layout. Studio gains a production Visual Sandbox route.
+
+The canonical public registry is `content/projects.registry.json`; shared visual artifacts and attribution live in `content/visuals`. The practice snapshot, hash manifest and licenses live in `content/practice`. No consumer data is imported into reusable packages.
+
+Run the new consumers with `dev:code-sandbox`, `dev:code-interview`, `dev:algorithm-atlas`, `dev:architecture-atlas` and `dev:pilot-center` (ports 4176–4180). `build:v3` builds all five and audits all six non-Studio consumer manifests. `test:practice-import` checks exact deterministic output. `test:unit` enforces separate coverage floors for six pure packages. Full commands and eight V3 reports are linked from the [repository README](../../README.md).
+
+## Preserved V2 foundation
 
 - one shared, lazy `@datapass/code` boundary for Monaco editor, JSON editor, and diff surfaces;
 - serializable `FigureSpec`, course, lesson, notebook-cell, assessment, project, runtime-target, vocabulary, and article contracts in pure `@datapass/content`;
@@ -48,15 +56,15 @@ The Studio keeps every v1.1 surface and adds the V2 Project Hub:
 - **Knowledge Atlas** — local source/status/version/change fixtures and deterministic impact resolution; it loads without Monaco.
 - **Project Hub** — validated, source-controlled destinations with search, facets, sort/view state, and direct links. Registry status is metadata, not live monitoring.
 
-### Dubreu Formation
+### Formation
 
-`apps/dubreu-formation` demonstrates Python, SQL, advanced SQL, and display-only PySpark lessons using the shared content and learning packages. It includes imported notebooks, a ConceptMotion figure embedded as a notebook cell, editable guided exercises, QCM/assessment, local progress import/export/reset, original-source downloads, and an optional external Colab link.
+`apps/formation` demonstrates Python, SQL, advanced SQL, and display-only PySpark lessons using the shared content and learning packages. It includes imported notebooks, a ConceptMotion figure embedded as a notebook cell, editable guided exercises, QCM/assessment, local progress import/export/reset, original-source downloads, and an optional external Colab link.
 
 The available source attachments did not include the private Dubreu course corpus. The consumer therefore uses clearly attributed original representative fixtures rather than claiming conversion of unavailable material.
 
 PySpark, Python, and SQL are **display, explanation, editing, and text comparison only** inside the site. Saved outputs are labeled reference evidence. There is no Spark execution, Python/SQL execution, Jupyter kernel, universal judge, or hidden runtime.
 
-See [`apps/dubreu-formation/README.md`](apps/dubreu-formation/README.md) for consumer details.
+See [`apps/formation/README.md`](apps/formation/README.md) for consumer details.
 
 ## Requirements and commands
 
@@ -69,8 +77,8 @@ pnpm run check
 
 | Command | Purpose |
 | --- | --- |
-| `pnpm run dev` | Run the Foundation V2 Studio. |
-| `pnpm run dev:consumer` | Deterministically import reference notebooks, then run Dubreu Formation. |
+| `pnpm run dev` | Run the V3 Studio. |
+| `pnpm run dev:consumer` | Deterministically import reference notebooks, then run Formation. |
 | `pnpm run dev:legacy` | Run the preserved JavaScript/D3 Studio. |
 | `pnpm run storybook` | Run the Storybook Golden Gallery on port 6006. |
 | `pnpm run import:reference` | Rebuild canonical Dubreu notebook JSON and public source downloads without execution. |
@@ -81,14 +89,14 @@ pnpm run check
 | `pnpm run test:scaffold` | Generate, test, type-check, and build the app recipe proofs. |
 | `pnpm run test:bundle` | Assert route/Monaco chunk boundaries in the Studio manifest. |
 | `pnpm run build` | Type-check and build the Studio, then run bundle assertions. |
-| `pnpm run build:consumer` | Import reference notebooks and build Dubreu Formation. |
+| `pnpm run build:consumer` | Import reference notebooks and build Formation. |
 | `pnpm run build:legacy` | Build the preserved legacy application into `dist-legacy`. |
 | `pnpm run build:storybook` | Build the Golden Gallery into `storybook-static`. |
 | `pnpm run test:browser` | Run Playwright desktop and 390px phone checks. |
 | `pnpm run check:offline` | Run legacy, coverage, boundary, and scaffold gates. |
-| `pnpm run check` | Run the complete required V2 QA sequence. |
+| `pnpm run check` | Run the complete required V3 QA sequence. |
 
-GitHub Actions mirrors the material gates in [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml). Exact delivery results belong in [`V2_TEST_REPORT.md`](../../V2_TEST_REPORT.md); this README does not infer a passing result.
+GitHub Actions mirrors the material gates in [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml). Exact delivery results belong in [`V3_TEST_REPORT.md`](../../V3_TEST_REPORT.md); this README does not infer a passing result.
 
 To scaffold a sibling consumer:
 

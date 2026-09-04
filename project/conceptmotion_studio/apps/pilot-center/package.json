@@ -1,0 +1,9 @@
+{
+  "name": "@datapass/pilot-center", "version": "3.0.0", "private": true, "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build", "typecheck": "tsc --noEmit" },
+  "dependencies": {
+    "@conceptmotion/core": "workspace:*", "@datapass/content": "workspace:*", "@datapass/figure": "workspace:*", "@datapass/progress": "workspace:*", "@datapass/ui": "workspace:*",
+    "@fluentui/react-components": "9.74.7", "react": "19.2.8", "react-dom": "19.2.8"
+  },
+  "devDependencies": { "@types/react": "19.2.18", "@types/react-dom": "19.2.7", "@vitejs/plugin-react": "6.1.1", "typescript": "7.0.2", "vite": "8.2.2" }
+}

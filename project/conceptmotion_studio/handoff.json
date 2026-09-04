@@ -1,14 +1,14 @@
 {
-  "project": "Datapass Visual Platform Foundation",
+  "project": "Datapass Visual Platform · V3 consumer expansion",
   "handoff_date": "2026-09-04",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "foundation_base_version": "1.1.0",
   "baseline": {
     "repository": "julian-passebecq/react_ms_fluent_2_framework",
     "branch": "main",
-    "commit": "d4435f55eb64eb02147e8ff0d51e3014c189fa75"
+    "commit": "8cccd77ecd0d0b60b1d28ee2e41cffe5ec78a26f"
   },
-  "goal": "Reusable visual-learning, source-aware documentation, deterministic notebook-content, assessment/progress, project-registry and application-scaffold foundation for Datapass consumers.",
+  "goal": "Preserve Foundation V1.1/V2 through a large consumer/reuse pass: Formation, Code Sandbox, separate Code Interview, Algorithm Atlas, Architecture Atlas, local Pilot Center and production Visual Sandbox.",
   "default_theme": "light",
   "counts": {
     "catalog_concepts": 186,
@@ -30,8 +30,8 @@
   "v2_source_handoff": "../../reference_material/v2_handoff_2026-09-04/datapass-visual-platform-codex-v2-post-v1-audit/START_HERE.md",
   "agent_instructions": "AGENTS.md",
   "architecture": "docs/ARCHITECTURE.md",
-  "audit": "../../V2_AUDIT_SELF_REVIEW.md",
-  "qa": "../../V2_TEST_REPORT.md",
+  "audit": "../../V3_AUDIT_SELF_REVIEW.md",
+  "qa": "../../V3_TEST_REPORT.md",
   "roadmap": "ROADMAP.md",
   "v2_reports": {
     "test": "../../V2_TEST_REPORT.md",
@@ -61,7 +61,7 @@
     "pnpm run dev:consumer"
   ],
   "source_material_status": "The private Dubreu course corpus was not present in the supplied attachments; the V2 consumer uses attributed original representative fixtures and does not claim private-course conversion.",
-  "execution_policy": "Python, SQL and PySpark are display, explanation, editing and text-comparison content only. Foundation V2 includes no Spark execution, notebook execution, Python/SQL execution, Jupyter kernel or universal code judge.",
+  "execution_policy": "Python, SQL and PySpark are display, explanation, editing, text-comparison or external-launch content only. V3 has no Spark execution, notebook execution, Python/SQL execution, Jupyter kernel or universal code judge.",
   "known_environment_limitation": null,
   "p0": [],
   "v1_1_gates": [
@@ -96,12 +96,40 @@
     "Added progress schema V2 with V1.1 challenge migration, local import/export and domain/concept breakdowns",
     "Added the Dubreu Formation Python/SQL/advanced-SQL/display-only-PySpark proof consumer",
     "Added a validated Project Registry, Project Hub, URL-backed explorer state and deterministic application presets",
-    "Added the Storybook Golden Gallery and repository CI workflow"
+    "Added the Storybook Golden Gallery and repository CI workflow",
+    "Restored reviewed Linux screenshot baselines and independently verified hosted CI before V3",
+    "Added full deterministic practice corpus and separate Sandbox/Interview consumers using shared challenge and progress semantics",
+    "Added 30 shared semantic visual artifacts and deterministic radial/layered Diagram layout used by two consumers",
+    "Renamed Formation and added SQL/Python reasoning capstones using shared figures and assessments",
+    "Added local Pilot Center and production Visual Sandbox with public/private and validation boundaries",
+    "Expanded old/new QA, Golden Gallery, manifest budgets and independent pure-package coverage floors"
   ],
   "generator_contracts": [
     "cloud-diagram",
     "data-model",
     "lineage"
   ],
-  "generator_renderers_status": "Legacy contracts remain supported; Foundation V2 adds reusable content/figure adapters and a deterministic application scaffold without implementing Data Forge generation."
+  "generator_renderers_status": "Legacy contracts remain supported; Foundation V2 adds reusable content/figure adapters and a deterministic application scaffold without implementing Data Forge generation.",
+  "v3_source_handoff": "../../reference_material/v3_handoff_2026-09-04/datapass-visual-platform-codex-v3-consumer-expansion/START_HERE.md",
+  "v3_counts": {
+    "consumers": 7,
+    "migrated_visuals": 30,
+    "practice_items": 323,
+    "practice_variants": 500,
+    "interview_questions": 36,
+    "architecture_variants": 16,
+    "public_registry_records": 10,
+    "golden_gallery_stories": 38
+  },
+  "v3_reports": {
+    "test_report": "../../V3_TEST_REPORT.md",
+    "audit_self_review": "../../V3_AUDIT_SELF_REVIEW.md",
+    "reuse_report": "../../V3_REUSE_REPORT.md",
+    "visual_migration_report": "../../V3_VISUAL_MIGRATION_REPORT.md",
+    "consumer_validation": "../../V3_CONSUMER_VALIDATION.md",
+    "migration_log": "../../V3_MIGRATION_LOG.md",
+    "api_surface": "../../V3_API_SURFACE.md",
+    "bundle_report": "../../V3_BUNDLE_REPORT.md"
+  },
+  "v3_source_privacy": "The three source repositories are private. Public runtime attribution must not expose private repository URLs; full pinned source provenance remains in nonbundled migration records. Pilot private overlays are runtime-only local imports."
 }

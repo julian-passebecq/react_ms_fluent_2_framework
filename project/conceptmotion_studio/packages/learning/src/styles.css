@@ -293,3 +293,18 @@
     transition-duration: 0.01ms !important;
   }
 }
+/* V3 shared practice composition; neutral surfaces, no consumer-specific identity. */
+.dp-practice-workbench { min-width: 0; }
+.dp-practice-workbench h1 { font-size: 1.75rem; line-height: 1.25; margin: 0 0 1rem; }
+.dp-practice-badges, .dp-practice-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
+.dp-practice-copy, .dp-practice-editor { padding: 1rem; min-width: 0; overflow-wrap: anywhere; }
+.dp-practice-copy p, .dp-practice-editor p { line-height: 1.65; }
+.dp-practice-copy h2, .dp-practice-editor h2 { font-size: 1.15rem; }
+.dp-practice-copy h3 { font-size: .95rem; margin-top: 1.6rem; }
+.dp-practice-copy aside { border-left: 3px solid #ad7c36; padding-left: 1rem; }
+.dp-practice-copy footer { border-top: 1px solid #d7dce2; margin-top: 2rem; }
+.dp-practice-editor-toolbar { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+.dp-practice-editor-toolbar > * { min-width: 0; }
+.dp-practice-copy pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.dp-practice-actions { padding: .75rem 0; }
+@media (max-width: 700px) { .dp-practice-workbench h1 { font-size: 1.45rem; } .dp-practice-editor-toolbar { align-items: stretch; } }

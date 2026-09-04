@@ -1,0 +1,211 @@
+[
+  {
+    "id": "project.portfolio",
+    "title": "Datapass Portfolio",
+    "summary": "Public portfolio destination listed by the V2 handoff, covering experience, portfolio work and certifications.",
+    "url": "https://datapassj.com/",
+    "status": "active",
+    "kind": "portfolio",
+    "iconId": "project.portfolio",
+    "features": [
+      "experience",
+      "portfolio",
+      "certifications"
+    ],
+    "technologies": [
+      "web"
+    ],
+    "locales": [
+      "en"
+    ],
+    "featured": true,
+    "order": 10,
+    "verifiedAt": "2026-09-04T00:00:00Z"
+  },
+  {
+    "id": "project.d3-visual-studio",
+    "title": "D3 Visual Studio",
+    "summary": "Public visualization sandbox listed by the V2 handoff for D3 and editorial chart exploration.",
+    "url": "https://d3ecosite.netlify.app/sandbox/",
+    "status": "active",
+    "kind": "visualization-studio",
+    "iconId": "project.visualization",
+    "features": [
+      "D3",
+      "editorial charts",
+      "generator"
+    ],
+    "technologies": [
+      "D3",
+      "web"
+    ],
+    "locales": [
+      "en"
+    ],
+    "featured": true,
+    "order": 20,
+    "verifiedAt": "2026-09-04T00:00:00Z"
+  },
+  {
+    "id": "project.datapass-visual-platform",
+    "title": "Datapass Visual Platform",
+    "summary": "Source repository for the shared visual-learning foundation and its consumers.",
+    "url": "https://github.com/julian-passebecq/react_ms_fluent_2_framework",
+    "repository": "https://github.com/julian-passebecq/react_ms_fluent_2_framework",
+    "status": "experimental",
+    "kind": "framework",
+    "iconId": "project.framework",
+    "features": [
+      "visual learning",
+      "source-aware documentation",
+      "app scaffold"
+    ],
+    "technologies": [
+      "React",
+      "TypeScript",
+      "Fluent UI v9"
+    ],
+    "locales": [
+      "en",
+      "no"
+    ],
+    "featured": false,
+    "order": 30,
+    "verifiedAt": "2026-09-04T00:00:00Z"
+  },
+  {
+    "id": "project.formation",
+    "title": "Formation",
+    "summary": "Formation consumer source. No hosted deployment is claimed.",
+    "url": "https://github.com/julian-passebecq/react_ms_fluent_2_framework/tree/main/project/conceptmotion_studio/apps/formation",
+    "status": "building",
+    "kind": "learning",
+    "features": [
+      "courses",
+      "notebooks",
+      "figures",
+      "assessment",
+      "progress"
+    ],
+    "technologies": [
+      "React",
+      "TypeScript",
+      "Fluent UI"
+    ],
+    "order": 40
+  },
+  {
+    "id": "project.code-sandbox",
+    "title": "Code Sandbox",
+    "summary": "Code Sandbox consumer source. No hosted deployment is claimed.",
+    "url": "https://github.com/julian-passebecq/react_ms_fluent_2_framework/tree/main/project/conceptmotion_studio/apps/code-sandbox",
+    "status": "building",
+    "kind": "practice",
+    "features": [
+      "practice catalog",
+      "Monaco",
+      "visualize",
+      "solution compare"
+    ],
+    "technologies": [
+      "React",
+      "TypeScript",
+      "Fluent UI"
+    ],
+    "order": 50
+  },
+  {
+    "id": "project.code-interview",
+    "title": "Code Interview",
+    "summary": "Code Interview consumer source. No hosted deployment is claimed.",
+    "url": "https://github.com/julian-passebecq/react_ms_fluent_2_framework/tree/main/project/conceptmotion_studio/apps/code-interview",
+    "status": "building",
+    "kind": "assessment",
+    "features": [
+      "interview",
+      "domain packs",
+      "review"
+    ],
+    "technologies": [
+      "React",
+      "TypeScript",
+      "Fluent UI"
+    ],
+    "order": 60
+  },
+  {
+    "id": "project.algorithm-atlas",
+    "title": "Algorithm Atlas",
+    "summary": "Algorithm Atlas consumer source. No hosted deployment is claimed.",
+    "url": "https://github.com/julian-passebecq/react_ms_fluent_2_framework/tree/main/project/conceptmotion_studio/apps/algorithm-atlas",
+    "status": "building",
+    "kind": "explainer",
+    "features": [
+      "ConceptMotion",
+      "figures",
+      "invariants"
+    ],
+    "technologies": [
+      "React",
+      "TypeScript",
+      "Fluent UI"
+    ],
+    "order": 70
+  },
+  {
+    "id": "project.architecture-atlas",
+    "title": "Architecture Atlas",
+    "summary": "Architecture Atlas consumer source. No hosted deployment is claimed.",
+    "url": "https://github.com/julian-passebecq/react_ms_fluent_2_framework/tree/main/project/conceptmotion_studio/apps/architecture-atlas",
+    "status": "building",
+    "kind": "architecture-learning",
+    "features": [
+      "stage lens",
+      "DiagramSpec",
+      "lineage",
+      "workflow"
+    ],
+    "technologies": [
+      "React",
+      "TypeScript",
+      "Fluent UI"
+    ],
+    "order": 80
+  },
+  {
+    "id": "project.pilot-center",
+    "title": "Pilot Center",
+    "summary": "Pilot Center consumer source. No hosted deployment is claimed.",
+    "url": "https://github.com/julian-passebecq/react_ms_fluent_2_framework/tree/main/project/conceptmotion_studio/apps/pilot-center",
+    "status": "building",
+    "kind": "personal-tool",
+    "features": [
+      "project registry",
+      "galaxy",
+      "sticky notes"
+    ],
+    "technologies": [
+      "React",
+      "TypeScript",
+      "Fluent UI"
+    ],
+    "order": 90
+  },
+  {
+    "id": "project.ml-atlas",
+    "title": "ML / Data Science Web",
+    "summary": "Business-first machine-learning mental models and visual lab.",
+    "url": "https://mldatasc.netlify.app/",
+    "status": "active",
+    "kind": "learning",
+    "features": [
+      "ML mental models",
+      "visual lab"
+    ],
+    "technologies": [
+      "web",
+      "SVG"
+    ],
+    "order": 100
+  }
+]

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { transformWithOxc } from 'vite';
 
 import { APP_PRESETS, createAppRecipe, generateAppFiles, validateAppName } from '../src/index.js';
 
@@ -50,5 +51,15 @@ describe('Datapass app recipes', () => {
     for (const name of ['../escape', 'Title Case', 'studio', '-broken']) {
       expect(() => validateAppName(name)).toThrow();
     }
+  });
+
+  it('escapes custom quoted titles as JSX entities and compiles the generated source', async () => {
+    const files = generateAppFiles({
+      name: 'quoted-title-proof', preset: 'catalog', title: 'Say "hello" & <learn>',
+      description: 'A "quoted" description with a \\ path\nand a second line.',
+    });
+    expect(files['src/App.tsx']).toContain('brand="Say &quot;hello&quot; &amp; &lt;learn&gt;"');
+    expect(files['index.html']).toContain('<title>Say &quot;hello&quot; &amp; &lt;learn&gt;</title>');
+    await expect(transformWithOxc(files['src/App.tsx'], 'generated/App.tsx')).resolves.toHaveProperty('code');
   });
 });

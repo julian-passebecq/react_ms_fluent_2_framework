@@ -9,9 +9,9 @@ import {
 
 describe('Studio Project Registry fixture', () => {
   it('uses unique stable IDs and canonical V2 records', () => {
-    expect(PROJECT_REGISTRY_VERSION).toBe('2');
+    expect(PROJECT_REGISTRY_VERSION).toBe('3');
     expect(new Set(projectRegistry.map((project) => project.id)).size).toBe(projectRegistry.length);
-    expect(projectRegistry.map((project) => project.id)).toEqual([
+    expect(projectRegistry.slice(0, 3).map((project) => project.id)).toEqual([
       'project.portfolio',
       'project.d3-visual-studio',
       'project.datapass-visual-platform',

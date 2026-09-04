@@ -30,6 +30,15 @@ export default defineConfig({
       reuseExistingServer: true,
       timeout: 120_000,
     },
+    ...[
+      ['code-sandbox', 4176], ['code-interview', 4177], ['algorithm-atlas', 4178],
+      ['architecture-atlas', 4179], ['pilot-center', 4180],
+    ].map(([app, port]) => ({
+      command: `pnpm run dev:${app}`,
+      url: `http://127.0.0.1:${port}`,
+      reuseExistingServer: true,
+      timeout: 120_000,
+    })),
   ],
   projects: [
     {

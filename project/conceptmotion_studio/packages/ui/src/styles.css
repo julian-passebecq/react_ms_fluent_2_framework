@@ -1514,3 +1514,22 @@
     border: 0;
   }
 }
+:root {
+  --datapass-canvas: #f8f8f5;
+  --datapass-ink: #102d43;
+  --datapass-slate: #4f5d64;
+  --datapass-accent: #0b6870;
+  --datapass-highlight: #d7a342;
+  --datapass-border: #dce3e5;
+}
+.dp-figure-player { min-width: 0; }
+.dp-figure-player__caption { color: var(--datapass-ink); font-size: 1rem; line-height: 1.65; margin: 1rem 0; overflow-wrap: anywhere; }
+.dp-figure-player__motion { color: var(--datapass-slate); font-size: .875rem; }
+.dp-figure-player .dp-inspector-panel { margin-top: .75rem; overflow-wrap: anywhere; }
+.dp-figure-player a { color: var(--datapass-accent); }
+.dp-figure-player__pan-hint { color: var(--datapass-slate); font-size: .8rem; line-height: 1.5; }
+/* Only the reusable player opts into panning; Foundation V1/V2 figures retain their sizing. */
+.dp-figure-player[data-pannable="true"] .dp-visualization-surface__renderer { overflow-x: auto; overscroll-behavior-x: contain; min-height: 0; }
+.dp-figure-player[data-pannable="true"] .dp-visualization-surface__renderer > [data-conceptmotion-host] { min-width: 960px !important; }
+.dp-figure-player[data-pannable="true"] .dp-visualization-surface__renderer:focus-visible { outline: 2px solid var(--datapass-accent); outline-offset: -3px; }
+.dp-figure-player .dp-source-note { overflow-wrap: anywhere; }

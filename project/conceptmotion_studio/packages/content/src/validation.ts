@@ -51,7 +51,7 @@ const CELL_TYPES = ['markdown', 'code', 'text-output', 'table-output', 'image-ou
 const QUESTION_TYPES: readonly QuestionType[] = ['single-choice', 'multiple-choice', 'true-false', 'ordering', 'matching', 'code-choice', 'figure-choice'];
 const QUESTION_DIFFICULTIES: readonly QuestionDifficulty[] = ['beginner', 'intermediate', 'advanced'];
 const ASSESSMENT_MODES: readonly AssessmentMode[] = ['practice', 'mock-exam', 'interview'];
-const PROJECT_STATUSES: readonly ProjectStatus[] = ['active', 'experimental', 'legacy', 'archived'];
+const PROJECT_STATUSES: readonly ProjectStatus[] = ['active', 'experimental', 'legacy', 'archived', 'building', 'planned'];
 const APP_PRESETS: readonly AppPreset[] = ['knowledge', 'learning', 'catalog', 'portfolio-hub'];
 
 function isRecord(value: unknown): value is Record<string, unknown> {

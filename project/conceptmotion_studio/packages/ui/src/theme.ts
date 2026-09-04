@@ -26,9 +26,9 @@ const generatedLightTheme = createLightTheme(datapassBrandVariants);
 export const datapassLightTheme: Theme = {
   ...generatedLightTheme,
   colorNeutralBackground1: '#FFFFFF',
-  colorNeutralBackground2: '#F7F8FA',
+  colorNeutralBackground2: '#F8F8F5',
   colorNeutralBackground3: '#F1F3F5',
-  colorNeutralForeground1: '#172126',
+  colorNeutralForeground1: '#102D43',
   colorNeutralForeground2: '#4F5D64',
   colorNeutralStroke1: '#DDE3E6',
   colorNeutralStroke2: '#E9EDEF',

@@ -1,0 +1,47 @@
+{
+  "source": {
+    "repository": "julian-passebecq/leetcodedataeng",
+    "revision": "a3bff6aeeb89af5e379b4d8c168b3b1f581fe026"
+  },
+  "files": {
+    "SQL_CHALLENGE_IMPORT.md": "0e6a6c5c7e24627dce337e3612641c605c13f1a6ed66f1b132ee270e516fb2c2",
+    "THIRD_PARTY_NOTICES.md": "bb72fc2151f349d0b2e3304d69b75ec2ae608a99e69627fd9157b6f0b4de9b97",
+    "ZILLACODE_APACHE_LICENSE.txt": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "src/airflow3StreamingExtensions.js": "9476ac7345ad5fa9f9b2dd6efed6513c879a54bfcb17c2dbca19f17ee9b4f2a0",
+    "src/airflowTroubleshootingExtensions.js": "1d63832dadd12ee13ff9269857a6e7db3578e50e83e3d35a48aeab4ac65d7335",
+    "src/algorithmExtensions.js": "0a81a5cd9ca7fb8dcedc48409618946f858eba564e81e1f2efef77c6ea3e2847",
+    "src/analyticsEngineeringExtensions.js": "3a03ccb1c3b347f1e0a45fa56be259643508bf496d9f6ce3e488a428f723f952",
+    "src/architectureVisualExtensions.js": "74d7ba46d95db22ad2e764905b2fa0a3c3f6cebfc98275e5b18466219e823278",
+    "src/cheatSheets.js": "6e70db5f0aa1b96de2a329e53d1c466bd395b7baa8ee1689a6097a915b063423",
+    "src/curriculum.js": "9018dd79e8af3a68734ad1abadab649c1bbef1277021fbeab92a8748d2cd2e52",
+    "src/dataReliabilityExtensions.js": "1cbef959acfc225739538ab669b49b108037958db011560a33fbd686fe8d2efd",
+    "src/engineLab.js": "b5a34bcad1664919b3fa2e540bd7328f216622e0a07032969cd46777df0ff677",
+    "src/learningHubContent.js": "f6b470b280a6e44faa7720c05b7c8fb49718e9e0cecdaffe9b8e25790c910596",
+    "src/modernLakehouseExtensions.js": "6083a4a80447d3cd38d19fb553505556895df3b4787219232fac3c1b89d593fc",
+    "src/pipelineTroubleshootingExtensions.js": "e7588d3b235efd9a86d95ccb487262a9bedda8ee5d09603f3769794439c4508c",
+    "src/pythonLab.js": "cfbad3260480f8039ee9fac044daa9e364a267f304d37d41946071e6ab065ffb",
+    "src/seniorityExtensions.js": "a1a16960f89de26a8a0f6aa481a9ff889369f50ef5d9663d4db0762f7def2b1f",
+    "src/sourceCourseExtensions.js": "5e517f6d9fd92c83c69604b1f0e7b4e2df595f72578960b7c111e6666119b28a",
+    "src/sqlChallenges.js": "641edcfe0b81a96bb0e4f3bbe7f665f43a2b11d9145a4c0749c28c47a25a7c3a",
+    "src/sqlDialects.js": "086df0dc7a2da7cc522c2f76603ae258790b8adb4438eb55ce9b51bab66a21d4",
+    "src/storagePerformanceExtensions.js": "1dd9de7ce3e38b90ca255277137b432d0bc0604615dbc5f069666fd6078699db"
+  },
+  "collections": {
+    "curriculum": 211,
+    "sql": 60,
+    "engine": 24,
+    "python": 28
+  },
+  "distinctItems": 323,
+  "variants": 500,
+  "curriculumTracks": 24,
+  "cheatSheets": 10,
+  "exclusions": [],
+  "excludedImplementation": [
+    "legacy React components",
+    "legacy CSS",
+    "legacy renderers",
+    "vendor logo assets"
+  ],
+  "notices": "Original source notices retained for attribution context; excluded UI/assets are not redistributed."
+}

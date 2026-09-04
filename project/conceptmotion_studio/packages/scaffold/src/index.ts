@@ -167,5 +167,6 @@ function escapeHtml(value: string): string {
 }
 
 function escapeTsx(value: string): string {
-  return value.replaceAll('\\', '\\\\').replaceAll('"', '\\"').replaceAll('\n', ' ');
+  // JSX quoted attributes use XML entities, not JavaScript backslash escapes.
+  return escapeHtml(value).replaceAll('\n', ' ');
 }

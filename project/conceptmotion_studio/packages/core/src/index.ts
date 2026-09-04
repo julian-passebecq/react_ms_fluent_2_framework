@@ -1,5 +1,6 @@
 export * from './algorithm';
 export * from './diagram';
+export * from './diagram-layout';
 export * from './entities';
 export * from './flow';
 export * from './icons';

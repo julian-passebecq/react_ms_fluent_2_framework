@@ -1,4 +1,8 @@
 import './styles.css';
+export { ChallengeWorkbench } from './challenge-workbench';
+export type { ChallengeWorkbenchProps } from './challenge-workbench';
+export { parsePracticeWorkspace, serializePracticeWorkspace, usePracticeWorkspace } from './practice-state';
+export type { PracticeWorkspaceState } from './practice-state';
 
 export {
   AssessmentRunner,

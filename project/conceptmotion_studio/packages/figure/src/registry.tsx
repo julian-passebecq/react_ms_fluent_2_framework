@@ -69,6 +69,18 @@ function figureStateIndex(figure: FigureSpec, reducedMotion: boolean): number {
   return numericState(state);
 }
 
+/** Small opt-in editorial profile; renderer-neutral content never embeds colors. */
+function figureOptions(figure: FigureSpec, locale: string) {
+  return {
+    locale: locale === 'no' ? 'no' as const : 'en' as const,
+    theme: figure.profile === 'professional' ? {
+      ink: '#102d43', mutedInk: '#526270', surface: '#ffffff', surfaceRaised: '#f8f8f5',
+      accent: '#0b6870', accentSubtle: '#e9f3f1', border: '#cdd7d9',
+      dataBatch: '#0b6870', dataStream: '#0b6870', control: '#526270', lineage: '#526270', cdc: '#8a5a14',
+    } : undefined,
+  };
+}
+
 function conceptMotionAdapter(id: string): FigureRendererAdapter {
   return {
     id,
@@ -89,7 +101,7 @@ function conceptMotionAdapter(id: string): FigureRendererAdapter {
           reducedMotion={reducedMotion}
           selectedId={selectedId}
           onSelect={onSelect}
-          options={{ locale: locale === 'no' ? 'no' : 'en' }}
+          options={figureOptions(figure, locale)}
           ariaLabel={resolveText(figure.fallbackText, locale)}
           fallback={resolveText(figure.fallbackText, locale)}
         />
@@ -123,7 +135,7 @@ function workflowAdapter(mode: 'topology' | 'run'): FigureRendererAdapter {
           reducedMotion={reducedMotion}
           selectedId={selectedId}
           onSelect={onSelect}
-          options={{ locale: locale === 'no' ? 'no' : 'en' }}
+          options={figureOptions(figure, locale)}
           ariaLabel={resolveText(figure.fallbackText, locale)}
           fallback={resolveText(figure.fallbackText, locale)}
         />

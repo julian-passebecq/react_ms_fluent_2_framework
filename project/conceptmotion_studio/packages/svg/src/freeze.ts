@@ -37,6 +37,20 @@ export function freezeSvgElement(
     clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
   }
   if (options.stripRuntimeState !== false) {
+    // FigurePlayer namespaces live document ARIA IDs. Standalone frozen SVGs
+    // normalize that runtime namespace so repeated exports remain deterministic.
+    const playerPrefix = clone.getAttribute('data-figure-player-a11y');
+    if (playerPrefix) {
+      const owner = clone.getAttribute('data-conceptmotion') ?? 'conceptmotion';
+      const title = clone.querySelector(`[id="${playerPrefix}-title"]`);
+      const description = clone.querySelector(`[id="${playerPrefix}-description"]`);
+      if (title && description) {
+        title.id = `${owner}-title`;
+        description.id = `${owner}-description`;
+        clone.setAttribute('aria-labelledby', `${title.id} ${description.id}`);
+      }
+      clone.removeAttribute('data-figure-player-a11y');
+    }
     clone.querySelectorAll<SVGElement>('*').forEach((element) => {
       for (const attribute of RUNTIME_ATTRIBUTES) element.removeAttribute(attribute);
       element.style.removeProperty('transition');

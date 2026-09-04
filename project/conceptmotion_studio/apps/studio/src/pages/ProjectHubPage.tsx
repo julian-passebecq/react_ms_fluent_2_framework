@@ -58,6 +58,8 @@ const statusTone: Record<ProjectStatus, StatusTone> = {
   experimental: 'informative',
   legacy: 'warning',
   archived: 'neutral',
+  building: 'informative',
+  planned: 'neutral',
 };
 
 const copy = {

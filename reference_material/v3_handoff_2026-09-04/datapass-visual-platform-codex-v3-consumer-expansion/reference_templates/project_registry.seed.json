@@ -1,0 +1,93 @@
+[
+  {
+    "id": "project.portfolio",
+    "title": "Datapass Portfolio",
+    "summary": "Professional CV, experience and selected portfolio work.",
+    "url": "https://datapassj.com/",
+    "status": "active",
+    "kind": "portfolio",
+    "features": ["career", "selected projects", "certifications"],
+    "technologies": ["web"],
+    "featured": true
+  },
+  {
+    "id": "project.formation",
+    "title": "Formation",
+    "summary": "Course-first Python, SQL and display-only PySpark learning.",
+    "url": "https://example.invalid/formation",
+    "status": "building",
+    "kind": "learning",
+    "features": ["courses", "notebooks", "figures", "assessment", "progress"],
+    "technologies": ["React", "TypeScript", "Fluent UI"]
+  },
+  {
+    "id": "project.code-sandbox",
+    "title": "Code Sandbox",
+    "summary": "Large data-engineering coding and practice catalog.",
+    "url": "https://leetodedataeng.netlify.app/",
+    "status": "building",
+    "kind": "practice",
+    "features": ["challenge catalog", "Monaco", "visualize", "solution compare", "progress"],
+    "technologies": ["React", "TypeScript", "SQL", "Python", "PySpark"]
+  },
+  {
+    "id": "project.code-interview",
+    "title": "Code Interview",
+    "summary": "Focused interview sessions across data, BI and cloud domains.",
+    "url": "https://example.invalid/code-interview",
+    "status": "planned",
+    "kind": "assessment",
+    "features": ["mock interview", "domain packs", "review"],
+    "technologies": ["React", "TypeScript"]
+  },
+  {
+    "id": "project.algorithm-atlas",
+    "title": "Algorithm Atlas",
+    "summary": "Interactive mental models for algorithms, SQL, data engineering and selected ML concepts.",
+    "url": "https://example.invalid/algorithm-atlas",
+    "status": "planned",
+    "kind": "explainer",
+    "features": ["ConceptMotion", "figures", "code", "complexity", "interview notes"],
+    "technologies": ["React", "TypeScript", "SVG"]
+  },
+  {
+    "id": "project.architecture-atlas",
+    "title": "Architecture Atlas",
+    "summary": "Cross-cloud data architecture explorer.",
+    "url": "https://architecturewebv1j.netlify.app/",
+    "status": "building",
+    "kind": "architecture-learning",
+    "features": ["DiagramSpec", "cross-cloud lens", "lineage", "workflow"],
+    "technologies": ["React", "TypeScript", "SVG"]
+  },
+  {
+    "id": "project.pilot-center",
+    "title": "Pilot Center",
+    "summary": "Personal project command center and idea board.",
+    "url": "https://example.invalid/pilot",
+    "status": "planned",
+    "kind": "personal-tool",
+    "features": ["project registry", "galaxy", "sticky notes", "next actions"],
+    "technologies": ["React", "TypeScript", "Fluent UI"]
+  },
+  {
+    "id": "project.d3-visual-studio",
+    "title": "D3 Visual Studio",
+    "summary": "D3 and editorial visualization sandbox.",
+    "url": "https://d3ecosite.netlify.app/sandbox/",
+    "status": "active",
+    "kind": "visualization-studio",
+    "features": ["D3", "editorial charts", "generator"],
+    "technologies": ["D3", "web"]
+  },
+  {
+    "id": "project.ml-atlas",
+    "title": "ML / Data Science Web",
+    "summary": "Business-first ML/data-science explainer and visual lab.",
+    "url": "https://mldatasc.netlify.app/",
+    "status": "active",
+    "kind": "learning",
+    "features": ["ML mental models", "visual lab"],
+    "technologies": ["web", "SVG"]
+  }
+]

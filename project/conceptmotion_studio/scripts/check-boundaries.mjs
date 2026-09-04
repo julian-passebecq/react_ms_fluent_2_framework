@@ -84,7 +84,7 @@ const rules = {
       return specifier.startsWith('.') || specifier === 'react' || specifier === 'react-dom'
         || specifier.startsWith('@fluentui/') || specifier === '@datapass/code'
         || specifier === '@datapass/content' || specifier === '@datapass/figure'
-        || specifier === '@datapass/progress';
+        || specifier === '@datapass/progress' || specifier === '@datapass/ui';
     },
     forbidden: [[/@conceptmotion\/(?:core|svg|react)|monaco-editor/, 'renderer semantics or direct editor implementation dependency']],
   },

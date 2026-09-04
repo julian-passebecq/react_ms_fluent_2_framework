@@ -1,0 +1,5 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "composite": true, "tsBuildInfoFile": "../../node_modules/.cache/pilot-center.tsbuildinfo" },
+  "include": ["src", "../../content/projects.ts", "../../content/projects.registry.json", "vite.config.ts"]
+}

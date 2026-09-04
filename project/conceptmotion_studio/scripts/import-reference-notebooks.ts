@@ -7,8 +7,8 @@ import { importIpynb } from '../packages/notebook-import/src/index.js';
 
 const workspaceRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const inputRoot = path.join(workspaceRoot, 'examples', 'notebooks');
-const outputRoot = path.join(workspaceRoot, 'apps', 'dubreu-formation', 'src', 'generated');
-const publicNotebookRoot = path.join(workspaceRoot, 'apps', 'dubreu-formation', 'public', 'notebooks');
+const outputRoot = path.join(workspaceRoot, 'apps', 'formation', 'src', 'generated');
+const publicNotebookRoot = path.join(workspaceRoot, 'apps', 'formation', 'public', 'notebooks');
 
 const jobs = [
   {
