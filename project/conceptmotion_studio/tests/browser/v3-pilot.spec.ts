@@ -105,3 +105,27 @@ test('Pilot ideas support structured edits, filtering, undo and previewed determ
   expect(publicExport).not.toContain('Local overlay proof');
   expect(publicExport).not.toContain('Inspect SQL grain');
 });
+
+test('Pilot backup controls stay contained with wider platform font metrics', async ({ page }) => {
+  await page.goto(`${app}/#/backups`);
+  const type = page.getByLabel('Import type');
+  await expect(type).toBeVisible();
+  // Exercise the Linux failure mechanism on every OS: a long native option
+  // must not establish an implicit grid minimum wider than the phone panel.
+  await page.addStyleTag({ content: '.pilot-form select { font-family: monospace; font-size: 18px; }' });
+  await type.selectOption('overlay');
+  await page.getByLabel('Choose a JSON file').setInputFiles({ name: 'projects.private.local.backup-with-a-long-file-name.json', mimeType: 'application/json', buffer: Buffer.from('{"schemaVersion":1,"overlays":[]}') });
+  await page.getByRole('button', { name: 'Preview import' }).press('Enter');
+  await expect(page.getByTestId('pilot-import-preview')).toContainText('Existing ideas are kept.');
+  const bounds = await page.locator('.pilot-form').evaluate((form) => {
+    const panel = form.getBoundingClientRect();
+    const padding = Number.parseFloat(getComputedStyle(form).paddingRight);
+    return [...form.querySelectorAll('select, textarea, input, button')].map((control) => ({
+      control: control.tagName,
+      right: control.getBoundingClientRect().right,
+      contentRight: panel.right - padding - Number.parseFloat(getComputedStyle(form).borderRightWidth),
+    }));
+  });
+  for (const { control, right, contentRight } of bounds) expect(right, `${control} stays within the backup panel`).toBeLessThanOrEqual(contentRight + 1);
+  await accessible(page);
+});

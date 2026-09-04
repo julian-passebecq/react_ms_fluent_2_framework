@@ -6,6 +6,10 @@ html, body, #root { margin: 0; min-height: 100%; background: #f8f7f4; color: #17
 .sandbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 1rem; }
 .sandbox-actions, .sandbox-catalog-summary { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin: .5rem 0 1rem; }
 .sandbox-catalog-summary { justify-content: space-between; }
+/* Native option widths depend on platform fonts. Keep each caller-owned
+   filter shrinkable inside the shared wrapping bar, without clipping it. */
+.sandbox-catalog-facet, .sandbox-catalog-facet .fui-Select { min-width: 0; max-width: 100%; }
+.sandbox-catalog-facet select { min-width: 0; max-width: 100%; width: 100%; }
 .dp-entity-table small { display: block; color: #546476; margin-top: .3rem; }
 .sandbox-references { display: grid; gap: 1rem; }
 .sandbox-references details, .sandbox-backup { padding: 1.25rem; background: #fff; border: 1px solid #d7dce2; border-radius: .4rem; }

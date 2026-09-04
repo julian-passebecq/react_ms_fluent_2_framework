@@ -7,6 +7,27 @@ async function accessible(page: Page) {
 }
 test.beforeEach(async ({ page }) => { await page.emulateMedia({ reducedMotion: 'reduce' }); });
 
+test('Code Sandbox catalog contains long native select options with narrow fallback-font metrics', async ({ page }) => {
+  await page.goto('http://127.0.0.1:4176/');
+  await expect(page.getByText('323 of 323 practice items', { exact: true })).toBeVisible();
+  // Linux lacks Segoe UI. Exercise wider fallback metrics as well as the default theme.
+  await page.addStyleTag({ content: '.dp-search-filter-bar, .dp-search-filter-bar * { font-family: Arial, sans-serif !important; font-size: 16px !important; }' });
+  const tracks = page.getByRole('combobox', { name: 'Domain / track', exact: true });
+  const longest = await tracks.locator('option').evaluateAll(options => [...options].sort((a, b) => (b.textContent?.length ?? 0) - (a.textContent?.length ?? 0))[0].value);
+  for (const width of [390, 360, 320]) {
+    await page.setViewportSize({ width, height: 844 });
+    await tracks.selectOption(longest);
+    await expect(tracks).toHaveValue(longest);
+    const geometry = await page.evaluate(() => {
+      const bar = document.querySelector('.dp-search-filter-bar')!.getBoundingClientRect();
+      return { overflow: document.documentElement.scrollWidth - window.innerWidth, controls: [...document.querySelectorAll('.dp-search-filter-bar select')].map(select => ({ label: select.getAttribute('aria-label'), right: select.getBoundingClientRect().right, limit: bar.right })) };
+    });
+    expect(geometry.overflow, JSON.stringify({ width, ...geometry })).toBeLessThanOrEqual(1);
+    for (const control of geometry.controls) expect(control.right, `${width}px ${control.label}`).toBeLessThanOrEqual(control.limit);
+  }
+  await accessible(page);
+});
+
 test('Code Sandbox preserves corpus, URL filters, lazy editor, variants, notes and backup', async ({ page }, info) => {
   const editorRequests: string[] = [];
   page.on('request', request => { if (/(monaco-editor|MonacoSurfaces|monacoLoader|editor\.worker|json\.worker)/iu.test(request.url())) editorRequests.push(request.url()); });

@@ -20,7 +20,11 @@ body { min-width: 320px; }
 .pilot-actions { display: flex; gap: .65rem; align-items: center; flex-wrap: wrap; }
 .pilot-filters { display: flex; gap: 1rem; align-items: end; flex-wrap: wrap; }
 .pilot-filters > * { flex: 1 1 9rem; min-width: 0; }
-.pilot-form { display: grid; gap: 1rem; }
+.pilot-form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; min-width: 0; }
+/* Native select option metrics vary by OS; do not let their min-content size
+   enlarge the grid track or any neighboring backup controls. */
+.pilot-form > *, .pilot-form .fui-Field, .pilot-form .fui-Input, .pilot-form .fui-Select, .pilot-form .fui-Textarea { min-width: 0; max-width: 100%; }
+.pilot-form select { min-width: 0; max-width: 100%; width: 100%; }
 .pilot-form input, .pilot-form textarea, .pilot-filters input { font-size: 1rem; }
 .pilot-form input[type="file"] { max-width: 100%; font-size: .875rem; }
 .pilot-form textarea { min-height: 6rem; }
