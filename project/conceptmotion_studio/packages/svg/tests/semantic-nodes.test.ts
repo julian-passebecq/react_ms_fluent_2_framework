@@ -27,7 +27,7 @@ describe('opt-in semantic Diagram nodes', () => {
     expect(host.querySelectorAll('[data-role="port"]')).toHaveLength(6);
     renderer.update({ spec });
     expect(host.querySelector('[data-node-id="source"]')).toBe(node);
-    expect(node?.querySelector('[data-role="label"]')?.textContent).toBe('An explicitly labelleddata source');
+    expect(node?.querySelector('[data-role="label"]')?.textContent).toBe('An explicitlylabelled data…');
     renderer.update({ spec: legacy });
     expect(node?.querySelectorAll('tspan')).toHaveLength(0);
     expect(host.querySelectorAll('[data-role="port"]')).toHaveLength(6);
@@ -35,6 +35,23 @@ describe('opt-in semantic Diagram nodes', () => {
     expect(node?.querySelector('[data-role="background"]')?.getAttribute('height')).toBe('68');
     expect(node?.querySelector('[data-role="label"]')?.getAttribute('font-size')).toBe('11');
     expect(host.querySelectorAll('[data-semantic-node="true"]')).toHaveLength(0);
+    renderer.destroy();
+  });
+  it('wraps wide fallback-font labels by glyph budget while retaining full semantic names', () => {
+    const host = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); const renderer = new DiagramRenderer();
+    const labels = ['Data Factory Pipelines / Git', 'ML / Data Science Web', 'W'.repeat(100_000)];
+    const wrapped = { ...spec, groups: [], nodes: labels.map((label, index) => ({ id: index ? `n${index}` : 'hub', label })) };
+    renderer.mount(host, { spec: { ...wrapped, edges: [] } }, { reducedMotion: true });
+    const lines = (id: string) => [...host.querySelectorAll(`[data-node-id="${id}"] [data-role="label"] tspan`)].map(span => span.textContent);
+    expect(lines('hub')).toEqual(['Data Factory', 'Pipelines / Git']);
+    expect(lines('n1')).toEqual(['ML / Data', 'Science Web']);
+    expect(lines('n2')).toEqual(['WWWWWWWWWW', 'WWWWWWWWW…']);
+    for (const [index, label] of labels.entries()) {
+      const node = host.querySelector(`[data-node-id="${index ? `n${index}` : 'hub'}"]`)!;
+      expect(node.getAttribute('aria-label')).toContain(label);
+      expect(node.querySelector('[data-role="label"]')?.getAttribute('font-size')).toBe('14');
+    }
+    const frozen = renderer.freeze(); renderer.update({ spec: { ...wrapped, edges: [] } }); expect(renderer.freeze()).toBe(frozen);
     renderer.destroy();
   });
 });

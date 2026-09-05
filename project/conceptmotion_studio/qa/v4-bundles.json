@@ -7,11 +7,11 @@
       "initialBudget": 650000,
       "initialExcludesMonaco": true,
       "editorLazyChunks": [
-        "assets/MonacoSurfaces-CkQ_at_S.js",
-        "assets/jsonMode-7oY3CZ1-.js",
+        "assets/MonacoSurfaces-DP5wOihV.js",
+        "assets/jsonMode--FnkwtYH.js",
         "assets/sql-NEE52Syq.js",
         "assets/shell-CC2rA5mh.js",
-        "assets/python-BBE3uTD7.js",
+        "assets/python-CJW_N4y_.js",
         "assets/powershell-DmHpPYUd.js",
         "assets/csharp-BKxtCVv1.js"
       ],
@@ -23,11 +23,11 @@
       "initialBudget": 550000,
       "initialExcludesMonaco": true,
       "editorLazyChunks": [
-        "assets/MonacoSurfaces-0bxAttA0.js",
-        "assets/jsonMode-DEmELWpB.js",
+        "assets/MonacoSurfaces-Bjr9daF9.js",
+        "assets/jsonMode-DBzdUWD2.js",
         "assets/sql-NEE52Syq.js",
         "assets/shell-CC2rA5mh.js",
-        "assets/python-GldGqVbW.js",
+        "assets/python-CjV2j3Pl.js",
         "assets/powershell-DmHpPYUd.js",
         "assets/csharp-BKxtCVv1.js"
       ],
@@ -39,11 +39,11 @@
       "initialBudget": 650000,
       "initialExcludesMonaco": true,
       "editorLazyChunks": [
-        "assets/MonacoSurfaces-BG5LEB33.js",
-        "assets/jsonMode-CViW8R6G.js",
+        "assets/MonacoSurfaces-D0G6BPJS.js",
+        "assets/jsonMode-oPDnqvK3.js",
         "assets/sql-NEE52Syq.js",
         "assets/shell-CC2rA5mh.js",
-        "assets/python-COvxGMRK.js",
+        "assets/python-DVCAlqyv.js",
         "assets/powershell-DmHpPYUd.js",
         "assets/csharp-BKxtCVv1.js"
       ],

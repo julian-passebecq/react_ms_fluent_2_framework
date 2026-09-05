@@ -37,6 +37,8 @@ The private workspace release label is 4.0.0; existing package/content schema ve
 
 The root README and current handoff point to V4 reports. Old `START_HERE.md`, master prompts, reports and prototype handoff remain preserved historical references. No branch reset, force push or unrelated repository modification is part of this migration.
 
+The initial V4 hosted run found a fallback-font title overflow in opt-in Architecture/Galaxy nodes, while all legacy screenshot comparisons passed. A focused follow-up keeps the same 14px/card geometry and semantic identities, replacing character-count wrapping with deterministic glyph-width budgeting and wider-font regressions. Exact failing-run and corrected-tree evidence is retained in the test report; no baseline or tolerance update masks the defect.
+
 ## Deliberate deferrals
 
 No VS Code extension, MCP server, additional app, universal layout/state package, backend, auth, cloud sync, Spark/Jupyter execution, universal judge, pipeline execution, live source monitoring, news/mail/social integration, D3 Power BI rewrite, GeoStory or full ML renderer expansion. Backups, interview review policy, provider translations and Pilot local state stay local until genuine reuse warrants extraction.

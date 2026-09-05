@@ -20,6 +20,21 @@ async function audit(page: Page, info: TestInfo, name: string) {
 
 test.beforeEach(async ({ page }) => page.emulateMedia({ reducedMotion: 'reduce' }));
 
+test('V4 semantic titles fit wider fallback fonts without reducing text size', async ({ page }) => {
+  for (const [url, nodeId] of [['http://127.0.0.1:4179', 'operate'], ['http://127.0.0.1:4180/#/projects', 'project.ml-atlas']]) {
+    await page.goto(url);
+    if (nodeId === 'operate') await page.getByLabel('Provider', { exact: true }).selectOption('fabric');
+    else await page.getByRole('button', { name: 'Galaxy', exact: true }).click();
+    const label = page.locator(`[data-node-id="${nodeId}"] [data-role="label"]`);
+    await expect(label).toHaveAttribute('font-size', '14');
+    for (const family of ['Arial, sans-serif', 'DejaVu Sans, sans-serif', 'Liberation Sans, sans-serif', 'Courier New, monospace']) {
+      const override = await page.addStyleTag({ content: `[data-semantic-node="true"] [data-role="label"] { font-family: ${family} !important; }` });
+      await assertNodeTextFits(page);
+      await override.evaluate(node => node.remove());
+    }
+  }
+});
+
 test('V4 eleven scenes synchronize operation, entity and state without clipped frames', async ({ page }, info) => {
   test.setTimeout(150_000);
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));

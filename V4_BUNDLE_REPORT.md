@@ -1,6 +1,6 @@
 # V4 bundle and privacy report
 
-Measured from fresh finished-tree production builds on 5 September 2026, Windows, Node 24.19.0 / pnpm 11.19.0 / Vite 8.2.2. All bundle assertions passed. Historical V3 JSON/reports remain unchanged; current machine-readable evidence is in `project/conceptmotion_studio/qa/v4-studio-bundle.json`, `v4-bundles.json` and `v4-bundle-privacy.json`.
+Measured from fresh finished-tree production builds on 5 September 2026, including the hosted-failure fallback-font correction, Windows, Node 24.19.0 / pnpm 11.19.0 / Vite 8.2.2. All bundle assertions passed. Historical V3 JSON/reports remain unchanged; current machine-readable evidence is in `project/conceptmotion_studio/qa/v4-studio-bundle.json`, `v4-bundles.json` and `v4-bundle-privacy.json`.
 
 ## Initial static JavaScript
 
@@ -15,16 +15,16 @@ The existing manifest gate follows static entry imports, not dynamic imports. Va
 | Architecture Atlas | 449,546 | 460,104 | +10,558 | 650,000 | Excluded |
 | Pilot Center | 441,213 | 441,507 | +294 | 650,000 | Excluded |
 
-Studio's Catalog closure is **705,500 bytes** (V3: 705,177), Knowledge **853,447** (842,430), Workflow **841,660** (831,662), and Challenge **861,187** (851,127). Catalog and Knowledge exclude Monaco; Workflow and Challenge reach it only dynamically. The Visual Sandbox remains a lazy route using the same shared editor implementation.
+Studio's Catalog closure is **705,500 bytes** (V3: 705,177), Knowledge **853,868** (842,430), Workflow **842,081** (831,662), and Challenge **861,608** (851,127). Catalog and Knowledge exclude Monaco; Workflow and Challenge reach it only dynamically. The Visual Sandbox remains a lazy route using the same shared editor implementation.
 
 V4 adds disclosure/presentation and semantic explanation support without moving the full practice corpus into catalog entry paths. The lightweight practice-visual availability projection is equality-tested against actual mappings. These measurements demonstrate retained boundaries, not an overall bundle-size reduction claim.
 
 ## Lazy payloads and warnings
 
 - Code Sandbox's full practice chunk is **706.55 kB raw / 127.17 kB gzip**. All 323 items and 500 variants remain.
-- Code Interview's lazy Session chunk is **949.09 kB raw / 195.67 kB gzip**; review guidance and shared Figure presentation are loaded with the session, not the initial selection page.
-- Pilot's lazy Projects chunk is **143.81 kB raw / 41.01 kB gzip**. Projects, Ideas and Backups remain separate routes.
-- Algorithm's lazy SceneDetail is **119.40 kB raw / 33.81 kB gzip**; Studio's Visual Sandbox page is **45.74 kB raw / 16.76 kB gzip**.
+- Code Interview's lazy Session chunk is **949.51 kB raw / 195.88 kB gzip**; review guidance and shared Figure presentation are loaded with the session, not the initial selection page.
+- Pilot's lazy Projects chunk is **144.23 kB raw / 41.23 kB gzip**. Projects, Ideas and Backups remain separate routes.
+- Algorithm's lazy SceneDetail is **119.82 kB raw / 34.03 kB gzip**; Studio's Visual Sandbox page is **45.74 kB raw / 16.76 kB gzip**.
 - Coding consumers' Monaco implementation remains approximately **2676.21 kB raw / 689.06 kB gzip**; JSON language service is **1207.73 / 307.21**. Studio's editor closure remains exactly **3,906,487 bytes**, unchanged from V3. Local editor/JSON workers are separate assets.
 
 Vite's existing >500 kB warnings are still visible for intentionally large lazy editor/corpus chunks and Storybook. No warning limit or initial-route ceiling was weakened. Storybook is an authoring/gallery build, not a consumer entry-size benchmark.

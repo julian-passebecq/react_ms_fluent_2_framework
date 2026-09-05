@@ -72,15 +72,42 @@ const STATUS_GLYPH: Readonly<Record<string, string>> = {
 };
 const nodeIcons = createIconRegistry();
 const PROJECT_STATUSES = new Set(['active', 'building', 'planned', 'experimental', 'legacy', 'archived']);
-function labelLines(text: string, max = 22): string[] {
-  const words = text.split(/\s+/);
-  const lines = [''];
-  for (const word of words) {
-    const last = lines.length - 1;
-    if (lines[last] && `${lines[last]} ${word}`.length > max) lines.push(word);
-    else lines[last] = `${lines[last]} ${word}`.trim();
-  }
-  return lines.length > 2 ? [lines[0], truncate(lines.slice(1).join(' '), max)] : lines;
+// Conservative em budgets keep wrapping deterministic across platform fonts.
+// Character counts alone under-budget uppercase/wide glyphs (e.g. "ML ... Web").
+// This is presentation-only: full semantic labels remain in the node's ARIA name.
+function titleGlyphWidth(char: string): number {
+  if (/\s/.test(char)) return .62;
+  if (/[MWmw@%&]/.test(char)) return 1.05;
+  if (/[ilI|.,:;'!]/.test(char)) return .62;
+  if (/[A-Z]/.test(char)) return .9;
+  if (/[a-z0-9/()[\]{}+_=\-]/.test(char)) return .75;
+  return 1.1;
+}
+function labelLines(text: string, width: number): string[] {
+  const budget = width / 14;
+  const value = text.trim().replace(/\s+/g, ' ');
+  // Normalize once in linear time. Thereafter inspect only the two visible
+  // lines, plus one bounded suffix-reserved pass if an ellipsis is needed.
+  const scan = (start: number, limit: number) => {
+    let end = start, used = 0, lastSpace = -1;
+    while (end < value.length) {
+      const char = String.fromCodePoint(value.codePointAt(end)!);
+      const next = used + titleGlyphWidth(char);
+      if (next > limit) break;
+      used = next;
+      if (char === ' ') lastSpace = end;
+      end += char.length;
+    }
+    return { end, lastSpace };
+  };
+  const first = scan(0, budget);
+  if (first.end === value.length) return [value];
+  const firstEnd = first.lastSpace > 0 ? first.lastSpace : first.end;
+  const secondStart = firstEnd + (value[firstEnd] === ' ' ? 1 : 0);
+  const second = scan(secondStart, budget);
+  if (second.end === value.length) return [value.slice(0, firstEnd), value.slice(secondStart)];
+  const finalEnd = scan(secondStart, budget - titleGlyphWidth('…')).end;
+  return [value.slice(0, firstEnd), `${value.slice(secondStart, finalEnd).trimEnd()}…`];
 }
 
 function statusColor(status: string | undefined, surface: SvgSurface): string {
@@ -367,7 +394,7 @@ export function renderGraph(
       });
       if (model.semanticNodes) {
         for (const child of Array.from(label.childNodes)) if (child.nodeType === 3) child.remove();
-        keyedChildren(label, 'tspan', 'tspan', labelLines(node.label).map((text, index) => ({ id: String(index), text })), line => line.id, (span, line, index) => { setAttributes(span, { x: 38, dy: index ? 17 : 0 }); setText(span, line.text); });
+        keyedChildren(label, 'tspan', 'tspan', labelLines(node.label, rect.width - 50).map((text, index) => ({ id: String(index), text })), line => line.id, (span, line, index) => { setAttributes(span, { x: 38, dy: index ? 17 : 0 }); setText(span, line.text); });
       } else setText(label, truncate(node.label, 19));
       const category = model.semanticNodes ? model.groups?.find(group => group.id === node.groupId && group.kind === 'category') : undefined;
       if (category) {

@@ -6,7 +6,7 @@ Baseline: exact final V3 `36c01d404e0acfd0bf9b55417ad48b4e9285586c`, clean `main
 
 Commands below run from `project/conceptmotion_studio`. Development used affected tests/builds/browser flows, not repeated full release gates. The finished-tree local release was started once and resumed after one test-location correction, as documented below; an uninterrupted local `pnpm run check` success is not claimed.
 
-## Finished-tree local release evidence
+## Initial finished-tree local release evidence
 
 | Stage | Observed result |
 | --- | --- |
@@ -26,7 +26,7 @@ Commands below run from `project/conceptmotion_studio`. Development used affecte
 | `pnpm run test:privacy` | PASS; nine outputs, 316 text artifacts, 15 binary exclusions, zero prohibited source-repository URLs, including source-map scanning. |
 | `pnpm run test:browser` | PASS; **50/50 tests**, 25 desktop + 25 phone, **5.4 min**; all four original screenshot comparisons retained. |
 
-The initial `pnpm run check` passed every offline gate, then stopped at TypeScript: the new CSS-token parity test imported `node:fs` inside the browser-oriented UI project. It exited 1 after **72.874 s**. The parity assertion was moved unchanged into the existing Node tooling-test layer (`scripts/check-ui-presentation.test.mjs`); no runtime code, coverage floor or application type boundary was loosened. The affected command `pnpm exec vitest run packages/ui/tests/presentation.test.tsx scripts/check-ui-presentation.test.mjs` passed **four tests in two files, 5.77 s**. This moves one test between files: the final tree has the same 328 tests in 56 files.
+The initial `pnpm run check` passed every offline gate, then stopped at TypeScript: the new CSS-token parity test imported `node:fs` inside the browser-oriented UI project. It exited 1 after **72.874 s**. The parity assertion was moved unchanged into the existing Node tooling-test layer (`scripts/check-ui-presentation.test.mjs`); no runtime code, coverage floor or application type boundary was loosened. The affected command `pnpm exec vitest run packages/ui/tests/presentation.test.tsx scripts/check-ui-presentation.test.mjs` passed **four tests in two files, 5.77 s**. This moved one test between files: that first hosted candidate retained 328 tests in 56 files. The subsequent font regression adds one unit test and one desktop/phone browser definition.
 
 The remaining release stages were resumed in their original order:
 
@@ -74,6 +74,14 @@ V4 captures are under `qa/v4-screenshots`; historical screenshots and handoff re
 The preserved Foundation/Pilot smoke scripts also regenerate old evidence filenames (not assertion baselines). Four such generated images were restored to their pre-run tracked bytes after the suite; current Knowledge captures were retained under V4 names and current Galaxy captures already exist in the V4 gallery. No historical screenshot or Foundation assertion-baseline change is included in the release. All 26 attached handoff byte-count/SHA-256 records were rechecked successfully before commit.
 
 ## Hosted verification and release identity
+
+Initial V4 commit `2677585c28961d197c90ce0f1da75df2ad93e6f7` triggered [run 33931609911](https://github.com/julian-passebecq/react_ms_fluent_2_framework/actions/runs/33931609911). All non-browser stages passed, including the final test placement (56 unit files, 38.16 s), DX (2.35 s), builds and privacy. Browser results were **46 passed / four failed (9.5 min)**: the two new Architecture/Galaxy text-containment checks failed at both widths because Linux fallback fonts made `Data Factory Pipelines / Git` and `ML / Data Science Web` exceed their cards. The four original Linux screenshot comparisons passed unchanged.
+
+This was a real cross-platform presentation defect, not a missing baseline. A forced-Arial browser regression reproduced the same Architecture overflow on Windows before the renderer correction. The follow-up changes only opt-in semantic title wrapping to a conservative glyph-width budget, retains 14px/two-line text and full accessible names, and adds wider-font/long-label regression coverage. Existing generic nodes, card geometry, screenshot baselines and all containment/overflow tolerances are unchanged.
+
+The corrected wrapping normalizes whitespace once in linear time, then scans only the two visible lines and an ellipsis budget; a 100,000-character label regression guards against quadratic tail rescanning while preserving full accessible names and deterministic export. Focused SVG/Diagram/Figure tests passed **16 tests in four files (7.24 s)** with affected TypeScript. All seven application builds plus legacy and existing bundle assertions were refreshed successfully (**27.764 s**); Storybook rebuilt successfully (3,364 modules, **9.22 s**, all 46 IDs). The four affected built-Storybook desktop/phone cases passed again (**5.70 s**), with zero overflow, serious/critical Axe or page/renderer errors. The fresh nine-output privacy scan again passed with the same 316 text/15 binary/zero-finding totals. Updated bundle bytes are in the bundle report.
+
+Final focused browser verification of the bounded implementation passed **six cases in 24.3 s**: Architecture, Galaxy and the new fallback-font case at both widths. The regression applies Arial, DejaVu Sans/fallback, Liberation Sans/fallback and Courier New to semantic titles while retaining 14px text and the original node-width +1px containment bound. Ten current consumer images and four affected Storybook captures were refreshed and inspected. The follow-up suite inventory is **329 unit tests in 56 files and 52 browser cases**; its complete clean hosted run is the final release acceptance, reported with the exact matching SHA in the final delivery message.
 
 The [Datapass visual platform CI workflow](https://github.com/julian-passebecq/react_ms_fluent_2_framework/actions/workflows/ci.yml) retains all old stages and adds explicit DX/schema verification. It uses a frozen install and clean Ubuntu checkout, keeps visual regression enabled, and uploads `v4-quality-evidence` with coverage, screenshots and bundle reports. The successful V3 baseline run above is **not** evidence for V4.
 
