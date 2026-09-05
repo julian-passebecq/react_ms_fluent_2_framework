@@ -33,6 +33,7 @@ export function FigurePlayer({ figure, captions, stepCount: explicitCount, showI
   const [speed, setSpeed] = useState(1);
   const [exportStatus, setExportStatus] = useState('');
   const [hasSvg, setHasSvg] = useState(false);
+  const [hasRenderer, setHasRenderer] = useState(false);
   const [narrow, setNarrow] = useState(false);
   const reducedMotion = useReducedMotion(explicitReducedMotion);
   const count = Math.max(1, explicitCount ?? figureStepCount(figure));
@@ -42,6 +43,7 @@ export function FigurePlayer({ figure, captions, stepCount: explicitCount, showI
   const seek = (value: number) => { const next = Math.max(0, Math.min(count - 1, value)); setIndex(next); onFrameChange?.(next); };
   useEffect(() => { setIndex(0); setSelection(undefined); setPlaying(false); setExportStatus(''); }, [figure.id]);
   useEffect(() => { if (reducedMotion) setPlaying(false); }, [reducedMotion]);
+  useEffect(() => { if (!hasRenderer) setPlaying(false); }, [hasRenderer]);
   useEffect(() => {
     const node = host.current;
     if (!node || typeof ResizeObserver === 'undefined') return;
@@ -65,15 +67,19 @@ export function FigurePlayer({ figure, captions, stepCount: explicitCount, showI
     }
   }, [narrow, hasSvg, figure.id, accessibilityPrefix]);
   useEffect(() => {
-    if (!playing || reducedMotion || count <= 1) return;
+    if (!playing || reducedMotion || !hasRenderer || count <= 1) return;
     if (current >= count - 1) { setPlaying(false); return; }
     const timer = setTimeout(() => seek(current + 1), 1200 / speed);
     return () => clearTimeout(timer);
-  }, [playing, reducedMotion, current, count, speed]);
+  }, [playing, reducedMotion, hasRenderer, current, count, speed]);
   useEffect(() => {
     const node = host.current;
     if (!node) return;
     const check = () => {
+      // Playback belongs to the Figure contract, including third-party HTML/SVG
+      // adapters. ConceptMotion SVG detection is only for its export/pan helpers.
+      const figureHost = node.querySelector('[data-figure-renderable="true"]');
+      setHasRenderer(Boolean(figureHost && !figureHost.querySelector('[data-renderer-error="true"], [data-conceptmotion-error]')));
       const svg = node.querySelector('svg[data-conceptmotion]');
       setHasSvg(Boolean(svg && !svg.closest('[data-renderer-error="true"]')));
       if (!svg) return;
@@ -92,7 +98,7 @@ export function FigurePlayer({ figure, captions, stepCount: explicitCount, showI
     };
     check();
     const observer = new MutationObserver(check);
-    observer.observe(node, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-renderer-error', 'id', 'aria-labelledby'] });
+    observer.observe(node, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-figure-renderable', 'data-renderer-error', 'data-conceptmotion-error', 'id', 'aria-labelledby'] });
     return () => observer.disconnect();
   }, [figure.id, figure.spec, accessibilityPrefix]);
   const filename = `${figure.id.replace(/[\x00-\x1f\x7f/\\:*?"<>|]/g, '-').slice(0, 120) || 'figure'}.svg`;
@@ -105,7 +111,7 @@ export function FigurePlayer({ figure, captions, stepCount: explicitCount, showI
   return <div ref={host} className="dp-figure-player" data-reduced-motion={String(reducedMotion)} data-frame-index={current} data-pannable={String(narrow && hasSvg)}>
     {narrow && hasSvg ? <p id={`${accessibilityPrefix}-pan-hint`} className="dp-figure-player__pan-hint">{locale === 'no' ? 'Sveip eller rull sidelengs for å se hele figuren. Med tastatur: fokuser figuren og bruk venstre/høyre piltast.' : 'Swipe or scroll sideways to explore the full figure. Keyboard: focus the canvas, then use Left/Right arrows.'}</p> : null}
     <FigureView {...rest} figure={figure} locale={locale} metadataMode={metadataMode} presentationSize={presentationSize} reducedMotion={reducedMotion} frameIndex={current} selectedId={selectedId} onSelect={id => { setSelection(id); onSelect?.(id); }}
-      toolbar={<>{toolbar}{hasSvg && count > 1 ? <TimelineControls currentStep={current} stepCount={count} isPlaying={playing} onPlayPause={() => { if (current >= count - 1) seek(0); setPlaying(value => !value); }} onPrevious={() => { setPlaying(false); seek(current - 1); }} onNext={() => { setPlaying(false); seek(current + 1); }} onSeek={value => { setPlaying(false); seek(value); }} onReset={() => { setPlaying(false); seek(0); }} speed={speed} onSpeedChange={setSpeed} playDisabled={reducedMotion} /> : null}</>}
+      toolbar={<>{toolbar}{hasRenderer && count > 1 ? <TimelineControls currentStep={current} stepCount={count} isPlaying={playing} onPlayPause={() => { if (current >= count - 1) seek(0); setPlaying(value => !value); }} onPrevious={() => { setPlaying(false); seek(current - 1); }} onNext={() => { setPlaying(false); seek(current + 1); }} onSeek={value => { setPlaying(false); seek(value); }} onReset={() => { setPlaying(false); seek(0); }} speed={speed} onSpeedChange={setSpeed} playDisabled={reducedMotion} /> : null}</>}
       exportAction={exportAction ?? (hasSvg ? <a href="#figure-export" download={filename} onClick={download}>Export SVG</a> : <span>SVG export unavailable for this renderer</span>)} />
     {caption ? <p className="dp-figure-player__caption" aria-live="polite">{caption}</p> : null}
     {reducedMotion ? <p className="dp-figure-player__motion">Reduced motion: static steps remain available; automatic playback is off.</p> : null}

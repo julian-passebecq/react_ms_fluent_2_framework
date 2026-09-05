@@ -62,8 +62,64 @@ The copied `consumer-release-gate.ts` requires exact source verification, frozen
 
 Keep semantic validation in the existing validators/compilers. `validateFigureSpec` certifies an envelope, not arbitrary renderer payloads. Use the applicable workflow/diagram/loop validators or compilers as well, and retain authoring schema checks where your app uses them. The generated content-validation script checks the content actually present in the starter and explicitly identifies where application-specific validation is added.
 
-`pnpm test:external-consumer` proves two independently initialized repositories: an unmodified portfolio starter and a learning fixture with canonical practice data and real FigurePlayer playback. Each bootstraps and resolves a consumer lock with `pnpm install --lockfile-only`, then a second clean repository receives only authored files/that lock, installs frozen and runs the production gate. A deliberately mismatched dependency manifest must fail frozen installation. No framework node_modules or dependency aliases are supplied. Both output bundles, including source maps, pass the existing privacy scanner. Temporary directories are removed; failures retain browser artifacts under `test-results/external-consumer`.
+`pnpm test:external-consumer` proves three independently initialized repositories: an unmodified portfolio starter, a learning fixture with canonical practice data and real FigurePlayer playback, and an unrelated external story adapter composed from the learning preset. Each bootstraps and resolves a consumer lock with `pnpm install --lockfile-only`, then a second clean repository receives only authored files/that lock, installs frozen and runs the production gate. A deliberately mismatched dependency manifest must fail frozen installation. No framework node_modules or dependency aliases are supplied. All output bundles, including source maps, pass the existing privacy scanner. Temporary directories are removed; failures retain browser artifacts under `test-results/external-consumer`.
 
 The browser template preserves V4's existing narrow Axe exclusion for `[data-tabster-dummy]`, Fluent's hidden focus sentinels. It does not exclude application controls or disable an Axe rule. The learning proof explicitly tabs through the real Figure toolbar and activates steps with Enter. Serious/critical = 0 refers to the application surface with this established library exception.
 
 Local development snapshots the allowlisted working-tree source into an isolated Git commit. Hosted CI fetches the exact framework commit under test through a local Git mirror, exercising the same fetch/selection/verification path. `qa/v4-external-consumer.json` records which mode and exact pin were tested. These fixtures prove the mechanism; they do not claim that any of the six independent consumer repositories has been rerun.
+
+## External visual labs and step-based stories
+
+Use the existing `learning` preset: its package selection already includes UI, Figure and lazy Code surfaces. Presets supply a bootstrap and starter shell, not finished domain routes. Compose `CatalogShell`, `Workbench`, `FigurePlayer`/`FigureView` and `CodeEditor` in consumer source. No new `visualization-studio` preset is needed.
+
+```text
+pnpm scaffold:app --name my-visual-lab --preset learning --mode external --output <new-absolute-directory-outside-framework> --commit <accepted-40-character-SHA>
+```
+
+Before the first bootstrap/install, a visual-only consumer can remove `@datapass/canonical`, `@datapass/learning` and `@datapass/progress` from its generated dependencies, replace the starter's project catalog/content validation with its own content, and remove the learning CSS import. Retain `@datapass/{ui,figure,code,content}` as `workspace:*`. The external story proof makes exactly this adaptation without altering the preset or any vendored source. Resolve and commit the consumer's own lock as above. [Issue #1](https://github.com/julian-passebecq/react_ms_fluent_2_framework/issues/1) records the final accepted SHA and matching hosted run for this contract.
+
+The runnable consumer-owned example is in `tests/external-story/src/story.tsx` and `App.tsx`. Its `beats` payload is intentionally unknown to Figure's built-in step inference:
+
+```tsx
+import type { FigureSpec } from '@datapass/content';
+import { FigurePlayer, FigureRendererRegistry } from '@datapass/figure';
+import { DemoVisual, isDemoPayload, payload } from './my-renderer';
+
+const registry = new FigureRendererRegistry().register({
+  id: 'external.story.demo',
+  validate: figure => isDemoPayload(figure.spec) ? [] : ['Unsupported story payload.'],
+  render: ({ figure, frameIndex = 0, reducedMotion }) =>
+    <DemoVisual payload={figure.spec} step={frameIndex} reducedMotion={reducedMotion} />,
+});
+const figure: FigureSpec = {
+  id: 'my-story', kind: 'concept', rendererId: 'external.story.demo',
+  title: 'My story', subtitle: 'Follow the changing state.',
+  takeaway: 'One useful conclusion.', fallbackText: 'A complete text alternative.',
+  spec: payload,
+};
+
+export function Story() {
+  return <FigurePlayer figure={figure} registry={registry}
+    stepCount={payload.beats.length}
+    captions={payload.beats.map(beat => beat.annotation)}
+    presentationSize="compact" showInspector={false}
+    source="Human-readable attribution" note="A useful note" />;
+}
+```
+
+`DemoVisual`, its payload validator and any D3 dependency belong to the consumer. `render` should return a React component when the adapter needs hooks; do not call hooks directly in the adapter callback. Keep the registry stable across renders. Use a fresh `FigureRendererRegistry` for only external adapters, or extend `createDefaultFigureRendererRegistry()` on your own instance to also use existing renderers.
+
+| Concern | Integration contract |
+| --- | --- |
+| Steps | Supply a positive integer `stepCount` and localized `captions` for an arbitrary payload. `FigureRenderContext.frameIndex` is zero-based. Previous/next/reset/seek and play/pause work independently of SVG type; autoplay starts off. `frameIndex` plus `onFrameChange` supports consumer-controlled state. Existing built-in inference stays intact. |
+| Static presentation | `FigureView` respects numeric `staticState`/`reducedMotionState`, unless `frameIndex` is provided. `FigurePlayer` starts at step zero; its explicit controlled frame takes precedence. |
+| Motion | FigurePlayer follows the OS preference or explicit `reducedMotion` prop, forwards it to the adapter and stops/disables autoplay when reduced. Manual stepping remains available. The adapter owns interpolation and cleanup; it must honor the flag. FigureView accepts an explicit preference for static embedding. |
+| Responsive layout | The adapter owns its responsive subtree: the fixture uses a fluid SVG viewBox and bounded height. Use local CSS/ResizeObserver for more complex layouts. `presentationSize` is an optional context hint, not pixel dimensions or a content field. |
+| Narrative | Generic title/subtitle/takeaway/fallback remain FigureSpec metadata; visible source/note are React slots. Pass per-step annotations through `captions` and/or render them inside the consumer visual. Source IDs remain opt-in details. |
+| Invalid content | Validate the envelope with `validateFigureSpec` and the payload with the consumer's validator. Adapter validation issues (including thrown validation errors) and missing registrations show Figure's accessible alert and text alternative, with no playback toolbar. Validate every supported step shape before rendering. |
+| Export/panning | Automatic SVG export and fixed-canvas keyboard panning remain specific to existing ConceptMotion SVGs. External adapters own export via `exportAction` and their own responsive/scroll behavior. Never add a fake `data-conceptmotion` marker. Canvas/WebGL export is not supplied. |
+| Dependencies | The adapter imports no ConceptMotion or D3 from the framework. `@datapass/figure` still has its existing ConceptMotion dependency closure for built-in compatibility; this pass does not claim a separately packaged Figure-only runtime. Modern distributed packages do not add D3. The separately preserved legacy app retains its existing D3 dependency. |
+
+Run `pnpm test:external-consumer external-story` for the focused clean-install production proof. It covers desktop/390px, actual CSS midpoint motion and stable point identity, keyboard stepping, play/pause/reset/seek, reduced motion, static FigureView, metadata/fallback, lazy Monaco, Axe and overflow. It also rejects D3/Power BI dependencies and excludes canonical data from this fixture's materialized source.
+
+D3 story templates, chart grammars, map engines, editorial sequencing and Power BI DataView/host/packaging stay in the independent consumer. The framework supplies an integer step and generic presentation; this proof does not certify any specific future line/ranking/scatter/map template or a VizForge release. Third-party rendering/effect exceptions after successful validation remain the adapter's responsibility; this is not a renderer sandbox or a universal error boundary.

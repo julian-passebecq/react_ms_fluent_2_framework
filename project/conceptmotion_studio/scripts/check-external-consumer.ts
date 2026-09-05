@@ -10,8 +10,8 @@ import { requireBundlePrivacy } from './check-bundle-privacy.mjs';
 const workspace = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repo = path.resolve(workspace, '../..');
 const requestedPreset = process.argv[2];
-if (process.argv.length > 3 || (requestedPreset && requestedPreset !== 'portfolio-hub' && requestedPreset !== 'learning')) throw new Error('Optional targeted proof: pnpm test:external-consumer <portfolio-hub|learning>');
-const presets = requestedPreset ? [requestedPreset as 'portfolio-hub' | 'learning'] : ['portfolio-hub', 'learning'] as const;
+if (process.argv.length > 3 || (requestedPreset && !['portfolio-hub', 'learning', 'external-story'].includes(requestedPreset))) throw new Error('Optional targeted proof: pnpm test:external-consumer <portfolio-hub|learning|external-story>');
+const presets = requestedPreset ? [requestedPreset as 'portfolio-hub' | 'learning' | 'external-story'] : ['portfolio-hub', 'learning', 'external-story'] as const;
 const temporary = mkdtempSync(path.join(os.tmpdir(), 'datapass-external-proof-'));
 const pnpm = process.env.npm_execpath;
 if (!pnpm || !existsSync(pnpm)) throw new Error('Run through pnpm test:external-consumer.');
@@ -56,16 +56,16 @@ try {
     const initial = path.join(temporary, `${preset}-initial`);
     const fresh = path.join(temporary, `${preset}-fresh`);
     const files = { ...generateExternalAppFiles({
-      name: `external-${preset}`, preset, frameworkCommit: commit,
+      name: `external-${preset}`, preset: preset === 'external-story' ? 'learning' : preset, frameworkCommit: commit,
       bootstrapSource: readFileSync(path.join(workspace, 'scripts/bootstrap-framework.ts'), 'utf8'),
       releaseGateSource: readFileSync(path.join(workspace, 'scripts/consumer-release-gate.ts'), 'utf8'),
     }) };
     // A local Git mirror changes transport only; exact pin and source verification
     // are identical to the public HTTPS bootstrap used by the generated workflow.
     files['datapass.json'] = JSON.stringify({ version: 1, repository: source, commit }, null, 2) + '\n';
-    if (preset === 'learning') {
+    if (preset === 'learning' || preset === 'external-story') {
       delete files['tests/app.smoke.test.tsx'];
-      const fixture = path.join(workspace, 'tests/external-consumer');
+      const fixture = path.join(workspace, preset === 'learning' ? 'tests/external-consumer' : 'tests/external-story');
       function addFixture(directory: string, prefix = ''): void {
         for (const entry of readdirSync(directory, { withFileTypes: true })) {
           const name = prefix + entry.name;
@@ -75,8 +75,16 @@ try {
       }
       addFixture(fixture);
       const manifest = JSON.parse(files['package.json']);
-      manifest.dependencies['@conceptmotion/core'] = 'workspace:*';
-      manifest.dependencies['@conceptmotion/svg'] = 'workspace:*';
+      if (preset === 'learning') {
+        manifest.dependencies['@conceptmotion/core'] = 'workspace:*';
+        manifest.dependencies['@conceptmotion/svg'] = 'workspace:*';
+      } else {
+        // This consumer authors its own payload and needs no canonical corpus,
+        // progress or learning policy. Keep the scaffold's four surface packages.
+        for (const name of ['@datapass/canonical', '@datapass/learning', '@datapass/progress']) delete manifest.dependencies[name];
+        files['src/main.tsx'] = files['src/main.tsx'].replace("import '@datapass/learning/styles.css';\n", '');
+        for (const [name, bytes] of Object.entries(files)) if (name.startsWith('src/')) assert.doesNotMatch(bytes, /@conceptmotion|from ['"]d3(?:['"/])/, `External adapter imports renderer internals: ${name}`);
+      }
       files['package.json'] = JSON.stringify(manifest, null, 2) + '\n';
     }
     for (const [name, bytes] of Object.entries(files)) write(initial, name, bytes);
@@ -101,7 +109,7 @@ try {
     assert.notEqual(mismatch.status, 0, 'Frozen install accepted a manifest/lock mismatch');
     assert.match(`${mismatch.stdout}${mismatch.stderr}`, /OUTDATED_LOCKFILE/);
     run(fresh, 'release:gate');
-    if (preset === 'learning') {
+    if (preset === 'learning' || preset === 'external-story') {
       const screenshots = path.join(workspace, 'qa/v4-visual-explanations');
       mkdirSync(screenshots, { recursive: true });
       function copyEvidence(directory: string): void {
@@ -109,7 +117,7 @@ try {
         for (const entry of readdirSync(directory, { withFileTypes: true })) {
           const source = path.join(directory, entry.name);
           if (entry.isDirectory()) copyEvidence(source);
-          else if (/^(sql-|algorithm-|de-).+-(desktop|phone)\.png$/.test(entry.name)) cpSync(source, path.join(screenshots, entry.name));
+          else if (/^(sql-|algorithm-|de-|external-).+-(desktop|phone)\.png$/.test(entry.name)) cpSync(source, path.join(screenshots, entry.name));
         }
       }
       copyEvidence(path.join(fresh, 'test-results'));
@@ -120,6 +128,10 @@ try {
     const vendor = path.join(fresh, 'vendor/datapass-platform');
     assert.equal(existsSync(path.join(vendor, 'project/conceptmotion_studio/apps')), false);
     assert.equal(existsSync(path.join(vendor, 'reference_material')), false);
+    if (preset === 'external-story') {
+      assert.equal(existsSync(path.join(vendor, 'project/conceptmotion_studio/content')), false);
+      assert.doesNotMatch(lock, /(?:^|\n)\s+(?:d3(?:-[\w-]+)?|powerbi[^\s:]*|pbiviz)@/i, 'Domain runtime leaked into external story dependencies');
+    }
     const sourceFiles = git(vendor, 'ls-files', '-t').split('\n').filter(line => line.startsWith('H ')).length;
     evidence.push({ preset, pin: commit, sourceFiles, lockBytes: Buffer.byteLength(lock) });
   }

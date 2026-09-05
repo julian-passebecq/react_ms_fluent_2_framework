@@ -242,7 +242,9 @@ export function FigureView({
 }: FigureViewProps) {
   const fallback = resolveText(figure.fallbackText, locale);
   const adapter = registry.get(figure.rendererId);
-  const issues = adapter?.validate?.(figure) ?? [];
+  let issues: readonly string[];
+  try { issues = adapter?.validate?.(figure) ?? []; }
+  catch (error) { issues = [error instanceof Error ? error.message : String(error)]; }
   const renderable = adapter && issues.length === 0;
   const resolvedFrameIndex = frameIndex ?? figureStateIndex(figure, reducedMotion);
   const metadata = [
@@ -278,6 +280,7 @@ export function FigureView({
       minimumHeight={minimumHeight ?? (presentationSize ? '0' : undefined)}
       data-figure-id={figure.id}
       data-figure-renderer={figure.rendererId}
+      data-figure-renderable={String(Boolean(renderable))}
       data-presentation-size={presentationSize}
       data-metadata-mode={metadataMode}
     >
