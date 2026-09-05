@@ -137,12 +137,13 @@ export class JoinRenderer extends BaseSvgRenderer<JoinRendererInput> {
           'data-role': 'lineage',
           'data-source-row': edge.sourceKey,
           'data-result-row': edge.resultId,
+          'data-focused': String(focus.has(edge.resultId)),
           d: routeOrthogonal(sourcePoint, edge.target),
           fill: 'none',
           stroke: edge.side === 'left' ? surface.theme.accent : surface.theme.lineage,
-          'stroke-width': focus.has(edge.sourceKey) || focus.has(edge.resultId) ? 3 : 1.5,
+          'stroke-width': focus.has(edge.resultId) ? 3 : 1.5,
           'stroke-dasharray': edge.side === 'right' ? '4 3' : undefined,
-          opacity: 0.72,
+          opacity: focus.size && !focus.has(edge.resultId) ? 0.2 : 0.72,
         });
       },
     );
@@ -198,8 +199,16 @@ export class JoinRenderer extends BaseSvgRenderer<JoinRendererInput> {
           'data-explanation-focused': String(focus.has(row.id)),
           'data-left-row-id': row.leftRowId ?? 'null',
           'data-right-row-id': row.rightRowId ?? 'null',
+          'data-null-extended': String(row.leftRowId === null || row.rightRowId === null),
           'data-entering': entering ? 'true' : undefined,
         });
+        if (entering && !this.reducedMotion) {
+          const origin = sourceLayouts.get(row.leftRowId ? `left:${row.leftRowId}` : `right:${row.rightRowId}`)!;
+          layer.appendChild(group);
+          setSvgTransform(group, origin.x, origin.y, true, 0);
+          // Flush the initial style; the result then travels from its contributor.
+          group.getBoundingClientRect();
+        }
         setSvgTransform(group, outputX, bodyTop + index * rowHeight, this.reducedMotion, this.durationMs);
         makeSelectable(group, row.id, `Result row ${row.id}`, options);
         const rect = ensureChild(group, 'rect', 'rect', {

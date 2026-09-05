@@ -4,6 +4,20 @@ import { fileURLToPath } from 'node:url';
 
 // Preserve all 38 V3 story IDs plus the eight approved V4 compositions.
 export const REQUIRED_STORIES = [
+  "v4-visual-explanations--pair-by-pair-join",
+  "v4-visual-explanations--left-join-null",
+  "v4-visual-explanations--cardinality",
+  "v4-visual-explanations--group-grain",
+  "v4-visual-explanations--window-rank",
+  "v4-visual-explanations--moving-rows-frame",
+  "v4-visual-explanations--bubble-swap",
+  "v4-visual-explanations--insertion-shift",
+  "v4-visual-explanations--dfs-worklist",
+  "v4-visual-explanations--partition-shuffle",
+  "v4-visual-explanations--skew",
+  "v4-visual-explanations--repartition",
+  "v4-visual-explanations--coalesce",
+  "v4-visual-explanations--backfill",
   "foundation-code--json-validation-error",
   "foundation-code--lazy-loading-contract",
   "foundation-code--read-only-python-reference",
@@ -56,7 +70,7 @@ export function checkStorybookIndex(index) {
   const actual = new Set(entries.map((entry) => entry.id));
   const missing = REQUIRED_STORIES.filter((id) => !actual.has(id));
   if (missing.length) throw new Error(`Storybook is missing required production compositions: ${missing.join(', ')}`);
-  return { storyCount: entries.length, preservedV3: 38, approvedV4: 8 };
+  return { storyCount: entries.length, preservedV3: 38, approvedV4: 8, visualExplanations: 14 };
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

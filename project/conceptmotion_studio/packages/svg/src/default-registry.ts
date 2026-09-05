@@ -8,6 +8,7 @@ import { registerTableRenderers } from './renderers/table.js';
 import { registerWorkflowRenderers } from './renderers/workflow.js';
 
 export function registerDefaultRendererFamilies(registry: RendererRegistry): RendererRegistry {
+  registerCollectionRenderers(registry);
   registerTableRenderers(registry);
   registerJoinRenderers(registry);
   registerLoopRenderers(registry);
@@ -21,3 +22,4 @@ export function registerDefaultRendererFamilies(registry: RendererRegistry): Ren
 export function createDefaultRendererRegistry(): RendererRegistry {
   return registerDefaultRendererFamilies(createRendererRegistry());
 }
+import { registerCollectionRenderers } from './renderers/collection.js';

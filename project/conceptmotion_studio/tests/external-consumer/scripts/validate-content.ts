@@ -16,3 +16,17 @@ assert.equal(validateFigureSpec(figure).valid, true);
 const loop = figure.spec as unknown as LoopSceneSpec;
 for (let index = 0; index < loop.frames.length; index++) assert.doesNotThrow(() => compileLoopFrame(loop, index));
 console.log('External canonical practice/projects, Figure envelope and semantic loop payload passed production validators.');
+for (const figure of visualExplanationFigures) {
+  assert.equal(validateFigureSpec(figure).valid, true, figure.id);
+  const spec = figure.spec as unknown as SvgSceneSpec | WorkflowSpec;
+  for (let i = 0; i < figureStepCount(figure); i++) {
+    if (spec.kind === 'workflow') compileWorkflowRunFrame(spec, spec.runs![0].id, i);
+    else assert.equal(resolveSvgScene(spec, i).rendererId, figure.rendererId);
+    assert.ok(resolveSceneExplanation(spec, i));
+  }
+}
+console.log('All 17 approved visual explanations passed every production semantic frame.');
+import { visualExplanationFigures } from '@datapass/canonical/explanations';
+import { resolveSvgScene, resolveSceneExplanation, type SvgSceneSpec } from '@conceptmotion/svg';
+import { compileWorkflowRunFrame, type WorkflowSpec } from '@conceptmotion/core';
+import { figureStepCount } from '@datapass/figure';

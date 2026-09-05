@@ -22,6 +22,8 @@ import type { RegressionRendererInput } from './renderers/regression.js';
 import type { TableRendererInput } from './renderers/table.js';
 
 export interface TableSvgSceneSpec {
+  /** Optional moving ROWS frame, aligned one-to-one with table states. */
+  readonly windowFrames?: readonly TableWindowFrame[];
   readonly explanation?: ExplanationTrack;
   readonly kind: 'table';
   readonly version: string;
@@ -66,6 +68,7 @@ export type LineageSvgSceneSpec = LineageSpec & {
 };
 
 export type SvgSceneSpec =
+  | CollectionFlowSpec
   | TableSvgSceneSpec
   | JoinSvgSceneSpec
   | LoopSceneSpec
@@ -74,6 +77,7 @@ export type SvgSceneSpec =
   | LineageSvgSceneSpec;
 
 export type ResolvedSvgScene =
+  | { rendererId: 'collection.flow'; input: CollectionRendererInput }
   | { rendererId: 'table.transform'; input: TableRendererInput }
   | { rendererId: 'table.join'; input: JoinRendererInput }
   | { rendererId: 'algorithm.loop'; input: LoopRendererInput }
@@ -88,6 +92,7 @@ function indexFor(length: number, requested = 0): number {
 }
 
 export function rendererIdForScene(spec: SvgSceneSpec): ResolvedSvgScene['rendererId'] {
+  if (spec.kind === 'collection') return 'collection.flow';
   if (spec.kind === 'table') return 'table.transform';
   if (spec.kind === 'join') return 'table.join';
   if (spec.kind === 'loop') return 'algorithm.loop';
@@ -103,11 +108,17 @@ export function resolveSvgScene(
   parameter?: number,
 ): ResolvedSvgScene {
   const explanation = resolveSceneExplanation(spec, frameIndex);
+  if (spec.kind === 'collection') return { rendererId: 'collection.flow', input: { spec, frame: compileCollectionFrame(spec, indexFor(spec.frames.length, frameIndex)) } };
   if (spec.kind === 'table') {
+    if (spec.windowFrames) {
+      if (spec.windowFrames.length !== spec.frames.length) throw new Error('Window overlays must align with table frames.');
+      spec.windowFrames.forEach((frame, i) => validateTableWindowFrame(spec.frames[i], frame));
+    }
     return {
       rendererId: 'table.transform',
       input: {
         state: spec.frames[indexFor(spec.frames.length, frameIndex)],
+        windowFrame: spec.windowFrames?.[indexFor(spec.frames.length, frameIndex)],
         explanation,
         title: spec.title,
         description: spec.description,
@@ -173,3 +184,6 @@ export function resolveSvgScene(
     input: { spec, activeRelationIds: frame?.activeRelationIds },
   };
 }
+import { compileCollectionFrame, type CollectionFlowSpec } from '@conceptmotion/core';
+import type { CollectionRendererInput } from './renderers/collection.js';
+import { validateTableWindowFrame, type TableWindowFrame } from '@conceptmotion/core';

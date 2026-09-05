@@ -55,6 +55,7 @@ export class FigureRendererRegistry {
 }
 
 const conceptMotionRendererIds = [
+  'collection.flow',
   'algorithm.loop',
   'diagram.flow',
   'lineage.model',

@@ -124,7 +124,9 @@ function sceneCaption(figure: FigureSpec, frame: number, locale: string): string
   const explanation = figure.spec.explanation;
   const step = record(explanation) && Array.isArray(explanation.steps) ? explanation.steps[frame] : undefined;
   const sceneFrame = Array.isArray(figure.spec.frames) ? figure.spec.frames[frame] : undefined;
-  const caption = record(step) ? step.title : record(sceneFrame) ? sceneFrame.caption : undefined;
+  // Collection operation titles are intentionally short; keep the full current
+  // explanation readable outside the locally pannable canvas too.
+  const caption = figure.spec.kind === 'collection' && record(sceneFrame) ? sceneFrame.caption : record(step) ? step.title : record(sceneFrame) ? sceneFrame.caption : undefined;
   if (typeof caption === 'string') return caption;
   if (record(caption)) return typeof caption[locale] === 'string' ? caption[locale] : typeof caption.en === 'string' ? caption.en : '';
   return '';

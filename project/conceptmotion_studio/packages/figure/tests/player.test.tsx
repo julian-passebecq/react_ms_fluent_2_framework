@@ -7,6 +7,17 @@ import { FigurePlayer, figureStepCount } from '../src';
 
 const figure: FigureSpec = { id: 'player', kind: 'diagram', rendererId: 'diagram.flow', title: 'Player fixture', fallbackText: 'A flows to B.', spec: { kind: 'diagram', version: '3', id: 'player', title: 'Player fixture', nodes: [{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }], edges: [{ id: 'ab', from: { nodeId: 'a' }, to: { nodeId: 'b' } }], frames: [{ id: 'one', activeNodeIds: ['a'] }, { id: 'two', activeNodeIds: ['b'] }] } };
 describe('FigurePlayer', () => {
+  it('keeps the collection caption readable outside the canvas while code/state follows the same step', async () => {
+    const value: FigureSpec = { id: 'collection-player', kind: 'concept', rendererId: 'collection.flow', title: 'Route', fallbackText: 'A moves to output.', spec: { kind: 'collection', version: '4', id: 'route', title: 'Route', containers: [{ id: 'input', label: 'Input' }, { id: 'output', label: 'Output' }], items: [{ id: 'a', label: 'A' }], frames: [{ id: 'read', operation: 'READ', caption: 'Read A in input.', placements: [{ itemId: 'a', containerId: 'input' }] }, { id: 'move', operation: 'MOVE', caption: 'A moves to output because its key matches.', placements: [{ itemId: 'a', containerId: 'output' }] }], explanation: { codeLines: [{ id: 'move', text: 'route(a)' }], steps: [{ id: 'read', title: 'READ', focus: {} }, { id: 'move', title: 'MOVE', focus: { codeRefs: ['move'] } }] } } };
+    const container = document.createElement('div'); document.body.append(container); const root = createRoot(container);
+    await act(async () => root.render(<FigurePlayer figure={value} reducedMotion presentationSize="compact" />));
+    const item = container.querySelector('[data-item-id="a"]');
+    await act(async () => (container.querySelector('button[aria-label="Next"]') as HTMLButtonElement).click());
+    expect(container.querySelector('[data-item-id="a"]')).toBe(item);
+    expect(container.querySelector('.dp-figure-player__caption')?.textContent).toBe('A moves to output because its key matches.');
+    expect(container.querySelector('[data-code-ref="move"]')?.getAttribute('data-focused')).toBe('true');
+    await act(async () => root.unmount()); container.remove();
+  });
   it('infers scene lengths without forcing playback onto static content', () => {
     expect(figureStepCount(figure)).toBe(2);
     expect(figureStepCount({ ...figure, spec: { revealCounts: [0, 1, 2] } })).toBe(3);

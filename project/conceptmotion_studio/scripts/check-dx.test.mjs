@@ -75,7 +75,7 @@ describe('repository DX configuration', () => {
 
   it('preserves the built V3/V4 story IDs and fails when a required composition disappears', () => {
     const index = { entries: Object.fromEntries(REQUIRED_STORIES.map((id) => [id, { id, type: 'story' }])) };
-    expect(checkStorybookIndex(index)).toEqual({ storyCount: 46, preservedV3: 38, approvedV4: 8 });
+    expect(checkStorybookIndex(index)).toEqual({ storyCount: 60, preservedV3: 38, approvedV4: 8, visualExplanations: 14 });
     delete index.entries['foundation-figures--table-transform'];
     expect(() => checkStorybookIndex(index)).toThrow('foundation-figures--table-transform');
   });

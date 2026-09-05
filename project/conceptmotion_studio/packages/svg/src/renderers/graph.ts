@@ -160,7 +160,7 @@ export function renderGraph(
   // Account for heading space without introducing spec-level coordinates.
   if (model.layoutResult) {
     const result = model.layoutResult;
-    const scale = Math.min(surface.viewport.width / result.width, (surface.viewport.height - 68) / result.height);
+    const scale = Math.min(surface.viewport.width / result.width, ((model.availableHeight ?? surface.viewport.height) - 68) / result.height, model.availableHeight === undefined ? Infinity : 1);
     root.setAttribute('transform', `translate(${round((surface.viewport.width - result.width * scale) / 2)} 58) scale(${round(scale, 5)})`);
     root.setAttribute('data-layout-provider', 'contract');
   } else {
@@ -409,10 +409,12 @@ export function renderGraph(
         'font-size': 9,
       });
       setText(kind, model.semanticNodes ? (node.kind ?? 'node').replaceAll('-', ' ').toUpperCase() : (node.kind ?? 'generic').toUpperCase());
+      // Attempt details need their own line instead of colliding with the task type.
+      const extendedStatus = !model.semanticNodes && node.statusLabel && node.statusLabel !== node.status;
       const statusBadge = ensureChild(nodeGroup, 'text[data-role="status"]', 'text', {
         'data-role': 'status',
         x: rect.width - 10,
-        y: model.semanticNodes ? 73 : 47,
+        y: model.semanticNodes ? 73 : extendedStatus ? 61 : 47,
         fill: hub ? surface.theme.surface : publicStatus === 'building' ? surface.theme.warning : statusColor(status, surface),
         'font-size': model.semanticNodes ? 11 : 10,
         'font-weight': 750,

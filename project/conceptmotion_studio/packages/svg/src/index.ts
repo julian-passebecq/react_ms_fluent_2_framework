@@ -17,3 +17,4 @@ export * from './renderers/loop.js';
 export * from './renderers/regression.js';
 export * from './renderers/table.js';
 export * from './renderers/workflow.js';
+export * from './renderers/collection.js';

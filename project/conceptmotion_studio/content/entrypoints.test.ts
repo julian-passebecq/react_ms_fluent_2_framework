@@ -24,8 +24,8 @@ describe('portable read-only canonical entrypoints', () => {
     }
     expect([...new Set(migratedVisuals.flatMap(entry => entry.practiceIds))].sort()).toEqual([...visualPracticeIds].sort());
   });
-  it('has only four explicit exports and pure semantic dependencies', () => {
-    expect(Object.keys(manifest.exports).sort()).toEqual(['./practice', './projects', './visual-availability', './visuals']);
+  it('has five explicit exports and pure semantic dependencies', () => {
+    expect(Object.keys(manifest.exports).sort()).toEqual(['./explanations', './practice', './projects', './visual-availability', './visuals']);
     expect(Object.keys(manifest.dependencies).sort()).toEqual(['@conceptmotion/core', '@datapass/content']);
     expect(manifest.sideEffects).toBe(false);
     expect(Object.values(manifest.exports).join(' ')).not.toMatch(/snapshot|catalog\.json|private/);

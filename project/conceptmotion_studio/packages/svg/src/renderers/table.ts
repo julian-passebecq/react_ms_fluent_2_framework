@@ -5,6 +5,7 @@ import {
   type TableColumn,
   type TableRow,
   type ResolvedExplanation,
+  type TableWindowFrame,
 } from '@conceptmotion/core';
 import { renderExplanationPanel } from '../explanation.js';
 
@@ -16,11 +17,13 @@ import {
   setAttributes,
   setSvgTransform,
   setText,
+  appendPreservingState,
 } from '../dom.js';
 import type { RendererRegistration } from '../types.js';
 import { formatValue, localText, makeSelectable, renderHeading, truncate } from './shared.js';
 
 export interface TableRendererInput {
+  windowFrame?: TableWindowFrame;
   explanation?: ResolvedExplanation;
   state: CompiledTableState;
   title?: LocalizedText;
@@ -126,6 +129,8 @@ export class TableRenderer extends BaseSvgRenderer<TableRendererInput> {
         setAttributes(rowGroup, {
           'data-role': 'row',
           'data-row-id': rowLayout.row.id,
+          'data-window-member': input.windowFrame ? String(input.windowFrame.memberRowIds.includes(rowLayout.row.id)) : undefined,
+          'data-current-row': input.windowFrame ? String(input.windowFrame.currentRowId === rowLayout.row.id) : undefined,
           'data-explanation-focused': String(focus.has(rowLayout.row.id)),
           'data-visible': String(rowLayout.visible),
           'data-entering': entering ? 'true' : undefined,
@@ -177,10 +182,16 @@ export class TableRenderer extends BaseSvgRenderer<TableRendererInput> {
           'font-size': 10,
           'font-weight': 650,
         });
-        setText(state, rowLayout.visible ? `#${rowLayout.slot + 1} kept` : '⊘ filtered');
+        setText(state, input.windowFrame?.currentRowId === rowLayout.row.id ? 'CURRENT' : input.windowFrame?.memberRowIds.includes(rowLayout.row.id) ? 'IN FRAME' : rowLayout.visible ? `#${rowLayout.slot + 1} kept` : '⊘ filtered');
         rowGroup.appendChild(state);
       },
     );
+    if (input.windowFrame) {
+      const first = input.state.rowOrder.indexOf(input.windowFrame.memberRowIds[0]);
+      const overlay = ensureChild(layer, 'rect[data-role="window-frame"]', 'rect', { 'data-role': 'window-frame', 'data-current-row-id': input.windowFrame.currentRowId, 'data-member-row-ids': input.windowFrame.memberRowIds.join(' '), width: availableWidth + 6, height: input.windowFrame.memberRowIds.length * rowHeight, rx: 5, fill: 'none', stroke: surface.theme.accent, 'stroke-width': 3, 'pointer-events': 'none', 'aria-hidden': 'true' });
+      setSvgTransform(overlay, left - 3, top + headerHeight + 4 + first * rowHeight, this.reducedMotion, this.durationMs);
+      appendPreservingState(layer, overlay);
+    } else layer.querySelector('[data-role="window-frame"]')?.remove();
     renderExplanationPanel(surface, input.explanation, top + headerHeight + 18 + rows.length * rowHeight, options.locale);
   }
 }

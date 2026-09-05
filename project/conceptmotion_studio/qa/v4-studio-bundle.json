@@ -7,16 +7,16 @@
     "challengeLoadsMonacoDynamically": true
   },
   "initialStaticBytes": 705500,
-  "knowledgeStaticBytes": 853868,
-  "workflowStaticBytes": 842081,
-  "challengeStaticBytes": 861608,
+  "knowledgeStaticBytes": 865801,
+  "workflowStaticBytes": 853620,
+  "challengeStaticBytes": 873523,
   "editorLazyBytes": 3906487,
   "monacoFiles": [
-    "assets/MonacoSurfaces-_zdPzrhj.js",
+    "assets/MonacoSurfaces-B5FbmKMH.js",
     "assets/csharp-BKxtCVv1.js",
-    "assets/jsonMode-cJaEzBIa.js",
+    "assets/jsonMode-j6rj0HLT.js",
     "assets/powershell-DmHpPYUd.js",
-    "assets/python-DMdQj1zl.js",
+    "assets/python-Cuvxsdz6.js",
     "assets/shell-CC2rA5mh.js",
     "assets/sql-NEE52Syq.js"
   ]

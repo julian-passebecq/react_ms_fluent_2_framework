@@ -1,6 +1,7 @@
 import {
   compileWorkflowRunFrame,
   getWorkflowEdgeId,
+  layeredDiagramLayout,
   resolveLocalizedText,
   validateWorkflowSpec,
   type CompiledWorkflowRunFrame,
@@ -19,6 +20,21 @@ import { renderGraph, type GraphEdgeModel, type GraphRenderModel } from './graph
 import { localText, renderHeading } from './shared.js';
 
 export type WorkflowRenderMode = 'topology' | 'run';
+
+/** Adapt task topology to the existing deterministic layout; run state stays in WorkflowSpec. */
+export function workflowGeometry(spec: WorkflowSpec, focusedGroupId?: string) {
+  const focus = spec.groups?.find(group => group.id === focusedGroupId);
+  const ids = new Set(focus ? focus.childNodeIds ?? spec.nodes.filter(node => node.groupId === focus.id).map(node => node.id) : spec.nodes.map(node => node.id));
+  const layout = layeredDiagramLayout.layout({
+    kind: 'diagram', version: spec.version, id: spec.id, title: spec.title,
+    layout: { direction: spec.layout?.direction ?? 'lr', density: spec.layout?.density },
+    nodes: spec.nodes.filter(node => ids.has(node.id)).map(node => ({ id: node.id, label: node.label, groupId: node.groupId })),
+    edges: spec.edges.flatMap((edge, index) => ids.has(edge.from) && ids.has(edge.to) ? [{ id: getWorkflowEdgeId(edge, index), from: { nodeId: edge.from }, to: { nodeId: edge.to } }] : []),
+    groups: spec.groups?.map(group => ({ id: group.id, label: group.label, childNodeIds: (group.childNodeIds ?? []).filter(id => ids.has(id)) })),
+  });
+  // Retain the graph renderer's port-aware orthogonal dependency routes.
+  return { ...layout, edgeRoutes: {} };
+}
 
 export interface WorkflowRendererInput {
   spec: WorkflowSpec;
@@ -158,6 +174,7 @@ export class WorkflowRenderer extends BaseSvgRenderer<WorkflowRendererInput> {
 
     const model: GraphRenderModel = {
       explanationFocusIds: explanation?.step.focus.entityIds,
+      layoutResult: explanation ? workflowGeometry(input.spec, input.focusedGroupId) : undefined,
       availableHeight: explanation ? surface.viewport.height - explanationPanelHeight(explanation) - 24 : undefined,
       id: input.spec.id,
       direction: input.spec.layout?.direction ?? 'lr',
@@ -198,7 +215,7 @@ export class WorkflowRenderer extends BaseSvgRenderer<WorkflowRendererInput> {
     renderGraph(surface, layer, model, options, this.reducedMotion, this.durationMs);
     renderExplanationPanel(surface, explanation, surface.viewport.height - explanationPanelHeight(explanation) - 16, options.locale);
 
-    const breadcrumb = ensureChild(layer, 'text[data-role="breadcrumb"]', 'text', {
+    const breadcrumb = ensureChild(surface.root, 'text[data-role="breadcrumb"]', 'text', {
       'data-role': 'breadcrumb',
       x: 20,
       y: 67,

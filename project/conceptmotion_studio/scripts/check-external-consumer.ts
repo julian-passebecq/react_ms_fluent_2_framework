@@ -76,6 +76,7 @@ try {
       addFixture(fixture);
       const manifest = JSON.parse(files['package.json']);
       manifest.dependencies['@conceptmotion/core'] = 'workspace:*';
+      manifest.dependencies['@conceptmotion/svg'] = 'workspace:*';
       files['package.json'] = JSON.stringify(manifest, null, 2) + '\n';
     }
     for (const [name, bytes] of Object.entries(files)) write(initial, name, bytes);
@@ -100,6 +101,19 @@ try {
     assert.notEqual(mismatch.status, 0, 'Frozen install accepted a manifest/lock mismatch');
     assert.match(`${mismatch.stdout}${mismatch.stderr}`, /OUTDATED_LOCKFILE/);
     run(fresh, 'release:gate');
+    if (preset === 'learning') {
+      const screenshots = path.join(workspace, 'qa/v4-visual-explanations');
+      mkdirSync(screenshots, { recursive: true });
+      function copyEvidence(directory: string): void {
+        if (!existsSync(directory)) return;
+        for (const entry of readdirSync(directory, { withFileTypes: true })) {
+          const source = path.join(directory, entry.name);
+          if (entry.isDirectory()) copyEvidence(source);
+          else if (/^(sql-|algorithm-|de-).+-(desktop|phone)\.png$/.test(entry.name)) cpSync(source, path.join(screenshots, entry.name));
+        }
+      }
+      copyEvidence(path.join(fresh, 'test-results'));
+    }
     requireBundlePrivacy(fresh, ['dist']);
     assert.equal(readFileSync(path.join(fresh, 'pnpm-lock.yaml'), 'utf8'), lock, 'Frozen release modified the consumer lockfile');
     assert.equal(git(fresh, 'status', '--porcelain'), '', 'Release changed consumer-owned files');

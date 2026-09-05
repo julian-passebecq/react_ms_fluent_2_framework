@@ -12,3 +12,4 @@ export * from './table';
 export * from './transitions';
 export * from './validation';
 export * from './workflow';
+export * from './collection';

@@ -400,3 +400,16 @@ export function compileTableAction(table: TableData, action: TableAction): Compi
   }
   return compileTableJoin(action);
 }
+/** Authored membership for a teaching ROWS frame; no SQL parsing or execution. */
+export interface TableWindowFrame {
+  readonly currentRowId: string;
+  readonly memberRowIds: readonly string[];
+}
+
+export function validateTableWindowFrame(state: CompiledTableState, frame: TableWindowFrame): void {
+  const order = state.rowOrder;
+  const members = frame.memberRowIds;
+  if (!Array.isArray(members) || !members.length || new Set(members).size !== members.length || !members.includes(frame.currentRowId) || members.some(id => !state.visibleRowIds.includes(id))) throw new Error('Window requires distinct visible members including the current row.');
+  const slots = members.map(id => order.indexOf(id));
+  if (slots.some((slot, index) => index > 0 && slot !== slots[index - 1] + 1)) throw new Error('ROWS frame members must be consecutive in display order.');
+}

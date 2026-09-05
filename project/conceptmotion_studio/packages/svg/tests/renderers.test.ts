@@ -53,6 +53,7 @@ describe('renderer registry and lifecycle', () => {
     const registry = createDefaultRendererRegistry();
     expect(registry.ids()).toEqual([
       'algorithm.loop',
+      'collection.flow',
       'diagram.flow',
       'lineage.model',
       'statistics.regression',

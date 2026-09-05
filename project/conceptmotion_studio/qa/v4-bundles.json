@@ -3,15 +3,15 @@
   "reports": [
     {
       "app": "formation",
-      "initialStaticBytes": 483340,
+      "initialStaticBytes": 483744,
       "initialBudget": 650000,
       "initialExcludesMonaco": true,
       "editorLazyChunks": [
-        "assets/MonacoSurfaces-BMQBYXRv.js",
-        "assets/jsonMode-I9VVfHmf.js",
+        "assets/MonacoSurfaces-DtTgAVz9.js",
+        "assets/jsonMode-BT1v7-bc.js",
         "assets/sql-NEE52Syq.js",
         "assets/shell-CC2rA5mh.js",
-        "assets/python-DLAHH0si.js",
+        "assets/python-DwgFRmbm.js",
         "assets/powershell-DmHpPYUd.js",
         "assets/csharp-BKxtCVv1.js"
       ],
@@ -23,11 +23,11 @@
       "initialBudget": 550000,
       "initialExcludesMonaco": true,
       "editorLazyChunks": [
-        "assets/MonacoSurfaces-C0F0Nzdb.js",
-        "assets/jsonMode-Bfx3Jd29.js",
+        "assets/MonacoSurfaces-CHhNlGO6.js",
+        "assets/jsonMode-DKQyJgJR.js",
         "assets/sql-NEE52Syq.js",
         "assets/shell-CC2rA5mh.js",
-        "assets/python-DiGmswNq.js",
+        "assets/python-BWMJS-km.js",
         "assets/powershell-DmHpPYUd.js",
         "assets/csharp-BKxtCVv1.js"
       ],
@@ -39,11 +39,11 @@
       "initialBudget": 650000,
       "initialExcludesMonaco": true,
       "editorLazyChunks": [
-        "assets/MonacoSurfaces-CDdgLpnA.js",
-        "assets/jsonMode-DPezIAJp.js",
+        "assets/MonacoSurfaces-BvVeMM28.js",
+        "assets/jsonMode-DUAtaJ9d.js",
         "assets/sql-NEE52Syq.js",
         "assets/shell-CC2rA5mh.js",
-        "assets/python-C71d_6dm.js",
+        "assets/python-B527Ku6R.js",
         "assets/powershell-DmHpPYUd.js",
         "assets/csharp-BKxtCVv1.js"
       ],
@@ -51,7 +51,7 @@
     },
     {
       "app": "algorithm-atlas",
-      "initialStaticBytes": 502616,
+      "initialStaticBytes": 503022,
       "initialBudget": 700000,
       "initialExcludesMonaco": true,
       "editorLazyChunks": [],
@@ -59,7 +59,7 @@
     },
     {
       "app": "architecture-atlas",
-      "initialStaticBytes": 460076,
+      "initialStaticBytes": 460486,
       "initialBudget": 650000,
       "initialExcludesMonaco": true,
       "editorLazyChunks": [],

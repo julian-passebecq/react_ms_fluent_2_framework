@@ -5,6 +5,7 @@ import type { RendererViewport } from './types.js';
 
 /** Pure resolution uses only the semantic identity space exposed by each renderer. */
 export function resolveSceneExplanation(spec: SvgSceneSpec | WorkflowSpec, frameIndex = 0): ResolvedExplanation | undefined {
+  if (spec.kind === 'collection') return compileCollectionFrame(spec, Math.max(0, Math.min(spec.frames.length - 1, Math.trunc(Number.isFinite(frameIndex) ? frameIndex : 0)))).explanation;
   if (!('explanation' in spec) || !spec.explanation) return undefined;
   if (spec.kind === 'loop') return resolveExplanationStep(spec.explanation, frameIndex, { entityIds: spec.items.map(item => item.id), frameCount: spec.frames.length, codeLines: spec.codeLines });
   if (spec.kind === 'table') return resolveExplanationStep(spec.explanation, frameIndex, { entityIds: [...new Set(spec.frames.flatMap(frame => frame.rows.map(row => row.id)))], frameCount: spec.frames.length });
@@ -75,8 +76,12 @@ export function recommendedSceneViewport(spec: SvgSceneSpec | WorkflowSpec, size
   // without reserving an extra empty line beneath these small explanations.
   if (spec.kind === 'loop') content = cue ? 181 + cue : Math.max(290, 100 + spec.codeLines.length * 24, 252 + Math.ceil(Math.max(0, ...spec.frames.map(frame => Object.keys(frame.variables ?? {}).length)) / 4) * 40);
   else if (spec.kind === 'table') content = 120 + Math.max(0, ...spec.frames.map(frame => frame.rows.length)) * 42 + cue;
+  else if (spec.kind === 'collection') content = 100 + collectionGeometry(spec).height + cue;
   else if (spec.kind === 'join') content = 124 + Math.max(spec.join.left.rows.length, spec.join.right.rows.length, compileTableJoin(spec.join).rows.length) * 31 + cue;
-  else if (spec.kind === 'workflow') content = 300 + cue;
+  else if (spec.kind === 'workflow') content = cue ? 92 + workflowGeometry(spec).height + cue : 300;
   else if (spec.kind === 'diagram' || spec.kind === 'lineage') content = 520;
   return { width: 960, height: Math.ceil(Math.max(content, size === 'expanded' ? 640 : size === 'regular' ? 420 : 280)) };
 }
+import { compileCollectionFrame } from '@conceptmotion/core';
+import { collectionGeometry } from './renderers/collection.js';
+import { workflowGeometry } from './renderers/workflow.js';

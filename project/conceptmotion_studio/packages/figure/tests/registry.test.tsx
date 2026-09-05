@@ -32,6 +32,7 @@ describe('FigureRendererRegistry', () => {
   it('registers all ConceptMotion families and safe static adapters', () => {
     expect(createDefaultFigureRendererRegistry().ids()).toEqual([
       'algorithm.loop',
+      'collection.flow',
       'diagram.flow',
       'lineage.model',
       'static.image',

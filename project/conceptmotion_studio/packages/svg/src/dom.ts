@@ -168,11 +168,19 @@ export function keyedChildren<T, K extends keyof SVGElementTagNameMap>(
       existing.delete(id);
     }
     update(element, item, index, entering);
-    parent.append(element);
+    appendPreservingState(parent, element);
     ordered.push(element);
   });
   existing.forEach((element) => element.remove());
   return ordered;
+}
+
+/** Reordering existing SVG children must not cancel CSS motion or keyboard focus.
+ * Older DOM implementations retain deterministic static placement via append. */
+export function appendPreservingState(parent: SVGElement, element: SVGElement): void {
+  if (parent.lastChild === element) return;
+  if (element.parentNode === parent && typeof parent.moveBefore === 'function') parent.moveBefore(element, null);
+  else parent.append(element);
 }
 
 export function rectContains(rect: Rect, x: number, y: number): boolean {

@@ -15,7 +15,7 @@
     "@datapass/scaffold": { "directory": "packages/scaffold", "files": ["package.json", "src/"] },
     "@datapass/canonical": {
       "directory": "content",
-      "files": ["package.json", "practice/index.ts", "practice/catalog.public.json", "practice/THIRD_PARTY_NOTICES.md", "practice/ZILLACODE_APACHE_LICENSE.txt", "projects.ts", "projects.registry.json", "visuals/algorithms.ts", "visuals/index.ts", "visuals/model.ts", "visuals/practice-availability.ts", "visuals/refinements.ts", "visuals/sql.ts", "visuals/systems.ts"]
+      "files": ["package.json", "practice/index.ts", "practice/catalog.public.json", "practice/THIRD_PARTY_NOTICES.md", "practice/ZILLACODE_APACHE_LICENSE.txt", "projects.ts", "projects.registry.json", "visuals/explanation-examples.ts", "visuals/algorithms.ts", "visuals/index.ts", "visuals/model.ts", "visuals/practice-availability.ts", "visuals/refinements.ts", "visuals/sql.ts", "visuals/systems.ts"]
     }
   }
 }
