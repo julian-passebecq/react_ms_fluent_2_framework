@@ -4,6 +4,8 @@ A reusable visual-learning and source-aware documentation platform with seven wo
 
 The runnable workspace is [project/conceptmotion_studio](project/conceptmotion_studio/README.md).
 
+Independent repositories use the [V4 external-consumer guide](project/conceptmotion_studio/docs/EXTERNAL_CONSUMERS.md): exact-commit selective bootstrap, consumer-owned frozen lockfile, canonical data exports, standalone scaffolds and production browser release gates. The [hardening report](V4_CONSUMER_HARDENING_REPORT.md), [consumer findings](V4_CONSUMER_FINDINGS.md) and [post-consumer backlog](V4_POST_CONSUMER_BACKLOG.md) record the release evidence and deliberate deferrals.
+
 ## Run
 
 Node 22.12+ and pnpm 11 are required (CI pins Node 24.19.0).

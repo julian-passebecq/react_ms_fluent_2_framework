@@ -428,6 +428,15 @@ importers:
         specifier: 19.2.7
         version: 19.2.7(@types/react@19.2.18)
 
+  content:
+    dependencies:
+      '@conceptmotion/core':
+        specifier: workspace:*
+        version: link:../packages/core
+      '@datapass/content':
+        specifier: workspace:*
+        version: link:../packages/content
+
   packages/code:
     dependencies:
       '@monaco-editor/react':

@@ -4,6 +4,8 @@ This directory is the runnable **V4 consolidation** workspace. The V1.1/V2/V3 pl
 
 The default application is the TypeScript/Fluent Studio in `apps/studio`. `apps/formation` is the first serious proof consumer. The earlier JavaScript/D3 Studio in `src` remains available through the legacy commands.
 
+For a separate repository, use the [external-consumer bootstrap/scaffold/release guide](docs/EXTERNAL_CONSUMERS.md). Public canonical practice, visual, availability and project imports now have explicit `@datapass/canonical` subpaths, while their original source and all existing consumers remain intact.
+
 ## What V4 refines
 
 Consumer-controlled `FigurePlayer`/`FigureView` presentation sizes are separate from `FigureSpec`. Technical metadata moves into shared optional details; required attribution stays visible. Eleven existing scenes synchronize stable code/entity/state references through the existing renderers. Formation, Code Sandbox, Code Interview, both Atlases, Pilot Galaxy and Visual Sandbox adopt the shared visual language without changing their state ownership or adding execution.

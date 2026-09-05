@@ -1,0 +1,17 @@
+{
+  "name": "@datapass/canonical",
+  "version": "4.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    "./practice": "./practice/index.ts",
+    "./visuals": "./visuals/index.ts",
+    "./visual-availability": "./visuals/practice-availability.ts",
+    "./projects": "./projects.ts"
+  },
+  "dependencies": {
+    "@conceptmotion/core": "workspace:*",
+    "@datapass/content": "workspace:*"
+  }
+}

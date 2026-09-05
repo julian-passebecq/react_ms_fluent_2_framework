@@ -37,12 +37,13 @@
     "validate:specs": "tsx scripts/validate-specs.ts",
     "test:dx": "tsc --project tsconfig.authoring.json --pretty false && tsc --project tsconfig.stories.json --pretty false && pnpm run schemas:check && vitest run scripts/check-dx.test.mjs",
     "test:scaffold": "tsx scripts/check-scaffold.ts",
+    "test:external-consumer": "tsc --project tsconfig.external.json --pretty false && tsx scripts/check-external-consumer.ts",
     "scaffold:app": "tsx scripts/scaffold-app.ts",
     "import:practice": "tsx scripts/import-practice.ts",
     "test:practice-import": "tsx scripts/import-practice.ts --check",
     "import:reference": "tsx scripts/import-reference-notebooks.ts",
     "check:offline": "pnpm run test:practice-import && pnpm run test:legacy && pnpm run test:unit && pnpm run test:dx && pnpm run check:boundaries && pnpm run test:scaffold",
-    "check": "pnpm run check:offline && pnpm run build && pnpm run build:consumer && pnpm run build:v3 && pnpm run build:legacy && pnpm run build:storybook && pnpm run test:privacy && pnpm run test:browser",
+    "check": "pnpm run check:offline && pnpm run test:external-consumer && pnpm run build && pnpm run build:consumer && pnpm run build:v3 && pnpm run build:legacy && pnpm run build:storybook && pnpm run test:privacy && pnpm run test:browser",
     "report": "node scripts/report.mjs"
   },
   "dependencies": {

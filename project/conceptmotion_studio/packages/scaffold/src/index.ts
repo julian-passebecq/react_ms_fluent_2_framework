@@ -1,4 +1,5 @@
 import type { AppPreset, AppRecipe, Locale } from '@datapass/content';
+export { generateExternalAppFiles, type ExternalAppOptions } from './external.js';
 
 export const APP_PRESETS = ['knowledge', 'learning', 'catalog', 'portfolio-hub'] as const satisfies readonly AppPreset[];
 

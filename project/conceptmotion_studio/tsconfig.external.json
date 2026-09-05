@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": { "types": ["node"], "allowImportingTsExtensions": true },
+  "include": ["scripts/bootstrap-framework.ts", "scripts/consumer-release-gate.ts", "scripts/scaffold-app.ts", "scripts/check-external-consumer.ts"]
+}

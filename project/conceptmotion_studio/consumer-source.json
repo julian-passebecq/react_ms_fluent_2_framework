@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "packages": {
+    "@conceptmotion/core": { "directory": "packages/core", "files": ["package.json", "src/"] },
+    "@conceptmotion/svg": { "directory": "packages/svg", "files": ["package.json", "src/"] },
+    "@conceptmotion/react": { "directory": "packages/react", "files": ["package.json", "src/"] },
+    "@datapass/ui": { "directory": "packages/ui", "files": ["package.json", "src/"] },
+    "@datapass/content": { "directory": "packages/content", "files": ["package.json", "src/"] },
+    "@datapass/code": { "directory": "packages/code", "files": ["package.json", "src/"] },
+    "@datapass/figure": { "directory": "packages/figure", "files": ["package.json", "src/"] },
+    "@datapass/learning": { "directory": "packages/learning", "files": ["package.json", "src/"] },
+    "@datapass/progress": { "directory": "packages/progress", "files": ["package.json", "src/"] },
+    "@datapass/knowledge": { "directory": "packages/knowledge", "files": ["package.json", "src/"] },
+    "@datapass/notebook-import": { "directory": "packages/notebook-import", "files": ["package.json", "src/"] },
+    "@datapass/scaffold": { "directory": "packages/scaffold", "files": ["package.json", "src/"] },
+    "@datapass/canonical": {
+      "directory": "content",
+      "files": ["package.json", "practice/index.ts", "practice/catalog.public.json", "practice/THIRD_PARTY_NOTICES.md", "practice/ZILLACODE_APACHE_LICENSE.txt", "projects.ts", "projects.registry.json", "visuals/algorithms.ts", "visuals/index.ts", "visuals/model.ts", "visuals/practice-availability.ts", "visuals/refinements.ts", "visuals/sql.ts", "visuals/systems.ts"]
+    }
+  }
+}

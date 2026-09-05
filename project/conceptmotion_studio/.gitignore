@@ -16,3 +16,4 @@ generated/
 coverage-*/
 content/projects.private.local.json
 content/*.private.local.*
+qa/v4-external-consumer.json
