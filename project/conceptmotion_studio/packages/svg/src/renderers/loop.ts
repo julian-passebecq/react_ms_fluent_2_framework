@@ -3,7 +3,9 @@ import {
   type CompiledLoopFrame,
   type LocalizedText,
   type LoopSceneSpec,
+  type ResolvedExplanation,
 } from '@conceptmotion/core';
+import { renderExplanationPanel } from '../explanation.js';
 
 import { BaseSvgRenderer } from '../base-renderer.js';
 import {
@@ -18,6 +20,7 @@ import type { RendererRegistration } from '../types.js';
 import { formatValue, localText, makeSelectable, renderHeading, truncate } from './shared.js';
 
 export interface LoopRendererInput {
+  explanation?: ResolvedExplanation;
   spec: LoopSceneSpec;
   frame: CompiledLoopFrame;
   title?: LocalizedText;
@@ -45,7 +48,7 @@ export class LoopRenderer extends BaseSvgRenderer<LoopRendererInput> {
       const item = itemById.get(id);
       return item ? [item] : [];
     });
-    const active = new Set(source.activeItemIds ?? []);
+    const active = new Set([...(source.activeItemIds ?? []), ...(input.explanation?.step.focus.entityIds ?? [])]);
     const done = new Set(source.doneItemIds ?? []);
     const arrayLeft = 24;
     const itemSize = Math.max(42, Math.min(70, (surface.viewport.width * 0.54 - arrayLeft) / Math.max(1, ordered.length)));
@@ -75,6 +78,7 @@ export class LoopRenderer extends BaseSvgRenderer<LoopRendererInput> {
         setAttributes(group, {
           'data-role': 'item',
           'data-item-id': item.id,
+          'data-explanation-focused': String(input.explanation?.step.focus.entityIds?.includes(item.id) ?? false),
           'data-state': isDone ? 'done' : isPointer ? 'pointer' : isActive ? 'active' : 'idle',
           'data-entering': entering ? 'true' : undefined,
         });
@@ -121,6 +125,12 @@ export class LoopRenderer extends BaseSvgRenderer<LoopRendererInput> {
       },
     );
 
+    if (input.explanation) {
+      layer.querySelectorAll('[data-role="code-background"], [data-role="code-line"], [data-role="variable"], [data-role="variables-label"]').forEach(node => node.remove());
+      renderExplanationPanel(surface, input.explanation, itemTop + 76, options.locale);
+      return;
+    }
+    renderExplanationPanel(surface, undefined, 0);
     const codeX = Math.max(surface.viewport.width * 0.59, arrayLeft + ordered.length * itemSize + 20);
     const codeWidth = surface.viewport.width - codeX - 20;
     const codeTop = top + 22;

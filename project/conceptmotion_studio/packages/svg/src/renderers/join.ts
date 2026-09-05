@@ -6,7 +6,9 @@ import {
   type TableData,
   type TableJoinSpec,
   type TableRow,
+  type ResolvedExplanation,
 } from '@conceptmotion/core';
+import { renderExplanationPanel } from '../explanation.js';
 
 import { BaseSvgRenderer } from '../base-renderer.js';
 import {
@@ -22,6 +24,7 @@ import type { RendererRegistration } from '../types.js';
 import { formatValue, localText, makeSelectable, renderHeading, truncate } from './shared.js';
 
 export interface JoinRendererInput {
+  explanation?: ResolvedExplanation;
   spec: TableJoinSpec;
   result?: JoinResult;
   /** Number of output rows currently revealed; omitted means all. */
@@ -49,6 +52,7 @@ export class JoinRenderer extends BaseSvgRenderer<JoinRendererInput> {
   protected render(input: JoinRendererInput): void {
     const surface = this.surface!;
     const options = this.options;
+    const focus = new Set(input.explanation?.step.focus.entityIds ?? []);
     const result = input.result ?? compileTableJoin(input.spec);
     const visibleRows = result.rows.slice(0, input.revealCount ?? result.rows.length);
     const title = localText(input.title, options) || `${input.spec.joinType.toUpperCase()} join fan-out`;
@@ -136,7 +140,7 @@ export class JoinRenderer extends BaseSvgRenderer<JoinRendererInput> {
           d: routeOrthogonal(sourcePoint, edge.target),
           fill: 'none',
           stroke: edge.side === 'left' ? surface.theme.accent : surface.theme.lineage,
-          'stroke-width': 1.5,
+          'stroke-width': focus.has(edge.sourceKey) || focus.has(edge.resultId) ? 3 : 1.5,
           'stroke-dasharray': edge.side === 'right' ? '4 3' : undefined,
           opacity: 0.72,
         });
@@ -154,6 +158,7 @@ export class JoinRenderer extends BaseSvgRenderer<JoinRendererInput> {
           'data-role': 'source-row',
           'data-side': source.side,
           'data-row-id': source.row.id,
+          'data-explanation-focused': String(focus.has(source.key)),
           'data-entering': entering ? 'true' : undefined,
         });
         setSvgTransform(group, source.x, source.y, this.reducedMotion, this.durationMs);
@@ -162,8 +167,8 @@ export class JoinRenderer extends BaseSvgRenderer<JoinRendererInput> {
           width: source.width,
           height: source.height,
           rx: 4,
-          fill: options.selectedId === source.key ? surface.theme.accentSubtle : surface.theme.surface,
-          stroke: options.selectedId === source.key ? surface.theme.accent : surface.theme.border,
+          fill: options.selectedId === source.key || focus.has(source.key) ? surface.theme.accentSubtle : surface.theme.surface,
+          stroke: options.selectedId === source.key || focus.has(source.key) ? surface.theme.accent : surface.theme.border,
         });
         rect.setAttribute('aria-hidden', 'true');
         const keyColumn = source.side === 'left' ? input.spec.leftKey : input.spec.rightKey;
@@ -190,6 +195,7 @@ export class JoinRenderer extends BaseSvgRenderer<JoinRendererInput> {
         setAttributes(group, {
           'data-role': 'result-row',
           'data-row-id': row.id,
+          'data-explanation-focused': String(focus.has(row.id)),
           'data-left-row-id': row.leftRowId ?? 'null',
           'data-right-row-id': row.rightRowId ?? 'null',
           'data-entering': entering ? 'true' : undefined,
@@ -200,8 +206,8 @@ export class JoinRenderer extends BaseSvgRenderer<JoinRendererInput> {
           width: outputWidth,
           height: rowHeight - 5,
           rx: 4,
-          fill: options.selectedId === row.id ? surface.theme.accentSubtle : surface.theme.surfaceRaised,
-          stroke: options.selectedId === row.id ? surface.theme.accent : surface.theme.border,
+          fill: options.selectedId === row.id || focus.has(row.id) ? surface.theme.accentSubtle : surface.theme.surfaceRaised,
+          stroke: options.selectedId === row.id || focus.has(row.id) ? surface.theme.accent : surface.theme.border,
           'stroke-dasharray': row.leftRowId === null || row.rightRowId === null ? '4 3' : undefined,
         });
         rect.setAttribute('aria-hidden', 'true');
@@ -227,6 +233,7 @@ export class JoinRenderer extends BaseSvgRenderer<JoinRendererInput> {
         setText(badge, row.leftRowId === null || row.rightRowId === null ? 'NULL-EXTENDED' : 'MATCH');
       },
     );
+    renderExplanationPanel(surface, input.explanation, bodyTop + Math.max(input.spec.left.rows.length, input.spec.right.rows.length, result.rows.length) * rowHeight + 18, options.locale);
   }
 }
 

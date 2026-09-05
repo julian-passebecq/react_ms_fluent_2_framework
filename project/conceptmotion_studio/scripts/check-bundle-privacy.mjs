@@ -88,7 +88,7 @@ const filename = fileURLToPath(import.meta.url);
 if (process.argv[1] && path.resolve(process.argv[1]) === filename) {
   const root = path.resolve(path.dirname(filename), '..');
   const report = scanBundlePrivacy(root);
-  const destination = path.join(root, 'qa/v3-bundle-privacy.json');
+  const destination = path.join(root, 'qa/v4-bundle-privacy.json');
   mkdirSync(path.dirname(destination), { recursive: true });
   writeFileSync(destination, `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify(report, null, 2));

@@ -1,17 +1,32 @@
-html, body, #root { margin: 0; min-height: 100%; background: #f8f7f4; color: #172b42; }
+html, body, #root { margin: 0; min-height: 100%; background: var(--dp-canvas-warm); color: var(--dp-ink-primary); }
 * { box-sizing: border-box; }
 .dp-app-shell__main { padding: 1.5rem; width: 100%; max-width: 1400px; margin: 0 auto; }
 .dp-page-header { margin-bottom: 1.5rem; }
 .interview-domain { max-width: 400px; margin-bottom: 1.25rem; }
 .interview-modes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1rem; }
-.interview-boundary { margin-top: 2rem; color: #546476; }
+.interview-boundary { margin-top: 2rem; color: var(--dp-ink-secondary); }
 .interview-session-tools, .interview-flags { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin: .5rem 0 1.25rem; }
-.interview-session-tools [role=timer] { font-size: 1.3rem; font-variant-numeric: tabular-nums; padding: .4rem .7rem; border: 1px solid #d7dce2; }
-.interview-review, .interview-coding, .interview-backup { border: 1px solid #d7dce2; border-radius: .4rem; background: #fff; padding: 1.2rem; margin-top: 1.5rem; }
+.interview-session-tools [role=timer] { font-size: 1.3rem; font-variant-numeric: tabular-nums; padding: .4rem .7rem; border: 1px solid var(--dp-border-subtle); border-radius: var(--dp-radius-control); }
+.interview-review, .interview-coding, .interview-backup { border: 1px solid var(--dp-border-subtle); border-radius: var(--dp-radius-card); background: var(--dp-surface-base); padding: 1.2rem; margin-top: 1.5rem; }
 .interview-coding > h2, .interview-review > h2 { font-size: 1.2rem; }
-.interview-domain-results { padding: 1rem 2rem; background: #fff; border: 1px solid #d7dce2; line-height: 2; }
+.interview-domain-results { padding: 1rem 2rem; background: var(--dp-surface-base); border: 1px solid var(--dp-border-subtle); line-height: 2; }
 .interview-backup { max-width: 900px; }
 .interview-coding .dp-practice-workbench { margin-top: 1.25rem; }
 /* Submitted answers remain disabled, but their labels must stay readable during review. */
-.dp-assessment-question .fui-Radio__input:disabled ~ .fui-Radio__label { color: #172b42; }
-@media (max-width: 700px) { .dp-app-shell__main { padding: .75rem; } .interview-review, .interview-coding { padding: .75rem; } }
+.dp-assessment-question .fui-Radio__input:disabled ~ .fui-Radio__label { color: var(--dp-ink-primary); }
+.interview-reasoning { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: 1.5rem; margin: 1.25rem 0 1.5rem; }
+.interview-reasoning > * { min-width: 0; }
+.interview-reasoning h1 { margin: .5rem 0 .75rem; font-size: 1.5rem; line-height: 1.25; }
+.interview-reasoning-copy > :last-child { margin-bottom: 0; }
+.interview-reasoning p, .interview-reasoning-review p { line-height: 1.65; }
+.interview-answer-stage { padding-top: 1.5rem; border-top: 1px solid var(--dp-border-subtle); }
+.interview-reasoning-review { margin-top: 2rem; padding: 1.25rem; background: var(--dp-surface-raised); border-left: 3px solid var(--dp-accent-teal); border-radius: var(--dp-radius-card); }
+.interview-reasoning-review > h2 { margin: .5rem 0; font-size: 1.5rem; }
+.interview-review-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.interview-review-columns > div { min-width: 0; }
+.interview-review-columns h4 { margin: 0; color: var(--dp-accent-teal); }
+.interview-review-columns ul { padding-left: 1.2rem; line-height: 1.65; }
+.interview-review-columns li + li { margin-top: .5rem; }
+.interview-domain-review + .interview-domain-review { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--dp-border-subtle); }
+.interview-reasoning-sequence { font-size: .875rem; color: var(--dp-ink-secondary); }
+@media (max-width: 700px) { .dp-app-shell__main { padding: .75rem; } .interview-review, .interview-coding, .interview-reasoning-review { padding: .75rem; } .interview-reasoning { grid-template-columns: minmax(0, 1fr); gap: 1rem; } .interview-review-columns { grid-template-columns: minmax(0, 1fr); gap: .5rem; } }

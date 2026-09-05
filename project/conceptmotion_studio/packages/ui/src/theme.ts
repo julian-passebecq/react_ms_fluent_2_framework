@@ -23,13 +23,21 @@ export const datapassBrandVariants: BrandVariants = {
 
 const generatedLightTheme = createLightTheme(datapassBrandVariants);
 
+/** Semantic surfaces shared by Fluent chrome and renderer presentation adapters. */
+export const datapassSurfaceTokens = {
+  canvasWarm: '#f8f8f5', surfaceBase: '#ffffff', surfaceRaised: '#f1f3f2',
+  inkPrimary: '#102d43', inkSecondary: '#4f5d64', accentTeal: '#0b6870',
+  accentAmber: '#8a5a14', borderSubtle: '#dce3e5',
+  elevationLow: '0 2px 8px rgb(16 45 67 / 5%)', radiusCard: '10px', radiusControl: '6px',
+} as const;
+
 export const datapassLightTheme: Theme = {
   ...generatedLightTheme,
-  colorNeutralBackground1: '#FFFFFF',
-  colorNeutralBackground2: '#F8F8F5',
+  colorNeutralBackground1: datapassSurfaceTokens.surfaceBase,
+  colorNeutralBackground2: datapassSurfaceTokens.canvasWarm,
   colorNeutralBackground3: '#F1F3F5',
-  colorNeutralForeground1: '#102D43',
-  colorNeutralForeground2: '#4F5D64',
+  colorNeutralForeground1: datapassSurfaceTokens.inkPrimary,
+  colorNeutralForeground2: datapassSurfaceTokens.inkSecondary,
   colorNeutralStroke1: '#DDE3E6',
   colorNeutralStroke2: '#E9EDEF',
   colorBrandForeground1: '#0F707C',

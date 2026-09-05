@@ -101,4 +101,13 @@ describe('FigureView', () => {
     expect(adapter?.validate?.(imageFigure('/assets/figure.png'))).toEqual([]);
     expect(adapter?.validate?.(imageFigure('data:image/png;base64,iVBORw0KGgo='))).toEqual([]);
   });
+
+  it('does not render unchecked legacy optional status payloads as React children', async () => {
+    const element = host(); const root = createRoot(element);
+    const figure = { ...staticFigure, status: { legacyExtension: true } } as unknown as FigureSpec;
+    await act(async () => root.render(<FigureView figure={figure} metadataMode="developer" />));
+    expect(element.querySelector('[data-figure-static="text"]')?.textContent).toContain('source -> lesson');
+    expect(element.textContent).not.toContain('Status:');
+    await act(async () => root.unmount());
+  });
 });

@@ -17,6 +17,7 @@ import {
 
 const meta = {
   title: 'Foundation/Explorer',
+  parameters: { docs: { description: { component: 'Approved catalog explorer primitives: shared cards/tables/facets around consumer-owned data and filter policy.' } }, datapass: { guide: 'docs/AUTHORING_DX.md', sourceFiles: ['packages/ui/src/index.ts'] } },
 } satisfies Meta;
 
 export default meta;
@@ -44,7 +45,7 @@ const projects: readonly GalleryProject[] = [
   },
   {
     id: 'project.dubreu-formation',
-    title: 'Dubreu Formation',
+    title: 'Formation',
     summary: 'Course-first Python, SQL, and display-only PySpark learning.',
     kind: 'learning',
     status: 'Preview',

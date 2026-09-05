@@ -307,4 +307,33 @@
 .dp-practice-editor-toolbar > * { min-width: 0; }
 .dp-practice-copy pre { white-space: pre-wrap; overflow-wrap: anywhere; }
 .dp-practice-actions { padding: .75rem 0; }
+.dp-practice-attribution { color: var(--dp-ink-secondary, #546476); font-size: .875rem; }
+
+/* Shared consumer treatment; Studio authoring keeps the existing renderer presentation. */
+.dp-consumer .dp-learning-eyebrow { color: var(--dp-accent-teal); }
+.dp-consumer .dp-progress-summary,
+.dp-consumer .dp-notebook-cell--text-output,
+.dp-consumer .dp-notebook-cell--table-output,
+.dp-consumer .dp-notebook-cell--image-output,
+.dp-consumer .dp-assessment-question {
+  background: var(--dp-surface-base);
+  border-color: var(--dp-border-subtle);
+  border-radius: var(--dp-radius-card);
+}
+.dp-consumer .dp-notebook-cell--markdown { background: transparent; border: 0; padding-inline: 0; }
+.dp-consumer .dp-notebook-lesson__header { margin-bottom: 1rem; }
+.dp-consumer .dp-notebook-lesson__header h2 { margin-bottom: .5rem; font-size: 1.4rem; }
+.dp-consumer .dp-notebook-provenance { background: transparent; border: 0; padding-inline: 0; }
+.dp-consumer .dp-notebook-output__notice { background: transparent; border: 0; padding: 0; color: var(--dp-ink-secondary); }
+.dp-consumer .dp-notebook-output__notice .fui-Badge { flex-shrink: 0; }
+.dp-consumer .dp-progress-summary__metrics { grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); }
+.dp-consumer .dp-progress-summary__metrics > div { background: var(--dp-canvas-warm); border-radius: var(--dp-radius-control); }
+.dp-consumer .dp-assessment-question { padding: 1.25rem; }
+.dp-consumer .dp-assessment-option { background: var(--dp-surface-raised); border-color: var(--dp-border-subtle); border-radius: var(--dp-radius-control); }
+.dp-consumer .dp-assessment-question .fui-Radio__input:disabled ~ .fui-Radio__label,
+.dp-consumer .dp-assessment-question .fui-Checkbox__input:disabled ~ .fui-Checkbox__label { color: var(--dp-ink-primary); }
+.dp-consumer .dp-practice-copy aside { border-color: var(--dp-accent-amber); }
+.dp-consumer .dp-practice-copy footer { border-color: var(--dp-border-subtle); }
+.dp-consumer .dp-practice-boundary { color: var(--dp-ink-secondary); font-size: .875rem; }
+@media (max-width: 700px) { .dp-consumer .dp-assessment-question { padding: .75rem; } .dp-consumer .dp-notebook-output__notice { flex-wrap: wrap; } }
 @media (max-width: 700px) { .dp-practice-workbench h1 { font-size: 1.45rem; } .dp-practice-editor-toolbar { align-items: stretch; } }

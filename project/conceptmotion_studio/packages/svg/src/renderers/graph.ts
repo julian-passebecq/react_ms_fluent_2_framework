@@ -1,4 +1,4 @@
-import type { DiagramLayoutResult, EntityId, FlowKind } from '@conceptmotion/core';
+import { createIconRegistry, type DiagramLayoutResult, type EntityId, type FlowKind } from '@conceptmotion/core';
 
 import { ensureChild, keyedChildren, round, setAttributes, setSvgTransform, setText, type SvgSurface } from '../dom.js';
 import { ensureFlowMarkers, flowVisualStyle } from '../flow-style.js';
@@ -45,6 +45,10 @@ export interface GraphGroupModel {
 }
 
 export interface GraphRenderModel {
+  explanationFocusIds?: readonly EntityId[];
+  /** Opt-in semantic node cards; omitted retains legacy workflow/diagram chrome. */
+  semanticNodes?: boolean;
+  availableHeight?: number;
   id: string;
   layoutResult?: DiagramLayoutResult;
   /** Generic diagrams describe concepts, not task execution. */
@@ -66,6 +70,18 @@ const STATUS_GLYPH: Readonly<Record<string, string>> = {
   skipped: '⊘',
   upstream_failed: '⊥',
 };
+const nodeIcons = createIconRegistry();
+const PROJECT_STATUSES = new Set(['active', 'building', 'planned', 'experimental', 'legacy', 'archived']);
+function labelLines(text: string, max = 22): string[] {
+  const words = text.split(/\s+/);
+  const lines = [''];
+  for (const word of words) {
+    const last = lines.length - 1;
+    if (lines[last] && `${lines[last]} ${word}`.length > max) lines.push(word);
+    else lines[last] = `${lines[last]} ${word}`.trim();
+  }
+  return lines.length > 2 ? [lines[0], truncate(lines.slice(1).join(' '), max)] : lines;
+}
 
 function statusColor(status: string | undefined, surface: SvgSurface): string {
   if (status === 'success') return surface.theme.success;
@@ -108,7 +124,7 @@ export function renderGraph(
     {
       direction,
       width: surface.viewport.width,
-      height: surface.viewport.height - 72,
+      height: (model.availableHeight ?? surface.viewport.height) - 72,
       padding: 92,
       nodeWidth: 154,
       nodeHeight: 68,
@@ -134,6 +150,9 @@ export function renderGraph(
   const nodesLayer = ensureChild(root, 'g[data-layer="nodes"]', 'g', { 'data-layer': 'nodes' });
 
   const groupLayouts = (model.groups ?? []).flatMap((group) => {
+    // Category membership controls radial order. A rectangle spanning an arc
+    // could cover the hub; category labels/counts belong in the consumer legend.
+    if (model.semanticNodes && group.kind === 'category') return [];
     const provided = model.layoutResult?.groups?.find(entry => entry.id === group.id);
     if (provided) return [{ group, x: provided.x, y: provided.y, width: provided.width, height: provided.height }];
     const children = group.childNodeIds.flatMap((id) => {
@@ -297,70 +316,87 @@ export function renderGraph(
     (nodeGroup, node, _index, entering) => {
       const rect = layout.get(node.id)!;
       const selected = options.selectedId === node.id;
+      const explanationFocused = model.explanationFocusIds?.includes(node.id) ?? false;
       const status = node.status ?? 'pending';
+      const publicStatus = model.semanticNodes && typeof node.metadata?.status === 'string' && PROJECT_STATUSES.has(node.metadata.status) ? node.metadata.status : '';
+      const hub = model.semanticNodes && node.kind === 'hub';
+      const semanticIcon = nodeIcons.resolve(node.iconId ?? `data.${node.kind ?? 'unknown'}`);
       setAttributes(nodeGroup, {
         'data-role': 'node',
         'data-node-id': node.id,
         'data-kind': node.kind ?? 'generic',
         'data-status': status,
+        'data-semantic-node': model.semanticNodes ? 'true' : undefined,
+        'data-category-id': node.groupId,
+        'data-public-status': publicStatus || undefined,
+        'data-explanation-focused': model.explanationFocusIds ? String(explanationFocused) : undefined,
         'data-entering': entering ? 'true' : undefined,
       });
       setSvgTransform(nodeGroup, rect.x, rect.y, reducedMotion, durationMs);
-      makeSelectable(nodeGroup, node.id, `${node.label}, ${node.kind ?? 'node'}${model.semanticOnly ? status === 'running' ? ', active' : status === 'failed' ? ', issue' : '' : `, status ${status}`}`, options);
+      makeSelectable(nodeGroup, node.id, `${node.label}, ${node.kind ?? 'node'}${publicStatus ? `, project status ${publicStatus}` : model.semanticOnly ? status === 'running' ? ', active' : status === 'failed' ? ', issue' : '' : `, status ${status}`}`, options);
       const background = ensureChild(nodeGroup, 'rect[data-role="background"]', 'rect', {
         'data-role': 'background',
         width: rect.width,
         height: rect.height,
         rx: surface.theme.radius,
-        fill: selected ? surface.theme.accentSubtle : surface.theme.surface,
-        stroke: selected ? surface.theme.accent : statusColor(status, surface),
-        'stroke-width': selected || status === 'running' || status === 'failed' ? 2.4 : 1.2,
+        fill: hub ? surface.theme.accent : selected || explanationFocused ? surface.theme.accentSubtle : surface.theme.surface,
+        stroke: selected || explanationFocused ? surface.theme.accent : statusColor(status, surface),
+        'stroke-width': hub || selected || explanationFocused || status === 'running' || status === 'failed' ? 2.4 : 1.2,
         'stroke-dasharray': status === 'queued' || status === 'retrying' ? '5 3' : undefined,
       });
       background.setAttribute('aria-hidden', 'true');
       const icon = ensureChild(nodeGroup, 'text[data-role="icon"]', 'text', {
         'data-role': 'icon',
         'data-icon-id': node.iconId ?? 'generic.node',
+        'data-icon-resolved': model.semanticNodes ? semanticIcon.resolvedId : undefined,
         x: 13,
         y: 24,
-        fill: surface.theme.accent,
-        'font-size': 15,
+        fill: hub ? surface.theme.surface : surface.theme.accent,
+        'font-size': model.semanticNodes && (semanticIcon.glyph?.length ?? 0) > 1 ? 11 : 15,
         'font-weight': 700,
       });
       // A deterministic generic glyph is safer than coupling specs to vendor asset paths.
-      setText(icon, node.kind === 'database' || node.kind === 'table' ? '▤' : node.kind === 'source' ? '◉' : '□');
+      setText(icon, model.semanticNodes ? semanticIcon.glyph ?? '◇' : node.kind === 'database' || node.kind === 'table' ? '▤' : node.kind === 'source' ? '◉' : '□');
       const label = ensureChild(nodeGroup, 'text[data-role="label"]', 'text', {
         'data-role': 'label',
         x: 38,
         y: 23,
-        fill: surface.theme.ink,
-        'font-size': 11,
+        fill: hub ? surface.theme.surface : surface.theme.ink,
+        'font-size': model.semanticNodes ? 14 : 11,
         'font-weight': 650,
       });
-      setText(label, truncate(node.label, 19));
+      if (model.semanticNodes) {
+        for (const child of Array.from(label.childNodes)) if (child.nodeType === 3) child.remove();
+        keyedChildren(label, 'tspan', 'tspan', labelLines(node.label).map((text, index) => ({ id: String(index), text })), line => line.id, (span, line, index) => { setAttributes(span, { x: 38, dy: index ? 17 : 0 }); setText(span, line.text); });
+      } else setText(label, truncate(node.label, 19));
+      const category = model.semanticNodes ? model.groups?.find(group => group.id === node.groupId && group.kind === 'category') : undefined;
+      if (category) {
+        const categoryLabel = ensureChild(nodeGroup, 'text[data-role="category"]', 'text', { 'data-role': 'category', x: 13, y: 55, fill: surface.theme.accent, 'font-size': 10, 'font-weight': 650 });
+        setText(categoryLabel, category.label);
+      } else nodeGroup.querySelector('[data-role="category"]')?.remove();
       const kind = ensureChild(nodeGroup, 'text[data-role="kind"]', 'text', {
         'data-role': 'kind',
         x: 13,
-        y: 47,
-        fill: surface.theme.mutedInk,
+        y: model.semanticNodes ? 73 : 47,
+        fill: hub ? surface.theme.surface : surface.theme.mutedInk,
         'font-size': 9,
       });
-      setText(kind, (node.kind ?? 'generic').toUpperCase());
+      setText(kind, model.semanticNodes ? (node.kind ?? 'node').replaceAll('-', ' ').toUpperCase() : (node.kind ?? 'generic').toUpperCase());
       const statusBadge = ensureChild(nodeGroup, 'text[data-role="status"]', 'text', {
         'data-role': 'status',
         x: rect.width - 10,
-        y: 47,
-        fill: statusColor(status, surface),
-        'font-size': 10,
+        y: model.semanticNodes ? 73 : 47,
+        fill: hub ? surface.theme.surface : publicStatus === 'building' ? surface.theme.warning : statusColor(status, surface),
+        'font-size': model.semanticNodes ? 11 : 10,
         'font-weight': 750,
         'text-anchor': 'end',
       });
-      setText(statusBadge, model.semanticOnly ? status === 'running' ? 'ACTIVE' : status === 'failed' ? 'ISSUE' : '' : `${STATUS_GLYPH[status] ?? '•'} ${(node.statusLabel ?? status).replaceAll('_', ' ').toUpperCase()}`);
+      setText(statusBadge, publicStatus ? publicStatus.toUpperCase() : model.semanticOnly ? status === 'running' ? 'ACTIVE' : status === 'failed' ? 'ISSUE' : '' : `${STATUS_GLYPH[status] ?? '•'} ${(node.statusLabel ?? status).replaceAll('_', ' ').toUpperCase()}`);
 
-      const ports = node.ports ?? [
+      const ports = node.ports ?? (model.semanticNodes ? [] : [
         { id: 'in', side: inferredSide('target', direction) },
         { id: 'out', side: inferredSide('source', direction) },
-      ];
+      ]);
       keyedChildren(
         nodeGroup,
         'g[data-role="port"]',

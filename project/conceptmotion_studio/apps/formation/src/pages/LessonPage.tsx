@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useReducedMotion } from '@conceptmotion/react';
 import { ReasoningLesson } from './ReasoningLesson';
 import { Badge, Button, MessageBar, MessageBarBody, MessageBarTitle } from '@fluentui/react-components';
 import { ArrowLeft20Regular, Checkmark20Regular } from '@fluentui/react-icons';
 import { NotebookLesson } from '@datapass/learning';
 import { setChallengeDraft, updateLessonProgress, type ProgressStateV2 } from '@datapass/progress';
-import { PageHeader, useLocale } from '@datapass/ui';
+import { ContentDetails, PageHeader, useLocale } from '@datapass/ui';
 import {
   courses,
   lessonById,
@@ -27,24 +28,12 @@ function courseForLesson(lessonId: string) {
   return courses.find((course) => course.modules.some((module) => module.lessons.some((lesson) => lesson.id === lessonId)));
 }
 
-function useReducedMotionPreference() {
-  const [reduced, setReduced] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  useEffect(() => {
-    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const update = () => setReduced(query.matches);
-    update();
-    query.addEventListener('change', update);
-    return () => query.removeEventListener('change', update);
-  }, []);
-  return reduced;
-}
-
 export function LessonPage({ lessonId, progress, updateProgress, onBack, onPractice }: LessonPageProps) {
   const { locale } = useLocale();
   const lesson = lessonById(lessonId);
   const course = lesson ? courseForLesson(lesson.id) : undefined;
   const notebook = notebookById(lesson?.notebookId);
-  const reducedMotion = useReducedMotionPreference();
+  const reducedMotion = useReducedMotion();
   const drafts = progress.challenges[NOTEBOOK_DRAFTS_ID]?.drafts ?? {};
   const lessonProgress = lesson ? progress.lessons[lesson.id] : undefined;
 
@@ -83,12 +72,7 @@ export function LessonPage({ lessonId, progress, updateProgress, onBack, onPract
         eyebrow={`${localized(course.title).toUpperCase()} · STRUCTURED LESSON`}
         title={localized(lesson.title)}
         description={localized(lesson.summary)}
-        metadata={(
-          <>
-            <Badge appearance="outline">{lesson.id}</Badge>
-            <Badge appearance="tint" color={isPySpark ? 'warning' : 'informative'}>{isPySpark ? 'DISPLAY-ONLY' : 'NO IN-SITE EXECUTION'}</Badge>
-          </>
-        )}
+        metadata={<Badge appearance="outline">{isPySpark ? 'PySpark reference' : 'Guided learning'}</Badge>}
         actions={(
           <Button
             appearance={completed ? 'primary' : 'secondary'}
@@ -135,6 +119,7 @@ export function LessonPage({ lessonId, progress, updateProgress, onBack, onPract
         <Button appearance="secondary" onClick={onBack}>{locale === 'no' ? 'Alle kurs' : 'All courses'}</Button>
         <Button appearance="primary" onClick={onPractice}>{locale === 'no' ? 'Øv og vurder' : 'Practice and assess'}</Button>
       </nav>
+      <ContentDetails summary="Lesson details"><p>Lesson ID: <code>{lesson.id}</code></p><p>Course ID: <code>{course.id}</code></p></ContentDetails>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 export * from './algorithm';
+export * from './explanation';
 export * from './diagram';
 export * from './diagram-layout';
 export * from './entities';

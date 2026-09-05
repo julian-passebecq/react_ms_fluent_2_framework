@@ -26,6 +26,18 @@ describe('deterministic DiagramLayoutContract providers', () => {
     const { nodes } = radialDiagramLayout.layout(spec);
     for (const [i, a] of nodes.entries()) for (const b of nodes.slice(i + 1)) expect(a.x + a.width <= b.x || b.x + b.width <= a.x || a.y + a.height <= b.y || b.y + b.height <= a.y).toBe(true);
   });
+  it('opts into readable node cards without changing legacy dimensions', () => {
+    for (const provider of [radialDiagramLayout, layeredDiagramLayout]) {
+      const legacy = provider.layout(spec);
+      expect(legacy.nodes.every(node => node.width === 154 && node.height === 68)).toBe(true);
+      expect(provider.layout({ ...spec, layout: { ...spec.layout, density: 'compact' } })).toEqual(legacy);
+      const comfortable = { ...spec, layout: { ...spec.layout, density: 'comfortable' as const } };
+      const layout = provider.layout(comfortable);
+      expect(layout).toEqual(provider.layout({ ...comfortable, nodes: [...comfortable.nodes].reverse() }));
+      expect(layout.nodes.every(node => node.width === 208 && node.height === 90)).toBe(true);
+      for (const [i, a] of layout.nodes.entries()) for (const b of layout.nodes.slice(i + 1)) expect(a.x + a.width <= b.x || b.x + b.width <= a.x || a.y + a.height <= b.y || b.y + b.height <= a.y).toBe(true);
+    }
+  });
   it('validates missing hubs and unknown providers', () => {
     expect(validateDiagramSpec({ ...spec, layout: { hubId: 'missing' } }).valid).toBe(false);
     expect(validateDiagramSpec({ ...spec, layout: { provider: 'force' } }).valid).toBe(false);

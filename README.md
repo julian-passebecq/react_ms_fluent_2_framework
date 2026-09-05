@@ -1,6 +1,6 @@
-# Datapass Visual Platform · V3
+# Datapass Visual Platform · V4
 
-A reusable visual-learning and source-aware documentation platform, extended through seven working consumers. V3 builds on V2 commit `8cccd77ecd0d0b60b1d28ee2e41cffe5ec78a26f`; it preserves Foundation v1.1 and V2 rather than replacing them.
+A reusable visual-learning and source-aware documentation platform with seven working consumers. V4 consolidates final V3 `36c01d404e0acfd0bf9b55417ad48b4e9285586c`: clearer consumer language, compact/regular/expanded Figure presentation, eleven refined explanations and repository-native authoring tools. Foundation v1.1, V2 and the complete V3 inventory remain intact.
 
 The runnable workspace is [project/conceptmotion_studio](project/conceptmotion_studio/README.md).
 
@@ -37,6 +37,17 @@ Pilot notes and private metadata stay in browser-local state and explicitly expo
 
 ## Delivery and audit
 
+- [V4 audit self-review](V4_AUDIT_SELF_REVIEW.md)
+- [V4 factorisation and shared APIs](V4_FACTORISATION_REPORT.md)
+- [V4 visual review](V4_VISUAL_REVIEW.md)
+- [V4 developer experience](V4_DX_REPORT.md)
+- [V4 test report](V4_TEST_REPORT.md)
+- [V4 bundle report](V4_BUNDLE_REPORT.md)
+- [V4 migration log](V4_MIGRATION_LOG.md)
+- [Authoring guide and approved compositions](project/conceptmotion_studio/docs/AUTHORING_DX.md)
+
+Historical V3 evidence:
+
 - [V3 test report](V3_TEST_REPORT.md)
 - [V3 audit self-review](V3_AUDIT_SELF_REVIEW.md)
 - [V3 reuse report](V3_REUSE_REPORT.md)
@@ -47,4 +58,4 @@ Pilot notes and private metadata stay in browser-local state and explicitly expo
 - [V3 bundle report](V3_BUNDLE_REPORT.md)
 - [Implemented architecture](project/conceptmotion_studio/docs/ARCHITECTURE.md)
 
-The [V3 handoff](reference_material/v3_handoff_2026-09-04/datapass-visual-platform-codex-v3-consumer-expansion/START_HERE.md) is retained as read-only source material. Root `START_HERE.md`, `CODEX_MASTER_PROMPT.md` and `V1_1_DELTA.md` remain the historical foundation contract; V1/V2 reports remain historical evidence. Current results and limitations belong in the V3 reports.
+The [V4 handoff](reference_material/v4_handoff_2026-09-05/datapass_visual_platform_codex_v4_consolidation_2026-09-05/START_HERE.md) and earlier handoffs are retained as read-only source material. Root `START_HERE.md`, `CODEX_MASTER_PROMPT.md` and `V1_1_DELTA.md` remain the historical foundation contract. Current results and limitations belong in the V4 reports; earlier reports are not rewritten as current evidence.

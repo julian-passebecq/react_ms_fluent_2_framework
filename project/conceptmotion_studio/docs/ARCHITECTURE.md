@@ -1,6 +1,14 @@
-# Foundation V2 architecture
+# Datapass V4 architecture
 
-Foundation V3 composes reusable content, import, figure, learning, progress, catalog, and app-generation contracts on top of the preserved Foundation v1.1 semantic/rendering packages. The Studio and Formation are consumers of those contracts; neither application is a library boundary.
+V4 preserves the V1.1/V2/V3 dependency direction, content contracts and seven consumers. Applications compose the shared packages; none is a library boundary.
+
+## V4 additive presentation and explanation boundaries
+
+`@datapass/ui` owns `ContentDetails` and semantic surface tokens. `@datapass/figure` owns `presentationSize`, `metadataMode`, visible human `source`/`note` props, shared playback and export. Sizing is not serialized into FigureSpec. Explicit sizes use content-aware viewport recommendations from the SVG adapter; absent sizes preserve the legacy 960×540 viewport. Responsive panning changes the viewing surface, not the scene's stable identities.
+
+`@conceptmotion/core` owns optional `ExplanationTrack` and validated `entityIds`/`stateKeys`/`codeRefs`. Existing loop, table, join and workflow specs carry these inside their semantic payloads. `@conceptmotion/svg` resolves the active step and renders one shared code/state cue panel. No renderer family, DOM dependency in core, code execution or per-consumer animation controller is added.
+
+The authoring schemas in `schemas/authoring` are generated from a small typed factory and tested against production validators. They assist structural editing; reference integrity and bounded renderer validation remain runtime responsibilities. Ajv is developer tooling, not a pure-package or consumer runtime dependency. See [AUTHORING_DX.md](AUTHORING_DX.md) and the [factorisation report](../../../V4_FACTORISATION_REPORT.md) for API/defaults and deliberate non-extractions.
 
 ## Dependency direction
 

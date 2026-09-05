@@ -10,7 +10,9 @@ import {
   type LoopSceneSpec,
   type RegressionSceneSpec,
   type TableJoinSpec,
+  type ExplanationTrack,
 } from '@conceptmotion/core';
+import { resolveSceneExplanation } from './explanation.js';
 
 import type { DiagramRendererInput } from './renderers/diagram.js';
 import type { JoinRendererInput } from './renderers/join.js';
@@ -20,6 +22,7 @@ import type { RegressionRendererInput } from './renderers/regression.js';
 import type { TableRendererInput } from './renderers/table.js';
 
 export interface TableSvgSceneSpec {
+  readonly explanation?: ExplanationTrack;
   readonly kind: 'table';
   readonly version: string;
   readonly id: string;
@@ -30,6 +33,7 @@ export interface TableSvgSceneSpec {
 }
 
 export interface JoinSvgSceneSpec {
+  readonly explanation?: ExplanationTrack;
   readonly kind: 'join';
   readonly version: string;
   readonly id: string;
@@ -98,11 +102,13 @@ export function resolveSvgScene(
   frameIndex = 0,
   parameter?: number,
 ): ResolvedSvgScene {
+  const explanation = resolveSceneExplanation(spec, frameIndex);
   if (spec.kind === 'table') {
     return {
       rendererId: 'table.transform',
       input: {
         state: spec.frames[indexFor(spec.frames.length, frameIndex)],
+        explanation,
         title: spec.title,
         description: spec.description,
       },
@@ -115,6 +121,7 @@ export function resolveSvgScene(
       rendererId: 'table.join',
       input: {
         spec: spec.join,
+        explanation,
         result,
         revealCount: revealIndex >= 0 ? spec.revealCounts?.[revealIndex] : result.rows.length,
         title: spec.title,
@@ -126,7 +133,7 @@ export function resolveSvgScene(
     const index = indexFor(spec.frames.length, frameIndex);
     return {
       rendererId: 'algorithm.loop',
-      input: { spec, frame: compileLoopFrame(spec, index) },
+      input: { spec, frame: compileLoopFrame(spec, index), explanation },
     };
   }
   if (spec.kind === 'regression') {

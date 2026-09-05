@@ -113,7 +113,7 @@ const report = {
   monacoFiles: [...monacoKeys].map((key) => manifest[key]?.file).filter(Boolean).sort(),
 };
 
-const reportPath = path.join(path.resolve(appRoot, '..', '..'), 'qa', 'v2-bundle.json');
+const reportPath = path.join(path.resolve(appRoot, '..', '..'), 'qa', 'v4-studio-bundle.json');
 fs.mkdirSync(path.dirname(reportPath), { recursive: true });
 fs.writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
 

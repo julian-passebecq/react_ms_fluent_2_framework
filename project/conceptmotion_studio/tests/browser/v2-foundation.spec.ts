@@ -16,9 +16,11 @@ function collectMonacoRequests(page: Page) {
 }
 
 async function saveEvidence(page: Page, testInfo: TestInfo, name: string) {
-  fs.mkdirSync(evidenceDir, { recursive: true });
+  const targetDir = name.startsWith('v2-dubreu-') ? path.resolve('qa/v4-screenshots') : evidenceDir;
+  const targetName = name.replace(/^v2-dubreu-/, 'v4-formation-');
+  fs.mkdirSync(targetDir, { recursive: true });
   await page.screenshot({
-    path: path.join(evidenceDir, `${name}-${testInfo.project.name}.png`),
+    path: path.join(targetDir, `${targetName}-${testInfo.project.name}.png`),
     // Playwright's emulated-mobile full-page capture temporarily expands the
     // layout viewport; a viewport capture keeps subsequent interaction valid.
     fullPage: false,
@@ -61,13 +63,13 @@ test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
 });
 
-test('Dubreu catalog and SQL lesson use structured contracts without notebook chrome', async ({ page }, testInfo) => {
+test('Formation catalog and SQL lesson preserve structured contracts without developer metadata', async ({ page }, testInfo) => {
   const monacoRequests = collectMonacoRequests(page);
   await page.goto(`${consumer}/#/catalog`);
   expect(await page.evaluate(() => window.innerWidth)).toBe(testInfo.project.name === 'phone-chrome' ? 390 : 1440);
   await expect(page.getByTestId('formation-catalog-page')).toBeVisible();
-  await expect(page.getByText('The private Dubreu corpus was not supplied or imported.')).toBeVisible();
-  await expect(page.getByText('In-site runtimes').locator('..').getByText('0')).toBeVisible();
+  expect(await page.locator('body').innerText()).not.toMatch(/Dubreu|In-site runtimes|schema v2/);
+  await expect(page.getByText('Thinking modules', { exact: true }).locator('..').getByText('2')).toBeVisible();
   expect(monacoRequests).toEqual([]);
   await expectNoPageOverflow(page);
   await expectNoSeriousAxeFindings(page);
@@ -77,6 +79,13 @@ test('Dubreu catalog and SQL lesson use structured contracts without notebook ch
   await expect(page.getByText('See what the predicate changes')).toBeVisible();
   await expect(page.locator('[data-figure-id="figure.dubreu.sql-filter-stable-rows"]')).toBeVisible();
   await expect(page.getByText('Saved reference output').first()).toBeVisible();
+  expect(await page.locator('body').innerText()).not.toMatch(/Dubreu|notebook\.dubreu|Source SHA-256/);
+  const notebookDetails = page.locator('details').filter({ has: page.locator('summary', { hasText: 'Notebook details & sources' }) });
+  await expect(notebookDetails).not.toHaveAttribute('open');
+  await notebookDetails.locator('summary').press('Enter');
+  await expect(notebookDetails).toHaveAttribute('open', '');
+  await expect(notebookDetails).toContainText('dubreu_sql_where_reference.ipynb');
+  await notebookDetails.locator('summary').press('Enter');
   const sqlViewLines = page.locator('[data-cell-id="notebook.dubreu.sql-where.cell.where-example"] .view-lines');
   await expect(sqlViewLines).toContainText('SELECT');
   const sqlSource = await sqlViewLines.textContent();
@@ -136,6 +145,9 @@ test('PySpark remains display-only and practice attempts persist through schema 
   await page.getByLabel('False').check();
   await page.getByLabel('Partition then order').check();
   await page.getByRole('button', { name: 'Submit assessment' }).click();
+  await expect(page.getByRole('button', { name: 'Submit assessment' })).toBeDisabled();
+  await expect(page.locator('.dp-assessment-result')).toContainText('100%');
+  await expect(page.getByRole('button', { name: 'Start another attempt' })).toBeVisible();
   await expect(page.getByText(/100%/).first()).toBeVisible();
   await expectNoPageOverflow(page);
   await expectNoSeriousAxeFindings(page);

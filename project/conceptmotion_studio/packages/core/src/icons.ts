@@ -33,6 +33,18 @@ const BUILTIN_UNKNOWN_ICON: IconRef = {
 
 export const DEFAULT_ICON_REFS: readonly IconRef[] = [
   BUILTIN_UNKNOWN_ICON,
+  { id: 'data.source', label: 'Source', provider: 'generic', glyph: '◉', official: false },
+  { id: 'data.move', label: 'Move', provider: 'generic', glyph: '→', official: false },
+  { id: 'data.store', label: 'Store', provider: 'generic', glyph: '▤', official: false },
+  { id: 'data.table', label: 'Table', provider: 'generic', fallbackId: 'generic.table', official: false },
+  { id: 'data.process', label: 'Process', provider: 'generic', glyph: 'ƒ', official: false },
+  { id: 'data.model', label: 'Model', provider: 'generic', glyph: '◇', official: false },
+  { id: 'data.serve', label: 'Serve', provider: 'generic', glyph: '▥', official: false },
+  { id: 'data.operate', label: 'Operate', provider: 'generic', glyph: '↻', official: false },
+  { id: 'data.govern', label: 'Govern', provider: 'generic', glyph: '✓', official: false },
+  { id: 'project.framework', label: 'Framework', provider: 'generic', fallbackId: 'generic.code', official: false },
+  { id: 'project.visualization', label: 'Visualization', provider: 'generic', fallbackId: 'generic.chart', official: false },
+  { id: 'project.portfolio', label: 'Portfolio', provider: 'generic', fallbackId: 'generic.user', official: false },
   { id: 'generic.database', label: 'Database', provider: 'generic', glyph: 'DB', official: false },
   { id: 'generic.table', label: 'Table', provider: 'generic', glyph: '▦', official: false },
   { id: 'generic.api', label: 'API', provider: 'generic', glyph: '{}', official: false },

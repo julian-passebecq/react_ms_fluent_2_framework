@@ -1,4 +1,4 @@
-html, body, #root { margin: 0; min-height: 100%; background: #f8f7f4; color: #172b42; }
+html, body, #root { margin: 0; min-height: 100%; background: var(--dp-canvas-warm); color: var(--dp-ink-primary); }
 * { box-sizing: border-box; }
 .dp-app-shell__main { padding: 1.5rem; max-width: 1680px; width: 100%; margin: 0 auto; }
 .dp-page-header { margin-bottom: 1.5rem; }
@@ -10,11 +10,12 @@ html, body, #root { margin: 0; min-height: 100%; background: #f8f7f4; color: #17
    filter shrinkable inside the shared wrapping bar, without clipping it. */
 .sandbox-catalog-facet, .sandbox-catalog-facet .fui-Select { min-width: 0; max-width: 100%; }
 .sandbox-catalog-facet select { min-width: 0; max-width: 100%; width: 100%; }
-.dp-entity-table small { display: block; color: #546476; margin-top: .3rem; }
+.dp-entity-table small { display: block; color: var(--dp-ink-secondary); margin-top: .3rem; }
+.sandbox-visual-indicator { display: inline-block; margin-left: .6rem; color: var(--dp-accent-teal); font-size: .75rem; font-weight: 600; }
 .sandbox-references { display: grid; gap: 1rem; }
-.sandbox-references details, .sandbox-backup { padding: 1.25rem; background: #fff; border: 1px solid #d7dce2; border-radius: .4rem; }
+.sandbox-references details, .sandbox-backup { padding: 1.25rem; background: var(--dp-surface-base); border: 1px solid var(--dp-border-subtle); border-radius: var(--dp-radius-card); }
 .sandbox-references summary { cursor: pointer; font-size: 1.1rem; font-weight: 600; }
-.sandbox-references pre { white-space: pre-wrap; overflow-wrap: anywhere; padding: 1rem; background: #f4f5f5; border: 1px solid #d7dce2; }
+.sandbox-references pre { white-space: pre-wrap; overflow-wrap: anywhere; padding: 1rem; background: var(--dp-canvas-warm); border: 1px solid var(--dp-border-subtle); }
 .sandbox-backup { max-width: 900px; margin-top: 2rem; }
 .dp-practice-workbench { margin-top: 1rem; }
 @media (max-width: 700px) { .dp-app-shell__main { padding: .75rem; } .dp-practice-workbench .dp-challenge-shell__workspace { min-height: 30rem; } }

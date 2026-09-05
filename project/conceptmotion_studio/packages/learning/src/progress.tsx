@@ -2,6 +2,7 @@ import { Badge, ProgressBar, Text } from '@fluentui/react-components';
 import type { ProgressStateV2 } from '@datapass/progress';
 import { useId, type ReactNode } from 'react';
 import type { LearningLocale } from './localization';
+import { ContentDetails } from '@datapass/ui';
 
 export interface ProgressSummaryScope {
   readonly lessonIds?: readonly string[];
@@ -64,6 +65,7 @@ export interface ProgressSummaryProps extends ProgressSummaryScope {
   readonly locale?: LearningLocale;
   readonly title?: ReactNode;
   readonly className?: string;
+  readonly metadataMode?: 'consumer' | 'developer';
 }
 
 export function ProgressSummary({
@@ -74,6 +76,7 @@ export function ProgressSummary({
   locale = 'en',
   title,
   className,
+  metadataMode = 'consumer',
 }: ProgressSummaryProps) {
   const titleId = useId();
   const snapshot = summarizeProgress(state, { lessonIds, challengeIds, assessmentIds });
@@ -87,19 +90,21 @@ export function ProgressSummary({
     >
       <header>
         <h2 id={titleId}>{title ?? copy.title}</h2>
-        <Badge appearance="outline">Local · schema v{state.schemaVersion}</Badge>
+        <Badge appearance="outline">On this device</Badge>
       </header>
-      <div className="dp-progress-summary__lesson-progress">
+      {snapshot.totalLessons > 0 && <div className="dp-progress-summary__lesson-progress">
         <div><span>{copy.lessons}</span><strong>{snapshot.completedLessons} / {snapshot.totalLessons}</strong></div>
         <ProgressBar value={lessonFraction} aria-label={`${copy.lessons}: ${snapshot.completedLessons} of ${snapshot.totalLessons}`} />
-      </div>
+      </div>}
       <dl className="dp-progress-summary__metrics">
-        <div><dt>{copy.mastered}</dt><dd>{snapshot.masteredChallenges} / {snapshot.totalChallenges}</dd></div>
+        {snapshot.totalChallenges > 0 && <div><dt>{copy.mastered}</dt><dd>{snapshot.masteredChallenges} / {snapshot.totalChallenges}</dd></div>}
         <div><dt>{copy.attempts}</dt><dd>{snapshot.submittedAttempts}</dd></div>
         <div><dt>{copy.best}</dt><dd>{snapshot.bestAssessmentPercent === undefined ? copy.empty : `${snapshot.bestAssessmentPercent}%`}</dd></div>
         <div><dt>{copy.review}</dt><dd>{snapshot.reviewItems}</dd></div>
       </dl>
-      <Text size={200}>Stored by the application through the shared versioned progress contract.</Text>
+      <ContentDetails summary="Progress details" open={metadataMode === 'developer' ? true : undefined}>
+        <Text size={200}>Local · schema v{state.schemaVersion}. Stored through the shared versioned progress contract.</Text>
+      </ContentDetails>
     </section>
   );
 }

@@ -1,14 +1,14 @@
 {
-  "project": "Datapass Visual Platform · V3 consumer expansion",
-  "handoff_date": "2026-09-04",
-  "version": "3.0.0",
+  "project": "Datapass Visual Platform · V4 consolidation",
+  "handoff_date": "2026-09-05",
+  "version": "4.0.0",
   "foundation_base_version": "1.1.0",
   "baseline": {
     "repository": "julian-passebecq/react_ms_fluent_2_framework",
     "branch": "main",
-    "commit": "8cccd77ecd0d0b60b1d28ee2e41cffe5ec78a26f"
+    "commit": "36c01d404e0acfd0bf9b55417ad48b4e9285586c"
   },
-  "goal": "Preserve Foundation V1.1/V2 through a large consumer/reuse pass: Formation, Code Sandbox, separate Code Interview, Algorithm Atlas, Architecture Atlas, local Pilot Center and production Visual Sandbox.",
+  "goal": "Consolidate the preserved V3 platform: consumer-controlled Figure presentation, eleven refined existing explanations, clearer consumer surfaces, proven factorisation and repository-native developer experience. No new app or renderer family.",
   "default_theme": "light",
   "counts": {
     "catalog_concepts": 186,
@@ -30,8 +30,8 @@
   "v2_source_handoff": "../../reference_material/v2_handoff_2026-09-04/datapass-visual-platform-codex-v2-post-v1-audit/START_HERE.md",
   "agent_instructions": "AGENTS.md",
   "architecture": "docs/ARCHITECTURE.md",
-  "audit": "../../V3_AUDIT_SELF_REVIEW.md",
-  "qa": "../../V3_TEST_REPORT.md",
+  "audit": "../../V4_AUDIT_SELF_REVIEW.md",
+  "qa": "../../V4_TEST_REPORT.md",
   "roadmap": "ROADMAP.md",
   "v2_reports": {
     "test": "../../V2_TEST_REPORT.md",
@@ -61,7 +61,7 @@
     "pnpm run dev:consumer"
   ],
   "source_material_status": "The private Dubreu course corpus was not present in the supplied attachments; the V2 consumer uses attributed original representative fixtures and does not claim private-course conversion.",
-  "execution_policy": "Python, SQL and PySpark are display, explanation, editing, text-comparison or external-launch content only. V3 has no Spark execution, notebook execution, Python/SQL execution, Jupyter kernel or universal code judge.",
+  "execution_policy": "Python, SQL and PySpark are display, explanation, editing, text-comparison or external-launch content only. V4 has no Spark execution, notebook execution, Python/SQL execution, Jupyter kernel or universal code judge.",
   "known_environment_limitation": null,
   "p0": [],
   "v1_1_gates": [
@@ -102,7 +102,10 @@
     "Added 30 shared semantic visual artifacts and deterministic radial/layered Diagram layout used by two consumers",
     "Renamed Formation and added SQL/Python reasoning capstones using shared figures and assessments",
     "Added local Pilot Center and production Visual Sandbox with public/private and validation boundaries",
-    "Expanded old/new QA, Golden Gallery, manifest budgets and independent pure-package coverage floors"
+    "Expanded old/new QA, Golden Gallery, manifest budgets and independent pure-package coverage floors",
+    "Separated consumer presentation and developer details without changing FigureSpec or stored content IDs",
+    "Refined eleven existing explanations through shared semantic code/entity/state tracks",
+    "Added tested structural authoring schemas, repository-native tasks/snippets and eight approved Storybook compositions"
   ],
   "generator_contracts": [
     "cloud-diagram",
@@ -131,5 +134,16 @@
     "api_surface": "../../V3_API_SURFACE.md",
     "bundle_report": "../../V3_BUNDLE_REPORT.md"
   },
-  "v3_source_privacy": "The three source repositories are private. Public runtime attribution must not expose private repository URLs; full pinned source provenance remains in nonbundled migration records. Pilot private overlays are runtime-only local imports."
+  "v3_source_privacy": "The three source repositories are private. Public runtime attribution must not expose private repository URLs; full pinned source provenance remains in nonbundled migration records. Pilot private overlays are runtime-only local imports.",
+  "v4_source_handoff": "../../reference_material/v4_handoff_2026-09-05/datapass_visual_platform_codex_v4_consolidation_2026-09-05/START_HERE.md",
+  "v4_counts": { "consumers": 7, "migrated_visuals": 30, "refined_visuals": 11, "practice_items": 323, "practice_variants": 500, "golden_gallery_stories": 46, "authoring_schemas": 4 },
+  "v4_reports": {
+    "audit": "../../V4_AUDIT_SELF_REVIEW.md",
+    "factorisation": "../../V4_FACTORISATION_REPORT.md",
+    "visual": "../../V4_VISUAL_REVIEW.md",
+    "developer_experience": "../../V4_DX_REPORT.md",
+    "test": "../../V4_TEST_REPORT.md",
+    "bundle": "../../V4_BUNDLE_REPORT.md",
+    "migration": "../../V4_MIGRATION_LOG.md"
+  }
 }

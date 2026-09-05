@@ -1,4 +1,5 @@
-import { Badge, Button, MessageBar, MessageBarBody, MessageBarTitle } from '@fluentui/react-components';
+import { useState } from 'react';
+import { Badge, Button } from '@fluentui/react-components';
 import { ArrowLeft20Regular } from '@fluentui/react-icons';
 import { AssessmentRunner, ProgressSummary, type AssessmentSubmission } from '@datapass/learning';
 import { appendAssessmentAttempt, type ProgressStateV2 } from '@datapass/progress';
@@ -15,9 +16,12 @@ export interface PracticePageProps {
 export function PracticePage({ progress, updateProgress, onBack, onProgress }: PracticePageProps) {
   const { locale } = useLocale();
   const attemptCount = progress.assessments[sqlPracticeAssessment.id]?.attempts.length ?? 0;
-  const attemptId = `${sqlPracticeAssessment.id}:attempt:${attemptCount + 1}`;
+  const [attemptNumber, setAttemptNumber] = useState(attemptCount + 1);
+  const [submitted, setSubmitted] = useState(false);
+  const attemptId = `${sqlPracticeAssessment.id}:attempt:${attemptNumber}`;
 
   const saveSubmission = (submission: AssessmentSubmission) => {
+    setSubmitted(true);
     updateProgress((current) => appendAssessmentAttempt(current, sqlPracticeAssessment.id, submission.attempt));
   };
 
@@ -27,19 +31,14 @@ export function PracticePage({ progress, updateProgress, onBack, onProgress }: P
         {locale === 'no' ? 'Til kurskatalogen' : 'Back to course catalog'}
       </Button>
       <PageHeader
-        eyebrow="PRACTICE · ORIGINAL REPRESENTATIVE QUESTIONS"
+        eyebrow="PRACTICE & REVIEW"
         title={locale === 'no' ? 'Sjekk forståelsen' : 'Check your understanding'}
         description={locale === 'no'
-          ? 'Direkte tilbakemelding er aktiv i øvingsmodus. Resultatet lagres lokalt med progresjonsskjema v2.'
-          : 'Immediate feedback is enabled in practice mode. The submitted result is stored locally through progress schema v2.'}
-        metadata={<><Badge appearance="tint" color="informative">QCM</Badge><Badge appearance="outline">attempt {attemptCount + 1}</Badge></>}
+          ? 'Prøv et svar, les forklaringen og behold resultatet på denne enheten.'
+          : 'Try an answer, read the explanation, and keep your result on this device.'}
+        metadata={<><Badge appearance="tint" color="informative">Knowledge check</Badge><Badge appearance="outline">Attempt {attemptNumber}</Badge></>}
       />
-      <MessageBar intent="info">
-        <MessageBarBody>
-          <MessageBarTitle>No execution and no universal judge</MessageBarTitle>
-          These deterministic questions grade declared choices only. They do not execute SQL, Python, PySpark, or notebook code.
-        </MessageBarBody>
-      </MessageBar>
+      <p>Feedback checks your selected answers. Coding exercises remain separate reference practice.</p>
       <ProgressSummary
         state={progress}
         lessonIds={lessons.map((lesson) => lesson.id)}
@@ -47,6 +46,7 @@ export function PracticePage({ progress, updateProgress, onBack, onProgress }: P
         locale={locale}
       />
       <AssessmentRunner
+        headingLevel={2}
         key={attemptId}
         assessment={sqlPracticeAssessment}
         questions={questions}
@@ -55,6 +55,7 @@ export function PracticePage({ progress, updateProgress, onBack, onProgress }: P
         attemptId={attemptId}
         onSubmit={saveSubmission}
       />
+      {submitted && <Button className="formation-new-attempt" onClick={() => { setAttemptNumber(attemptCount + 1); setSubmitted(false); }}>Start another attempt</Button>}
       <nav className="formation-lesson-footer" aria-label="Practice actions">
         <Button appearance="secondary" onClick={onBack}>{locale === 'no' ? 'Alle kurs' : 'All courses'}</Button>
         <Button appearance="primary" onClick={onProgress}>{locale === 'no' ? 'Se fremdrift' : 'View progress'}</Button>

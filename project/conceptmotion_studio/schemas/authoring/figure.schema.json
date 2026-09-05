@@ -1,0 +1,149 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:datapass:schema:figure:1",
+  "title": "Datapass Figure envelope",
+  "description": "Editor structural assistance. Run pnpm validate:specs for authoritative runtime/semantic validation. Unknown extension fields remain allowed.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "kind": {
+      "enum": [
+        "concept",
+        "diagram",
+        "workflow",
+        "lineage",
+        "chart",
+        "geo",
+        "static"
+      ]
+    },
+    "rendererId": {
+      "type": "string",
+      "pattern": "\\S",
+      "description": "Shared renderer registry ID; no closed list so adapters remain extensible."
+    },
+    "title": {
+      "$ref": "#/definitions/localizedText"
+    },
+    "subtitle": {
+      "$ref": "#/definitions/localizedText"
+    },
+    "takeaway": {
+      "$ref": "#/definitions/localizedText"
+    },
+    "fallbackText": {
+      "$ref": "#/definitions/localizedText"
+    },
+    "spec": {
+      "description": "Renderer-neutral JSON payload. Renderer-specific validation and ExplanationTrack semantics remain in the production renderer/core contracts."
+    },
+    "sourceIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      },
+      "uniqueItems": true
+    },
+    "conceptIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      },
+      "uniqueItems": true
+    },
+    "featureIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      },
+      "uniqueItems": true
+    },
+    "verifiedAt": {
+      "type": "string",
+      "description": "Runtime validator checks Date.parse-compatible timestamps."
+    },
+    "status": {
+      "description": "Optional status metadata (TypeScript recommends string); this legacy optional field is not checked by the runtime envelope validator."
+    },
+    "reducedMotionState": {
+      "type": [
+        "string",
+        "number"
+      ]
+    },
+    "staticState": {
+      "type": [
+        "string",
+        "number"
+      ]
+    },
+    "profile": {
+      "enum": [
+        "professional",
+        "editorial",
+        "sketch"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "kind",
+    "rendererId",
+    "title",
+    "spec",
+    "fallbackText"
+  ],
+  "additionalProperties": true,
+  "definitions": {
+    "localizedText": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "en": {
+              "type": "string"
+            },
+            "no": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "anyOf": [
+            {
+              "required": [
+                "en"
+              ],
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "pattern": "\\S"
+                }
+              }
+            },
+            {
+              "required": [
+                "no"
+              ],
+              "properties": {
+                "no": {
+                  "type": "string",
+                  "pattern": "\\S"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -6,7 +6,7 @@ on:
   pull_request:
 
 concurrency:
-  group: datapass-v3-${{ github.workflow }}-${{ github.ref }}
+  group: datapass-v4-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -47,6 +47,9 @@ jobs:
 
       - name: Deterministic full practice corpus
         run: pnpm run test:practice-import
+
+      - name: Developer tooling and schema parity
+        run: pnpm run test:dx
 
       - name: Package boundary audit
         run: pnpm run check:boundaries
@@ -93,9 +96,10 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: v3-quality-evidence
+          name: v4-quality-evidence
           path: |
             project/conceptmotion_studio/coverage
             project/conceptmotion_studio/qa/screenshots
+            project/conceptmotion_studio/qa/v4-screenshots
             project/conceptmotion_studio/qa/*bundle*.json
           if-no-files-found: ignore

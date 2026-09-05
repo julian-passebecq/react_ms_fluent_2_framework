@@ -15,7 +15,7 @@ describe('FigurePlayer', () => {
   });
   it('supports steps, semantic selection and reset under reduced motion', async () => {
     const container = document.createElement('div'); document.body.append(container); const root = createRoot(container);
-    await act(async () => root.render(<FigurePlayer figure={figure} captions={['First', 'Second']} reducedMotion />));
+    await act(async () => root.render(<FigurePlayer figure={figure} captions={['First', 'Second']} reducedMotion metadataMode="developer" />));
     expect(container.querySelector('button[aria-label^="Play unavailable"]')?.hasAttribute('disabled')).toBe(true);
     await act(async () => (container.querySelector('button[aria-label="Next"]') as HTMLButtonElement).click());
     expect(container.querySelector('[data-frame-index]')?.getAttribute('data-frame-index')).toBe('1');

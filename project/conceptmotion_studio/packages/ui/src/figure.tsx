@@ -97,6 +97,7 @@ export interface FigureFrameProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
   subtitle?: ReactNode;
   takeaway?: ReactNode;
   metadata?: ReactNode;
+  details?: ReactNode;
   toolbar?: ReactNode;
   actions?: ReactNode;
   actionsLabel?: string;
@@ -117,6 +118,7 @@ export function FigureFrame({
   subtitle,
   takeaway,
   metadata,
+  details,
   toolbar,
   actions,
   actionsLabel = 'Figure actions',
@@ -175,6 +177,7 @@ export function FigureFrame({
         {children}
       </VisualizationSurface>
       <SourceNote source={source} note={note} sourceLabel={sourceLabel} noteLabel={noteLabel} />
+      {details}
     </figure>
   );
 }

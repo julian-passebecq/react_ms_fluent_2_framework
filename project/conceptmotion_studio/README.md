@@ -1,10 +1,16 @@
 # Datapass Visual Platform / ConceptMotion Studio
 
-This directory is the runnable **V3 consumer-expansion** workspace. V3 extends the completed Foundation v1.1 baseline with reusable content, notebook, figure, learning, progress, catalog, and application-scaffold contracts. It does not restart or replace the v1.1 semantic/rendering foundation.
+This directory is the runnable **V4 consolidation** workspace. The V1.1/V2/V3 platform, seven entry points, deterministic corpus and thirty semantic Figures are preserved. V4 refines presentation and reuse rather than rebuilding the foundation.
 
 The default application is the TypeScript/Fluent Studio in `apps/studio`. `apps/formation` is the first serious proof consumer. The earlier JavaScript/D3 Studio in `src` remains available through the legacy commands.
 
-## What V3 adds
+## What V4 refines
+
+Consumer-controlled `FigurePlayer`/`FigureView` presentation sizes are separate from `FigureSpec`. Technical metadata moves into shared optional details; required attribution stays visible. Eleven existing scenes synchronize stable code/entity/state references through the existing renderers. Formation, Code Sandbox, Code Interview, both Atlases, Pilot Galaxy and Visual Sandbox adopt the shared visual language without changing their state ownership or adding execution.
+
+Repository `.vscode` tasks/settings/snippets, Copilot/agent guidance and four tested structural JSON schemas support authoring without an extension. See [AUTHORING_DX.md](docs/AUTHORING_DX.md) for local schema validation and the eight additional approved Storybook compositions. Run targeted checks while developing, then `pnpm check` once on the finished release tree. All seven [V4 reports](../../README.md#delivery-and-audit) record the delta and release evidence.
+
+## Preserved V3 consumers
 
 Seven application entry points share the existing platform. Formation gains Think in SQL and Think in Python for Data Engineering; Code Sandbox migrates all 323 pinned source items without the old UI; Code Interview provides a distinct session/review flow. Algorithm Atlas shares 30 semantic Figure artifacts with learning consumers. Architecture Atlas and Pilot Center reuse the same deterministic radial/layered Diagram layout. Studio gains a production Visual Sandbox route.
 
@@ -40,7 +46,7 @@ Run the new consumers with `dev:code-sandbox`, `dev:code-interview`, `dev:algori
 | `@datapass/ui` | Fluent v9 shell, explorer/catalog, Knowledge Atlas, challenge/workflow, and renderer-neutral figure primitives. |
 | `@datapass/scaffold` | Deterministic recipes and generated files for `knowledge`, `learning`, `catalog`, and `portfolio-hub` applications. |
 
-See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for dependency direction and lifecycle details. The repository-level [`V2_API_SURFACE.md`](../../V2_API_SURFACE.md) records the public exports; [`V1_API_SURFACE.md`](../../V1_API_SURFACE.md) remains the historical v1.1 record.
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for dependency direction and lifecycle details. The repository-level [`V4_FACTORISATION_REPORT.md`](../../V4_FACTORISATION_REPORT.md#changed-public-apis-and-defaults) records V4's additive APIs and defaults; [`V3_API_SURFACE.md`](../../V3_API_SURFACE.md), [`V2_API_SURFACE.md`](../../V2_API_SURFACE.md) and [`V1_API_SURFACE.md`](../../V1_API_SURFACE.md) retain the historical export records.
 
 ## Applications
 
@@ -77,11 +83,11 @@ pnpm run check
 
 | Command | Purpose |
 | --- | --- |
-| `pnpm run dev` | Run the V3 Studio. |
+| `pnpm run dev` | Run the Studio, including the V4 Visual Sandbox. |
 | `pnpm run dev:consumer` | Deterministically import reference notebooks, then run Formation. |
 | `pnpm run dev:legacy` | Run the preserved JavaScript/D3 Studio. |
 | `pnpm run storybook` | Run the Storybook Golden Gallery on port 6006. |
-| `pnpm run import:reference` | Rebuild canonical Dubreu notebook JSON and public source downloads without execution. |
+| `pnpm run import:reference` | Rebuild canonical reference notebook JSON and historical source downloads without execution. |
 | `pnpm run typecheck` | Import reference notebooks, then type-check all workspace references. |
 | `pnpm run test:unit` | Run the coverage-enabled unit and component suites. |
 | `pnpm run test:legacy` | Run preserved catalog, scene, data, generator, handoff, and Python smoke tests. |
@@ -93,10 +99,10 @@ pnpm run check
 | `pnpm run build:legacy` | Build the preserved legacy application into `dist-legacy`. |
 | `pnpm run build:storybook` | Build the Golden Gallery into `storybook-static`. |
 | `pnpm run test:browser` | Run Playwright desktop and 390px phone checks. |
-| `pnpm run check:offline` | Run legacy, coverage, boundary, and scaffold gates. |
-| `pnpm run check` | Run the complete required V3 QA sequence. |
+| `pnpm run check:offline` | Run deterministic corpus, legacy, coverage, DX, boundary, and scaffold gates. |
+| `pnpm run check` | Run the complete required V4 QA sequence, including all preserved gates. |
 
-GitHub Actions mirrors the material gates in [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml). Exact delivery results belong in [`V3_TEST_REPORT.md`](../../V3_TEST_REPORT.md); this README does not infer a passing result.
+GitHub Actions mirrors the material gates in [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml). Exact local delivery results and the hosted-verification handoff procedure belong in [`V4_TEST_REPORT.md`](../../V4_TEST_REPORT.md); this README does not infer a passing result. [`V3_TEST_REPORT.md`](../../V3_TEST_REPORT.md) remains historical evidence.
 
 To scaffold a sibling consumer:
 

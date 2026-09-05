@@ -69,7 +69,7 @@ export interface RuntimeLauncherProps {
 export function RuntimeLauncher({
   targets,
   locale = 'en',
-  title = 'Continue in a configured runtime',
+  title = 'Practice elsewhere',
   emptyState = 'No runtime target is configured for this lesson.',
   className,
 }: RuntimeLauncherProps) {
@@ -82,7 +82,7 @@ export function RuntimeLauncher({
     <section className={className ?? 'dp-runtime-launcher'} aria-labelledby={titleId}>
       <header className="dp-runtime-launcher__header">
         <h2 id={titleId}>{title}</h2>
-        <Text size={200}>Nothing runs in this site. Only the configured destinations below can be opened.</Text>
+        <Text size={200}>Download a reference or open an external practice environment.</Text>
       </header>
       <div className="dp-runtime-launcher__targets">
         {targets.map((target) => {
@@ -111,10 +111,10 @@ export function RuntimeLauncher({
                 {description ? <p>{description}</p> : null}
                 <Text size={200}>
                   {isDownload
-                    ? 'Downloads the configured artifact; it is not executed here.'
+                    ? 'Download a reference file.'
                     : target.executesExternally
-                      ? 'Opens a separate service. Any execution happens there, under that service’s controls.'
-                      : 'Opens configured external guidance. Nothing is executed here.'}
+                      ? 'Execution happens in the external service, under its controls.'
+                      : 'Open external guidance.'}
                 </Text>
               </div>
               {target.runtimeRequirements?.length ? (

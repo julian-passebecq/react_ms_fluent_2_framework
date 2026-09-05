@@ -12,6 +12,7 @@ import { Fragment, useId, useMemo, useState, type ReactNode } from 'react';
 import { GuidedExercise } from './exercise';
 import { resolveLearningText, resolveOptionalLearningText, type LearningLocale } from './localization';
 import { RuntimeLauncher } from './runtime';
+import { ContentDetails } from '@datapass/ui';
 
 type FigureCollection = readonly FigureSpec[] | Readonly<Record<string, FigureSpec>>;
 
@@ -195,8 +196,8 @@ export function NotebookCellView({
           <Badge appearance="outline">{cell.language}</Badge>
           <Text size={200}>
             {displayOnly
-              ? 'PySpark display and explanation only · Spark did not run here'
-              : 'Code example · not executed in this site'}
+              ? 'PySpark reference · display and explanation only'
+              : 'Reference code'}
           </Text>
         </div>
         <CodeEditor
@@ -251,7 +252,7 @@ export function NotebookCellView({
   } else if (cell.type === 'figure') {
     const figure = availableFigures[cell.figureId];
     body = figure ? (
-      <FigureView figure={figure} locale={locale} reducedMotion={reducedMotion} />
+      <FigureView figure={figure} locale={locale} reducedMotion={reducedMotion} presentationSize={figure.rendererId === 'table.join' ? 'regular' : 'compact'} />
     ) : (
       <div role="alert">Figure “{cell.figureId}” is unavailable.</div>
     );
@@ -297,7 +298,7 @@ function OutputNotice({ isError = false }: { readonly isError?: boolean }) {
   return (
     <div className="dp-notebook-output__notice" role="note">
       <Badge appearance="filled" color={isError ? 'danger' : 'informative'}>Saved reference output</Badge>
-      <span>{isError ? 'Saved error output' : 'This output came from the source notebook'}; it was not run here.</span>
+      <span>{isError ? 'Saved error output' : 'Saved, not a live result.'}</span>
     </div>
   );
 }
@@ -315,6 +316,7 @@ export interface NotebookLessonProps {
   readonly beforeCells?: ReactNode;
   readonly afterCells?: ReactNode;
   readonly className?: string;
+  readonly metadataMode?: 'consumer' | 'developer';
 }
 
 export function NotebookLesson({
@@ -330,6 +332,7 @@ export function NotebookLesson({
   beforeCells,
   afterCells,
   className,
+  metadataMode = 'consumer',
 }: NotebookLessonProps) {
   const titleId = useId();
   const configuredTargets = useMemo(() => {
@@ -346,15 +349,15 @@ export function NotebookLesson({
     >
       <header className="dp-notebook-lesson__header">
         <div>
-          <p className="dp-learning-eyebrow">STRUCTURED NOTEBOOK LESSON</p>
-          <h1 id={titleId}>{title}</h1>
-          <p>Imported content is presented as a lesson. Code and saved outputs are never executed during rendering.</p>
+          <p className="dp-learning-eyebrow">WORKED EXAMPLE</p>
+          <h2 id={titleId}>{title}</h2>
+          <p>Read the example, then explain each transformation.</p>
         </div>
-        <dl className="dp-notebook-provenance">
+        <ContentDetails summary="Notebook details & sources" open={metadataMode === 'developer' ? true : undefined}><dl className="dp-notebook-provenance">
           <div><dt>Source file</dt><dd>{notebook.provenance.sourceFile}</dd></div>
           <div><dt>Source SHA-256</dt><dd><code>{notebook.provenance.sourceSha256}</code></dd></div>
           <div><dt>Importer</dt><dd>{notebook.provenance.importerVersion}</dd></div>
-        </dl>
+        </dl><p>Code and saved outputs are not executed in this lesson.</p></ContentDetails>
       </header>
       {beforeCells}
       <div className="dp-notebook-lesson__cells">

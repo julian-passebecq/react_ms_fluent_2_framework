@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "36c01d404e0acfd0bf9b55417ad48b4e9285586c",
+  "baselineCiRun": 33924063684,
+  "releaseType": "consolidation-visual-refinement",
+  "noNewAppByDefault": true,
+  "preserve": {
+    "practiceItems": 323,
+    "practiceVariants": 500,
+    "semanticVisuals": 30,
+    "applicationEntryPoints": 7,
+    "browserTestsBaseline": 40
+  },
+  "requiredReports": [
+    "V4_AUDIT_SELF_REVIEW.md",
+    "V4_FACTORISATION_REPORT.md",
+    "V4_VISUAL_REVIEW.md",
+    "V4_DX_REPORT.md",
+    "V4_TEST_REPORT.md",
+    "V4_BUNDLE_REPORT.md",
+    "V4_MIGRATION_LOG.md"
+  ],
+  "hardNonGoals": [
+    "vscode-extension",
+    "backend-auth-cloud-sync",
+    "spark-jupyter-execution",
+    "universal-judge",
+    "d3-powerbi-rewrite",
+    "geostory",
+    "news-mail-social-integrations",
+    "full-ml-renderer-expansion"
+  ]
+}

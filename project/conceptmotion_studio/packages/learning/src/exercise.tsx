@@ -1,5 +1,5 @@
 import { CodeDiff, CodeEditor } from '@datapass/code';
-import { Button, Card, MessageBar, MessageBarBody, MessageBarTitle, Text } from '@fluentui/react-components';
+import { Button, Card, Text } from '@fluentui/react-components';
 import type { LocalizedText } from '@datapass/content';
 import { useId, useMemo, useState } from 'react';
 import { resolveLearningText, type LearningLocale } from './localization';
@@ -63,17 +63,10 @@ export function GuidedExercise({
           <p className="dp-learning-eyebrow">GUIDED PRACTICE · {step.toUpperCase()}</p>
           <h2>Try, inspect, and compare</h2>
         </div>
-        <Text size={200}>Editing and comparison only · no Run action</Text>
+        <Text size={200}>Compare your draft with a reference solution</Text>
       </header>
 
-      <MessageBar intent={isPySpark ? 'warning' : 'info'}>
-        <MessageBarBody>
-          <MessageBarTitle>{isPySpark ? 'PySpark is display-only' : 'No in-site execution'}</MessageBarTitle>
-          {isPySpark
-            ? ' This code is for explanation and comparison. Spark does not run in this site.'
-            : ' This workspace edits text and compares it with a reference solution; it does not execute code.'}
-        </MessageBarBody>
-      </MessageBar>
+      <p role="note">{isPySpark ? 'PySpark reference practice · Spark runs externally.' : 'Text practice · drafts are not executed.'}</p>
 
       <div className="dp-guided-exercise__editor" aria-label="Try">
         <CodeEditor

@@ -5,6 +5,7 @@ import { CodeDiagnostics, PageHeader } from '../packages/ui/src/index';
 const meta = {
   title: 'Foundation/Code',
   component: CodeEditor,
+  parameters: { docs: { description: { component: 'Approved editor boundary: consumers use @datapass/code; Monaco remains lazy and centralized. These examples display/edit/compare code without execution.' } }, datapass: { guide: 'docs/AUTHORING_DX.md', sourceFiles: ['packages/code/src/index.ts'] } },
 } satisfies Meta<typeof CodeEditor>;
 
 export default meta;

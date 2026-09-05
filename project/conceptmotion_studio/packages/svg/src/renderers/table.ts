@@ -4,7 +4,9 @@ import {
   type LocalizedText,
   type TableColumn,
   type TableRow,
+  type ResolvedExplanation,
 } from '@conceptmotion/core';
+import { renderExplanationPanel } from '../explanation.js';
 
 import { BaseSvgRenderer } from '../base-renderer.js';
 import {
@@ -19,6 +21,7 @@ import type { RendererRegistration } from '../types.js';
 import { formatValue, localText, makeSelectable, renderHeading, truncate } from './shared.js';
 
 export interface TableRendererInput {
+  explanation?: ResolvedExplanation;
   state: CompiledTableState;
   title?: LocalizedText;
   description?: LocalizedText;
@@ -42,6 +45,7 @@ export class TableRenderer extends BaseSvgRenderer<TableRendererInput> {
   protected render(input: TableRendererInput): void {
     const surface = this.surface!;
     const options = this.options;
+    const focus = new Set(input.explanation?.step.focus.entityIds ?? []);
     const title = localText(input.title, options) || input.state.tableId;
     const description =
       localText(input.description, options) ||
@@ -97,6 +101,8 @@ export class TableRenderer extends BaseSvgRenderer<TableRendererInput> {
       'font-weight': 650,
     });
     setText(statusHeader, 'STATE');
+    // Keyed columns move in display order; keep fixed chrome in a stable slot too.
+    header.appendChild(statusHeader);
 
     const rowById = new Map(input.state.rows.map((row) => [row.id, row]));
     const visible = new Set(input.state.visibleRowIds);
@@ -120,6 +126,7 @@ export class TableRenderer extends BaseSvgRenderer<TableRendererInput> {
         setAttributes(rowGroup, {
           'data-role': 'row',
           'data-row-id': rowLayout.row.id,
+          'data-explanation-focused': String(focus.has(rowLayout.row.id)),
           'data-visible': String(rowLayout.visible),
           'data-entering': entering ? 'true' : undefined,
           opacity: rowLayout.visible ? 1 : 0.42,
@@ -133,12 +140,12 @@ export class TableRenderer extends BaseSvgRenderer<TableRendererInput> {
           height: rowHeight - 5,
           rx: Math.max(2, surface.theme.radius - 2),
           fill:
-            options.selectedId === rowLayout.row.id
+            options.selectedId === rowLayout.row.id || focus.has(rowLayout.row.id)
               ? surface.theme.accentSubtle
               : rowLayout.visible
                 ? surface.theme.surface
                 : surface.theme.surfaceRaised,
-          stroke: options.selectedId === rowLayout.row.id ? surface.theme.accent : surface.theme.border,
+          stroke: options.selectedId === rowLayout.row.id || focus.has(rowLayout.row.id) ? surface.theme.accent : surface.theme.border,
           'stroke-dasharray': rowLayout.visible ? undefined : '3 3',
         });
         background.setAttribute('aria-hidden', 'true');
@@ -171,8 +178,10 @@ export class TableRenderer extends BaseSvgRenderer<TableRendererInput> {
           'font-weight': 650,
         });
         setText(state, rowLayout.visible ? `#${rowLayout.slot + 1} kept` : '⊘ filtered');
+        rowGroup.appendChild(state);
       },
     );
+    renderExplanationPanel(surface, input.explanation, top + headerHeight + 18 + rows.length * rowHeight, options.locale);
   }
 }
 

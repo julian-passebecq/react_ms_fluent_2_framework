@@ -48,6 +48,7 @@ export class DiagramRenderer extends BaseSvgRenderer<DiagramRendererInput> {
       id: input.spec.id,
       layoutResult: input.spec.layout?.provider ? layoutDiagram(input.spec) : undefined,
       semanticOnly: Boolean(input.spec.layout?.provider),
+      semanticNodes: Boolean(input.spec.layout?.provider) && input.spec.layout?.density === 'comfortable',
       direction: input.spec.layout?.direction,
       focusedGroupId: input.focusedGroupId,
       nodes: input.spec.nodes.map((node) => ({

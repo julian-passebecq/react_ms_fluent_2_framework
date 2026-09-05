@@ -1,0 +1,17 @@
+{
+  "name": "datapass_visual_platform_codex_v4_consolidation",
+  "version": "4.0-planning",
+  "date": "2026-09-05",
+  "baseline": "36c01d404e0acfd0bf9b55417ad48b4e9285586c",
+  "purpose": "V4 consolidation, visual refinement, selective ConceptMotion polish, and AI/VS Code developer experience",
+  "referenceScreenshots": [
+    "formation-catalog",
+    "formation-thinking",
+    "code-sandbox",
+    "code-interview",
+    "algorithm-atlas",
+    "architecture-atlas",
+    "pilot-galaxy",
+    "visual-sandbox"
+  ]
+}

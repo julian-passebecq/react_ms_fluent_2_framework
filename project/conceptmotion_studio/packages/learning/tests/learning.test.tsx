@@ -118,10 +118,20 @@ describe('notebook learning surfaces', () => {
     expect(element.querySelectorAll('[data-cell-id]')).toHaveLength(6);
     expect(element.querySelector('[data-code-editor="sql"]')).not.toBeNull();
     expect(element.querySelector('[data-reference-output="text"]')?.textContent).toContain('Saved reference output');
-    expect(element.querySelector('[data-reference-output="table"]')?.textContent).toContain('it was not run here');
+    expect(element.querySelector('[data-reference-output="table"]')?.textContent).toContain('Saved, not a live result.');
+    const details = element.querySelector('details')!;
+    expect(details.open).toBe(false);
+    expect(details.textContent).toContain(notebook.provenance.sourceSha256);
+    expect(element.querySelector('.dp-notebook-lesson__header h2')?.textContent).toBe('Filtering rows');
     expect(element.querySelector('[data-figure-view="figure.where"]')).not.toBeNull();
     expect(element.querySelector('table caption')?.textContent).toContain('source notebook');
     expect([...element.querySelectorAll('button')].some((control) => /^(run|execute)$/i.test(control.textContent ?? ''))).toBe(false);
+  });
+
+  it('exposes source provenance on explicit developer opt-in without changing the notebook', async () => {
+    const element = await render(<NotebookLesson notebook={notebook} metadataMode="developer" />);
+    expect(element.querySelector('details')?.open).toBe(true);
+    expect(element.querySelector('.dp-notebook-provenance')?.textContent).toContain('where.ipynb');
   });
 
   it('keeps Markdown and media handling deterministic and free of raw HTML execution', async () => {
@@ -168,8 +178,9 @@ describe('GuidedExercise', () => {
 
   it('labels PySpark exercises as display-only', async () => {
     const element = await render(<GuidedExercise id="spark" language="pyspark" starter="df.show()" />);
-    expect(element.textContent).toContain('PySpark is display-only');
-    expect(element.textContent).toContain('Spark does not run in this site');
+    expect(element.textContent).toContain('PySpark reference practice');
+    expect(element.textContent).toContain('Spark runs externally');
+    expect(element.querySelector('[data-execution="none"]')).not.toBeNull();
   });
 });
 
@@ -218,6 +229,15 @@ describe('assessment grading and feedback modes', () => {
     expect(element.querySelectorAll('[data-feedback-state]')).toHaveLength(0);
   });
 
+  it('supports an embedded heading while retaining the standalone default', async () => {
+    const assessment: AssessmentSpec = { id: 'heading', title: 'Knowledge check', mode: 'practice', questionIds: ['single'] };
+    const standalone = await render(<AssessmentRunner assessment={assessment} questions={questions} />);
+    const embedded = await render(<AssessmentRunner assessment={assessment} questions={questions} headingLevel={2} />);
+    expect(standalone.querySelector('h1')?.textContent).toBe('Knowledge check');
+    expect(embedded.querySelector('h1')).toBeNull();
+    expect(embedded.querySelector('h2')?.textContent).toBe('Knowledge check');
+  });
+
   it('shows immediate practice feedback but withholds mock-exam feedback until submit', async () => {
     const practice: AssessmentSpec = { id: 'practice', title: 'Practice', mode: 'practice', questionIds: ['single'] };
     const practiceHost = await render(<AssessmentRunner assessment={practice} questions={questions} />);
@@ -259,7 +279,7 @@ describe('safe runtime boundaries', () => {
     expect(element.querySelectorAll('a')).toHaveLength(2);
     expect(element.querySelector('a[href^="javascript:"]')).toBeNull();
     expect(element.querySelector('[data-runtime-rejected="true"]')?.textContent).toContain('unsafe or incomplete');
-    expect(element.textContent).toContain('Nothing runs in this site');
+    expect(element.textContent).toContain('Execution happens in the external service');
   });
 });
 
@@ -294,5 +314,12 @@ describe('ProgressSummary', () => {
     expect(element.textContent).toContain('1 / 2');
     expect(element.textContent).toContain('80%');
     expect(element.textContent).toContain('schema v2');
+    expect(element.querySelector('details')?.open).toBe(false);
+  });
+  it('keeps empty lesson and challenge totals out of an interview-only summary', async () => {
+    const element = await render(<ProgressSummary state={createEmptyProgressState()} metadataMode="developer" />);
+    expect(element.querySelector('.dp-progress-summary__lesson-progress')).toBeNull();
+    expect(element.textContent).not.toContain('0 / 0');
+    expect(element.querySelector('details')?.open).toBe(true);
   });
 });

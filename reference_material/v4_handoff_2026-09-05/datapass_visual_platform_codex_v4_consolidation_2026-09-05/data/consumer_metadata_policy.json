@@ -1,0 +1,22 @@
+{
+  "consumerDefault": [
+    "title",
+    "subtitle",
+    "takeaway",
+    "learningExplanation",
+    "progress",
+    "requiredAttribution",
+    "meaningfulFreshness",
+    "semanticControls"
+  ],
+  "developerOrDetails": [
+    "internalId",
+    "schemaVersion",
+    "rendererId",
+    "rawSourceId",
+    "migrationNote",
+    "buildRuntimeDisclaimer",
+    "verificationInternals"
+  ],
+  "rule": "Do not hide legally required attribution. Do not show implementation metadata by default merely because it exists in the contract."
+}

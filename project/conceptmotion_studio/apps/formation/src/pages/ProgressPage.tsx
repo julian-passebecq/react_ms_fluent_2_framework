@@ -4,7 +4,7 @@ import { Button, MessageBar, MessageBarBody, MessageBarTitle, Textarea } from '@
 import { ArrowLeft20Regular, ArrowReset20Regular } from '@fluentui/react-icons';
 import { ProgressSummary } from '@datapass/learning';
 import { computeProgressBreakdown, type ProgressStateV2 } from '@datapass/progress';
-import { PageHeader, useLocale } from '@datapass/ui';
+import { ContentDetails, PageHeader, useLocale } from '@datapass/ui';
 import { lessons, sqlPracticeAssessment } from '../data/contentCatalog';
 
 export interface ProgressPageProps {
@@ -39,18 +39,18 @@ export function ProgressPage({ progress, persisted, loadSource, warnings, export
         {locale === 'no' ? 'Til kurskatalogen' : 'Back to course catalog'}
       </Button>
       <PageHeader
-        eyebrow="LOCAL PROGRESS · VERSIONED CONTRACT"
+        eyebrow="YOUR LEARNING RECORD"
         title={locale === 'no' ? 'Fremdrift og repetisjon' : 'Progress and review'}
         description={locale === 'no'
           ? 'Data lagres bare i denne nettleseren. Ingen konto, skysynkronisering eller overvåking er koblet til.'
           : 'Data is stored only in this browser. No account, cloud sync, or monitoring is connected.'}
       />
-      <MessageBar intent={warnings.length ? 'warning' : 'info'}>
+      {warnings.length > 0 && <MessageBar intent="warning">
         <MessageBarBody>
           <MessageBarTitle>{persisted ? 'Local persistence available' : 'Local persistence not confirmed'}</MessageBarTitle>
-          Loaded from <code>{loadSource}</code>. {warnings.length ? warnings.join(' ') : 'The shared store validates schema v2 and safely migrates V1.1 challenge state.'}
+          {warnings.join(' ')}
         </MessageBarBody>
-      </MessageBar>
+      </MessageBar>}
       <ProgressSummary
         state={progress}
         lessonIds={lessons.map((lesson) => lesson.id)}
@@ -64,7 +64,9 @@ export function ProgressPage({ progress, persisted, loadSource, warnings, export
           <dl>{breakdown.domains.map((metric) => <div key={metric.id}><dt>{metric.id}</dt><dd>{metric.correct}/{metric.answers} · {metric.percent}%</dd></div>)}</dl>
         ) : <p>{locale === 'no' ? 'Lever en vurdering for å se en oversikt.' : 'Submit an assessment to see a breakdown.'}</p>}
       </section>
-      <section className="formation-progress-json" aria-labelledby="formation-export-title">
+      <ContentDetails summary={locale === 'no' ? 'Sikkerhetskopi og lagringsdetaljer' : 'Backup & storage details'}>
+        <p>{persisted ? 'Local persistence available.' : 'Local persistence not confirmed.'} Loaded from <code>{loadSource}</code>. The shared store validates schema v2 and safely migrates V1.1 challenge state.</p>
+        <section className="formation-progress-json" aria-labelledby="formation-export-title">
         <div>
           <span className="formation-eyebrow">VALIDATED JSON</span>
           <h2 id="formation-export-title">{locale === 'no' ? 'Eksporter' : 'Export'}</h2>
@@ -79,7 +81,8 @@ export function ProgressPage({ progress, persisted, loadSource, warnings, export
             <Button appearance="secondary" icon={<ArrowReset20Regular />} onClick={() => { reset(); setMessage(locale === 'no' ? 'Lokal progresjon er tilbakestilt.' : 'Local progress was reset.'); }}>{locale === 'no' ? 'Tilbakestill lokalt' : 'Reset local data'}</Button>
           </div>
         </div>
-      </section>
+        </section>
+      </ContentDetails>
       {message ? <p role="status" className="formation-import-status">{message}</p> : null}
     </div>
   );

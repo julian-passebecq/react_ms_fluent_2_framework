@@ -33,7 +33,7 @@ const reports=apps.map(app=>{
   if(['formation','code-sandbox','code-interview'].includes(app)&&lazyEditor.length===0)throw new Error(`${app}: expected shared lazy editor is absent`);
   return {app,initialStaticBytes,initialBudget,initialExcludesMonaco:true,editorLazyChunks:lazyEditor.map(key=>manifest[key].file),privateOverlayExcluded:true};
 });
-const output=path.join(root,'qa/v3-bundles.json');
+const output=path.join(root,'qa/v4-bundles.json');
 mkdirSync(path.dirname(output),{recursive:true});
 writeFileSync(output,JSON.stringify({schemaVersion:1,reports,privacy},null,2)+'\n');
 console.log(JSON.stringify(reports,null,2));

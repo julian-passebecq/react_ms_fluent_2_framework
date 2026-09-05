@@ -7,7 +7,7 @@ import {
   type ProgressStateV2,
 } from '@datapass/progress';
 
-export function useDubreuProgress() {
+export function useFormationProgress() {
   const store = useMemo(
     () => new ProgressStore(createGuardedStorageAdapter(typeof window === 'undefined' ? undefined : window.localStorage)),
     [],
@@ -47,3 +47,6 @@ export function useDubreuProgress() {
     reset,
   };
 }
+
+/** Compatibility alias; persisted progress keys and records are unchanged. */
+export const useDubreuProgress = useFormationProgress;

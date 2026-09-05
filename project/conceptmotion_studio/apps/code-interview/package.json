@@ -9,6 +9,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@conceptmotion/react": "workspace:*",
     "@datapass/code": "workspace:*",
     "@datapass/content": "workspace:*",
     "@datapass/figure": "workspace:*",

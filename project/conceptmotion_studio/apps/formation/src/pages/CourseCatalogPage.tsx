@@ -2,7 +2,7 @@ import { reasoningModules } from '../data/reasoning';
 import { Badge, Button, Text } from '@fluentui/react-components';
 import { ArrowRight20Regular } from '@fluentui/react-icons';
 import { ProgressSummary } from '@datapass/learning';
-import { EntityCard, MetricStrip, PageHeader, useLocale } from '@datapass/ui';
+import { ContentDetails, EntityCard, MetricStrip, PageHeader, useLocale } from '@datapass/ui';
 import type { ProgressStateV2 } from '@datapass/progress';
 import { courses, lessons } from '../data/contentCatalog';
 
@@ -16,30 +16,24 @@ const labels = {
   en: {
     eyebrow: 'FORMATION',
     title: 'Learn with structure.',
-    description: 'Python, SQL and PySpark foundations. Read, reason, practice—and execute elsewhere.',
+    description: 'Understand Python, SQL and PySpark through worked examples and visual reasoning.',
     routes: 'Learning paths',
     lessons: 'Lessons',
-    execution: 'In-site runtimes',
-    executionDetail: 'Display, edit and compare only',
     open: 'Open lesson',
     practice: 'Practice & review',
-    practiceSummary: 'Answer an original QCM, inspect immediate feedback, and retain a versioned local attempt.',
+    practiceSummary: 'Check your understanding, explain your choices, and revisit what needs practice.',
     begin: 'Begin practice',
-    fixture: 'Original local fixture',
   },
   no: {
     eyebrow: 'FORMATION',
     title: 'Lær med struktur.',
-    description: 'Python, SQL og PySpark. Les, forstå og øv—kjør koden eksternt.',
-    routes: 'Referansestier',
-    lessons: 'Representative leksjoner',
-    execution: 'Kjøretider på nettstedet',
-    executionDetail: 'Kun visning, redigering og sammenligning',
+    description: 'Forstå Python, SQL og PySpark med eksempler og visuelle forklaringer.',
+    routes: 'Læringsstier',
+    lessons: 'Leksjoner',
     open: 'Åpne leksjon',
     practice: 'Øving og repetisjon',
-    practiceSummary: 'Svar på en original QCM, se direkte tilbakemelding og behold et versjonert lokalt forsøk.',
+    practiceSummary: 'Sjekk forståelsen, forklar valgene og repeter det du vil øve på.',
     begin: 'Start øving',
-    fixture: 'Original lokal fixture',
   },
 } as const;
 
@@ -60,7 +54,7 @@ export function CourseCatalogPage({ progress, onOpenLesson, onOpenPractice }: Co
         metrics={[
           { id: 'paths', label: copy.routes, value: courses.length + 1, tone: 'informative' },
           { id: 'lessons', label: copy.lessons, value: lessons.length, tone: 'success' },
-          { id: 'runtimes', label: copy.execution, value: 0, detail: copy.executionDetail },
+          { id: 'reasoning', label: locale === 'no' ? 'Fordypninger' : 'Thinking modules', value: reasoningModules.length, detail: 'SQL · Python for data engineering' },
         ]}
       />
       <ProgressSummary
@@ -73,7 +67,7 @@ export function CourseCatalogPage({ progress, onOpenLesson, onOpenPractice }: Co
       <section aria-labelledby="formation-paths-title">
         <div className="formation-section-heading">
           <div><span className="formation-eyebrow">COURSE CATALOG</span><h2 id="formation-paths-title">{copy.routes}</h2></div>
-          <Text size={200}>{copy.executionDetail}</Text>
+          <Text size={200}>{locale === 'no' ? 'Velg et emne eller en fordypning' : 'Choose a foundation or a thinking module'}</Text>
         </div>
         <div className="formation-course-grid">
           {courses.map((course) => {
@@ -102,13 +96,13 @@ export function CourseCatalogPage({ progress, onOpenLesson, onOpenPractice }: Co
             eyebrow="ASSESS · REVIEW"
             title={copy.practice}
             description={copy.practiceSummary}
-            metadata={<Badge appearance="outline">QCM · schema v2</Badge>}
-            tags={[{ id: 'practice.sql', label: 'SQL' }, { id: 'practice.pyspark', label: 'runtime boundary' }]}
+            metadata={<Badge appearance="outline">Knowledge check</Badge>}
+            tags={[{ id: 'practice.sql', label: 'SQL' }, { id: 'practice.pyspark', label: 'PySpark' }]}
             actions={<Button appearance="primary" icon={<ArrowRight20Regular />} iconPosition="after" onClick={onOpenPractice}>{copy.begin}</Button>}
           />
         </div>
       </section>
-      <aside className="formation-sources"><h2>Content provenance</h2><p>The private Dubreu corpus was not supplied or imported.</p><p>Foundation lessons retain original representative fixtures. Thinking modules are original Datapass lessons with linked sources.</p></aside>
+      <ContentDetails summary="About these lessons"><p>Original Datapass teaching examples and reasoning lessons. Selected lessons include linked technical references. Source records are retained for audit and reproducible imports.</p></ContentDetails>
     </div>
   );
 }

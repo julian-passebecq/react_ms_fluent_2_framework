@@ -1,0 +1,186 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:datapass:schema:challenge:1",
+  "title": "Datapass authored challenge subset",
+  "description": "Editor structural assistance. Run pnpm validate:specs for authoritative runtime/semantic validation. Unknown extension fields remain allowed.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "title": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "domain": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "summary": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "difficulty": {
+      "enum": [
+        "Easy",
+        "Medium",
+        "Hard"
+      ]
+    },
+    "schema": {
+      "type": "string"
+    },
+    "input": {
+      "type": "string"
+    },
+    "example": {
+      "type": "string"
+    },
+    "expectedOutput": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "hints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "execution": {
+      "const": "none"
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "label": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "monacoLanguage": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "starter": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "solution": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "language": {
+            "enum": [
+              "python",
+              "pandas",
+              "pyspark",
+              "sql",
+              "tsql",
+              "duckdb",
+              "bigquery",
+              "dax",
+              "csharp",
+              "powershell",
+              "bash",
+              "shell",
+              "yaml",
+              "dockerfile",
+              "plaintext"
+            ]
+          },
+          "explanation": {
+            "description": "Optional explanation text; not checked by the existing challenge subset validator."
+          },
+          "note": {
+            "description": "Optional note text; not checked by the existing challenge subset validator."
+          }
+        },
+        "required": [
+          "id",
+          "language",
+          "label",
+          "monacoLanguage",
+          "starter",
+          "solution"
+        ],
+        "additionalProperties": true
+      },
+      "minItems": 1
+    },
+    "figure": {
+      "description": "Optional FigureSpec: author it as a separate *.figure.json and run Figure validation. Existing challenge validation does not recursively validate this field."
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "domain",
+    "difficulty",
+    "summary",
+    "schema",
+    "input",
+    "example",
+    "expectedOutput",
+    "tags",
+    "hints",
+    "variants"
+  ],
+  "additionalProperties": true,
+  "definitions": {
+    "localizedText": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "en": {
+              "type": "string"
+            },
+            "no": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "anyOf": [
+            {
+              "required": [
+                "en"
+              ],
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "pattern": "\\S"
+                }
+              }
+            },
+            {
+              "required": [
+                "no"
+              ],
+              "properties": {
+                "no": {
+                  "type": "string",
+                  "pattern": "\\S"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

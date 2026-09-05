@@ -9,7 +9,7 @@ import {
 } from '@fluentui/react-icons';
 import { AppShell, LanguageToggle, SideNav, TopBar, useLocale } from '@datapass/ui';
 import { courses } from './data/contentCatalog';
-import { useDubreuProgress } from './lib/useDubreuProgress';
+import { useFormationProgress } from './lib/useFormationProgress';
 
 const CourseCatalogPage = lazy(() => import('./pages/CourseCatalogPage').then((module) => ({ default: module.CourseCatalogPage })));
 const LessonPage = lazy(() => import('./pages/LessonPage').then((module) => ({ default: module.LessonPage })));
@@ -44,7 +44,7 @@ function firstLessonId(courseId: string) {
 export function App() {
   const [route, setRoute] = useState<FormationRoute>(routeFromHash);
   const { locale } = useLocale();
-  const progress = useDubreuProgress();
+  const progress = useFormationProgress();
   const shouldFocus = useRef(false);
 
   useEffect(() => {
@@ -91,8 +91,8 @@ export function App() {
       label={locale === 'no' ? 'Kursnavigasjon' : 'Course navigation'}
       footer={(
         <div className="formation-side-note">
-          <Text size={200} weight="semibold">Display · edit · compare</Text>
-          <Caption1 block>Python/SQL/PySpark execution: external only</Caption1>
+          <Text size={200} weight="semibold">Read · reason · practice</Text>
+          <Caption1 block>Build understanding one lesson at a time.</Caption1>
         </div>
       )}
     >
@@ -150,6 +150,7 @@ export function App() {
 
   return (
     <AppShell
+      className="dp-consumer"
       topBar={(
         <TopBar
           brand="Formation"

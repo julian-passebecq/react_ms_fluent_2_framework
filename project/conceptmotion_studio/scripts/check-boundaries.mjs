@@ -117,6 +117,7 @@ function importSpecifiers(source) {
   return matches.map((match) => match[1]);
 }
 
+const { findDirectMonacoImports } = await import('./app-import-boundary.mjs');
 const failures = [];
 let scanned = 0;
 
@@ -135,6 +136,16 @@ for (const [packageName, rule] of Object.entries(rules)) {
   }
 }
 
+let appScanned = 0;
+for (const app of fs.readdirSync(path.join(root, 'apps'), { withFileTypes: true })) {
+  const directory = path.join(root, 'apps', app.name, 'src');
+  if (!app.isDirectory() || !fs.existsSync(directory)) continue;
+  for (const file of sourceFiles(directory)) {
+    appScanned += 1;
+    for (const specifier of findDirectMonacoImports(fs.readFileSync(file, 'utf8'))) failures.push(`${path.relative(root, file)}: direct app Monaco import “${specifier}”; use @datapass/code`);
+  }
+}
+
 for (const packageName of ['core', 'knowledge', 'content', 'progress']) {
   const manifestPath = path.join(root, 'packages', packageName, 'package.json');
   const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
@@ -148,5 +159,5 @@ if (failures.length) {
   for (const failure of failures) console.error(`- ${failure}`);
   process.exitCode = 1;
 } else {
-  console.log(`boundary check: ${scanned} source files · ${Object.keys(rules).length} package boundaries clean`);
+  console.log(`boundary check: ${scanned} source files · ${Object.keys(rules).length} package boundaries clean · ${appScanned} app files checked for direct Monaco`);
 }

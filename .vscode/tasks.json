@@ -1,0 +1,24 @@
+{
+  "version": "2.0.0",
+  "options": { "cwd": "${workspaceFolder}/project/conceptmotion_studio" },
+  "tasks": [
+    { "label": "Datapass: Run affected unit tests", "type": "shell", "command": "pnpm", "args": ["exec", "vitest", "run", "${input:testPath}"], "group": "test", "problemMatcher": [] },
+    { "label": "Datapass: Run Storybook", "type": "shell", "command": "pnpm", "args": ["run", "storybook"], "isBackground": true, "problemMatcher": [] },
+    { "label": "Datapass: Build Formation", "type": "shell", "command": "pnpm", "args": ["run", "build:consumer"], "problemMatcher": [] },
+    { "label": "Datapass: Build other consumers", "type": "shell", "command": "pnpm", "args": ["run", "build:v3"], "problemMatcher": [] },
+    { "label": "Datapass: Build all consumers", "dependsOrder": "sequence", "dependsOn": ["Datapass: Build Formation", "Datapass: Build other consumers"], "group": "build", "problemMatcher": [] },
+    { "label": "Datapass: Run browser smoke", "type": "shell", "command": "pnpm", "args": ["run", "test:browser", "${input:browserPath}"], "group": "test", "problemMatcher": [] },
+    { "label": "Datapass: Run full release gate", "type": "shell", "command": "pnpm", "args": ["run", "check"], "group": "test", "problemMatcher": [] },
+    { "label": "Datapass: Scaffold learning app", "type": "shell", "command": "pnpm", "args": ["run", "scaffold:app", "--name", "${input:appName}", "--preset", "learning"], "problemMatcher": [] },
+    { "label": "Datapass: Scaffold catalog app", "type": "shell", "command": "pnpm", "args": ["run", "scaffold:app", "--name", "${input:appName}", "--preset", "catalog"], "problemMatcher": [] },
+    { "label": "Datapass: Validate visual specs", "type": "shell", "command": "pnpm", "args": ["run", "validate:specs", "${input:specKind}", "${input:specPath}"], "group": "test", "problemMatcher": [] },
+    { "label": "Datapass: Check developer tooling", "type": "shell", "command": "pnpm", "args": ["run", "test:dx"], "group": "test", "problemMatcher": [] }
+  ],
+  "inputs": [
+    { "id": "testPath", "type": "promptString", "description": "Affected test file/directory relative to project/conceptmotion_studio", "default": "packages/content" },
+    { "id": "browserPath", "type": "promptString", "description": "Affected Playwright spec relative to project/conceptmotion_studio", "default": "tests/browser/v3-foundation.spec.ts" },
+    { "id": "appName", "type": "promptString", "description": "New lowercase kebab-case app directory; existing directories are never overwritten", "default": "my-learning-app" },
+    { "id": "specKind", "type": "pickString", "description": "Runtime contract to validate", "options": ["figure", "diagram", "app-recipe", "challenge"], "default": "figure" },
+    { "id": "specPath", "type": "promptString", "description": "JSON file relative to project/conceptmotion_studio", "default": "schemas/authoring/examples/source-to-store.figure.json" }
+  ]
+}

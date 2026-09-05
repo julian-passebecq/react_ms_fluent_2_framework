@@ -1,6 +1,7 @@
 export {
   datapassBrandVariants,
   datapassLightTheme,
+  datapassSurfaceTokens,
 } from './theme';
 
 export {
@@ -101,6 +102,8 @@ export { InspectorPanel, SplitPane, Workbench } from './workbench';
 export type { InspectorPanelProps, SplitPaneProps, WorkbenchProps } from './workbench';
 
 export { FigureFrame, SourceNote, VisualizationSurface } from './figure';
+export { ContentDetails } from './content-details';
+export type { ContentDetailsProps } from './content-details';
 export type {
   AccessibleFallbackMode,
   FigureFrameProps,

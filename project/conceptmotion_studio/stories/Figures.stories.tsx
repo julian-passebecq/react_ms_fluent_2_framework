@@ -20,6 +20,8 @@ const meta = {
   title: 'Foundation/Figures',
   component: FigureView,
   parameters: {
+    docs: { description: { component: 'Production FigureView/ConceptScene renderer-neutral compositions and preserved semantic families. Prefer FigurePlayer presentationSize props for new consumer compositions; historical minimumHeight examples remain compatible.' } },
+    datapass: { sourceFiles: ['packages/figure/src/registry.tsx', 'packages/ui/src/figure.tsx'], guide: 'docs/AUTHORING_DX.md' },
     chromatic: { pauseAnimationAtEnd: true },
   },
 } satisfies Meta<typeof FigureView>;

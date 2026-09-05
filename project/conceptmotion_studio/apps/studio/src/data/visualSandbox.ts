@@ -1,5 +1,5 @@
 import { compileTableState, compileWorkflowRun, validateDiagramSpec, validateLineageSpec, validateWorkflowSpec, type WorkflowSpec } from '@conceptmotion/core';
-import { resolveSvgScene, type SvgSceneSpec } from '@conceptmotion/svg';
+import { resolveSceneExplanation, resolveSvgScene, type SvgSceneSpec } from '@conceptmotion/svg';
 import { validateFigureSpec, type FigureSpec } from '@datapass/content';
 import { createDefaultFigureRendererRegistry } from '@datapass/figure';
 
@@ -31,7 +31,11 @@ export function parseSandboxFigure(source: string): { figure?: FigureSpec; issue
       const workflow=figure.spec as unknown as WorkflowSpec;
       const validation=validateWorkflowSpec(workflow);
       if(!validation.valid) return {issues:validation.issues.map(issue=>issue.message)};
-      workflow.runs?.forEach(run=>compileWorkflowRun(workflow,run.id));
+      workflow.runs?.forEach(run=>{
+        if(run.frames.length>256) throw new Error('A preview may contain at most 256 frames.');
+        compileWorkflowRun(workflow,run.id);
+      });
+      for(let index=0;index<Math.max(1,workflow.runs?.[0]?.frames.length??0);index++) resolveSceneExplanation(workflow,index);
     } else {
       if(!['table','join','loop','regression','diagram','lineage'].includes(spec.kind)) throw new Error('Unknown semantic scene kind.');
       if(spec.kind==='diagram' || spec.kind==='lineage') {

@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "reports": [
+    {
+      "app": "formation",
+      "initialStaticBytes": 483416,
+      "initialBudget": 650000,
+      "initialExcludesMonaco": true,
+      "editorLazyChunks": [
+        "assets/MonacoSurfaces-CkQ_at_S.js",
+        "assets/jsonMode-7oY3CZ1-.js",
+        "assets/sql-NEE52Syq.js",
+        "assets/shell-CC2rA5mh.js",
+        "assets/python-BBE3uTD7.js",
+        "assets/powershell-DmHpPYUd.js",
+        "assets/csharp-BKxtCVv1.js"
+      ],
+      "privateOverlayExcluded": true
+    },
+    {
+      "app": "code-sandbox",
+      "initialStaticBytes": 366665,
+      "initialBudget": 550000,
+      "initialExcludesMonaco": true,
+      "editorLazyChunks": [
+        "assets/MonacoSurfaces-0bxAttA0.js",
+        "assets/jsonMode-DEmELWpB.js",
+        "assets/sql-NEE52Syq.js",
+        "assets/shell-CC2rA5mh.js",
+        "assets/python-GldGqVbW.js",
+        "assets/powershell-DmHpPYUd.js",
+        "assets/csharp-BKxtCVv1.js"
+      ],
+      "privateOverlayExcluded": true
+    },
+    {
+      "app": "code-interview",
+      "initialStaticBytes": 448446,
+      "initialBudget": 650000,
+      "initialExcludesMonaco": true,
+      "editorLazyChunks": [
+        "assets/MonacoSurfaces-BG5LEB33.js",
+        "assets/jsonMode-CViW8R6G.js",
+        "assets/sql-NEE52Syq.js",
+        "assets/shell-CC2rA5mh.js",
+        "assets/python-COvxGMRK.js",
+        "assets/powershell-DmHpPYUd.js",
+        "assets/csharp-BKxtCVv1.js"
+      ],
+      "privateOverlayExcluded": true
+    },
+    {
+      "app": "algorithm-atlas",
+      "initialStaticBytes": 502646,
+      "initialBudget": 700000,
+      "initialExcludesMonaco": true,
+      "editorLazyChunks": [],
+      "privateOverlayExcluded": true
+    },
+    {
+      "app": "architecture-atlas",
+      "initialStaticBytes": 460104,
+      "initialBudget": 650000,
+      "initialExcludesMonaco": true,
+      "editorLazyChunks": [],
+      "privateOverlayExcluded": true
+    },
+    {
+      "app": "pilot-center",
+      "initialStaticBytes": 441507,
+      "initialBudget": 650000,
+      "initialExcludesMonaco": true,
+      "editorLazyChunks": [],
+      "privateOverlayExcluded": true
+    }
+  ],
+  "privacy": {
+    "schemaVersion": 1,
+    "passed": true,
+    "reports": [
+      {
+        "output": "dist-formation",
+        "scannedFiles": 53,
+        "skippedBinaryFiles": 2
+      },
+      {
+        "output": "dist-code-sandbox",
+        "scannedFiles": 49,
+        "skippedBinaryFiles": 1
+      },
+      {
+        "output": "dist-code-interview",
+        "scannedFiles": 35,
+        "skippedBinaryFiles": 1
+      },
+      {
+        "output": "dist-algorithm-atlas",
+        "scannedFiles": 10,
+        "skippedBinaryFiles": 0
+      },
+      {
+        "output": "dist-architecture-atlas",
+        "scannedFiles": 10,
+        "skippedBinaryFiles": 0
+      },
+      {
+        "output": "dist-pilot-center",
+        "scannedFiles": 20,
+        "skippedBinaryFiles": 0
+      }
+    ],
+    "violations": []
+  }
+}

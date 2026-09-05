@@ -1,5 +1,6 @@
 import { createSemanticSnapshot, type EntitySnapshot, type SemanticSnapshot } from './entities';
 import type { LocalizedText } from './localization';
+import type { ExplanationTrack } from './explanation';
 
 export interface LoopItem {
   readonly id: string;
@@ -26,6 +27,7 @@ export interface LoopFrame {
 }
 
 export interface LoopSceneSpec {
+  readonly explanation?: ExplanationTrack;
   readonly kind: 'loop';
   readonly version: string;
   readonly id: string;

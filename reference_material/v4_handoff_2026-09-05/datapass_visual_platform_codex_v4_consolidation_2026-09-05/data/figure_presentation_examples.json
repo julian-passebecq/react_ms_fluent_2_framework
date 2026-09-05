@@ -1,0 +1,17 @@
+{
+  "sizes": {
+    "compact": {
+      "useFor": ["algorithm-loop", "small-table-transform", "single-concept-explainer"],
+      "goal": "Keep teaching content visually dense without clipping labels or controls."
+    },
+    "regular": {
+      "useFor": ["join", "window", "statistics", "medium-diagram"],
+      "goal": "Default consumer figure presentation."
+    },
+    "expanded": {
+      "useFor": ["architecture", "workflow", "lineage", "complex-diagram"],
+      "goal": "Provide space for multi-node semantics and selection."
+    }
+  },
+  "constraint": "Presentation size is consumer/layout policy, not semantic FigureSpec content."
+}

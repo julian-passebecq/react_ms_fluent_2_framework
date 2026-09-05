@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { WorkflowSpec } from '@conceptmotion/core';
 import { migratedFigures } from '../../../../content/visuals';
 import { parseSandboxFigure } from './visualSandbox';
 describe('production Visual Sandbox validation',()=>{
@@ -20,5 +21,14 @@ describe('production Visual Sandbox validation',()=>{
     const result=parseSandboxFigure(JSON.stringify(figure));
     expect(result.figure).toBeUndefined();
     expect(result.issues[0]).toContain('Preview join budget exceeded');
+  });
+  it('validates workflow explanation references before replacing the last applied preview',()=>{
+    const figure=migratedFigures.find(item=>item.id==='de-retry')!;
+    const spec=figure.spec as unknown as WorkflowSpec;
+    expect(spec.explanation).toBeDefined();
+    const invalid={...figure,spec:{...spec,explanation:{...spec.explanation,steps:spec.explanation!.steps.map((step,index)=>index?step:{...step,focus:{...step.focus,entityIds:['task.missing']}})}}};
+    const result=parseSandboxFigure(JSON.stringify(invalid));
+    expect(result.figure).toBeUndefined();
+    expect(result.issues.join(' ')).toContain('focus.entityIds');
   });
 });

@@ -1,66 +1,32 @@
-# AGENTS.md — instructions for Codex
+# AGENTS.md — Datapass workspace
 
-This repository is a standalone visual-explanation library/demo named **ConceptMotion Studio**.
+This directory is the active pnpm workspace for the reusable platform and seven application entry points. Follow the repository-root AGENTS.md and the current user release scope. The files CODEX_HANDOFF.md, AUDIT.md and ROADMAP.md document the preserved pre-foundation prototype; they do not replace the current architecture or authorize legacy renderer expansion.
 
-Before changing code, read `CODEX_HANDOFF.md`, `AUDIT.md`, `ROADMAP.md`, and `research/SOURCE_AUDIT.md`. For motion work, also read `research/MOVING_VIDEO_SPEC.md`.
+## Local architecture
 
-## Non-negotiable architecture rules
+- `packages/core`: pure semantic state, validation, compilation and deterministic layouts.
+- `packages/svg`: shared SVG rendering; `packages/react`: thin React adapters. React owns app state; the renderer owns its contained SVG subtree. Do not make consumers independently mutate it.
+- `packages/ui`: restrained Fluent v9 composites and semantic visual tokens.
+- `packages/content`: serializable contracts; `packages/figure`: renderer-neutral Figure composition.
+- `packages/code`: the only Monaco integration; coding/spec routes load it lazily.
+- `packages/learning`, `packages/progress`, `packages/knowledge`: shared learning/state/source boundaries.
+- `content/`: canonical public project/practice/visual artifacts; apps consume these rather than duplicate them.
+- `src/` and `vite.config.js`: preserved legacy JS/D3 application. Its catalog/scene/renderer counts are separate from modern semantic content.
 
-1. React owns application/UI state. D3 owns the SVG visualization subtree.
-2. Prefer semantic scene state over bespoke DOM animation code.
-3. Stable IDs are required for moving objects.
-4. A catalogue entry is not a live scene unless it exists in `src/data/scenes.js`.
-5. Do not create a new renderer just to restyle an existing geometry.
-6. Light theme is the default. Dark mode is secondary.
-7. Respect `prefers-reduced-motion`; every frame must remain understandable statically.
-8. Do not copy external article/Instagram visual assets, logos or branding. Use references for interaction/design principles only.
-9. Keep source-specific claims traceable in `research/visual-references.md` or a more specific research note.
-10. Do not modify or re-integrate this project into `mlweb`; the user explicitly requested a standalone repo/ZIP.
+Prefer semantic specs and stable object/row/node IDs. Do not add a renderer to restyle existing geometry or implement bespoke SVG animation inside apps. Figure presentation size/metadata visibility stays outside semantic content. Existing DiagramSpec category/icon/layout semantics serve both Atlas and Pilot.
 
-## Coding direction
+## Authoring and privacy
 
-- Move pure semantics out of D3 renderers so they can be unit-tested.
-- Split the monolithic renderer file as work expands.
-- Prefer keyed D3 joins and `enter/update/exit` over `resetLayer()` for concepts where object tracking matters.
-- Avoid animation that does not encode a causal/state change.
-- Keep scene authoring schema versioned.
-- Canonical new scene payload is `data: {...}` + `frames: [...]`; legacy flat scenes are normalized temporarily.
+Schemas in `schemas/authoring` are editor structural assistance only. Preserve unknown extensions and use the production runtime validators for reference integrity, cycles, Figure renderer payloads and semantic correctness. Do not equate AppRecipe metadata validation with scaffold CLI app-name validation.
 
-## Content direction
+Use `pnpm schemas:generate` only after reviewing the typed schema factory and parity tests; `pnpm schemas:check` detects committed JSON drift. `pnpm validate:specs <kind> <file.json>` performs schema plus runtime validation. Approved composition examples live in Storybook; `docs/AUTHORING_DX.md` gives direct links and commands.
 
-Highest-value user domains:
+Never import `content/*.private.local.*` or private backups into bundles. Keep IDs/persistence keys compatible, retain source attribution and preserve all deterministic public import projections. PySpark has no execution runtime here.
 
-- SQL/T-SQL/BigQuery/DuckDB: joins, windows, indexing, query plans/performance.
-- Python/pandas/PySpark/Polars: filtering, groupby, merge, partition/shuffle.
-- DAX/Power BI: filter/row context, CALCULATE, relationship propagation, semantic model, performance.
-- Data modeling: Kimball, grain, facts/dimensions, SCD1/2, semantic layer.
-- Airflow/pipelines: readiness, trigger rules, retries, branching, backfill, troubleshooting.
-- Storage/lakehouse: Parquet internals/pruning, Delta/Iceberg, compaction.
-- Algorithms, statistics and classical ML.
-- Git/Docker/tool shortcuts and printable cheat sheets.
+## Efficient verification
 
-## Required verification
+Use `pnpm exec vitest run <affected-path>`, an affected Vite build and `pnpm test:browser <affected-spec>` while implementing. New authoring/tooling work also runs `pnpm test:dx` and the boundary audit. Keep tests/assertions intact.
 
-Always run at least:
+At the end of a release run one complete `pnpm check`: offline/import/unit/coverage/boundary/scaffold checks, all builds, legacy, Storybook, private-output scan and the desktop/phone browser matrix. Hosted success must be observed on the final pushed commit, not inferred from local results. Record exact commands/results; do not rerun the full gate after each small change.
 
-```bash
-npm run check:offline
-```
-
-After dependencies are installed, also run:
-
-```bash
-npm run check
-```
-
-If you add/modify a renderer, add at least one live scene and a semantic/unit test. If you change visual behavior, inspect it in a real browser at desktop and mobile sizes.
-
-## v0.5 reminder
-
-After reading this file, also read the archive-root documents:
-
-- `../CLOUD_DIAGRAM_GENERATOR.md`
-- `../DATA_MODEL_GENERATOR.md`
-- `../LIBRARY_PRODUCT_STRATEGY.md`
-
-The next large product objective is to turn cloud diagrams and data models/lineage into first-class structured generator families.
+When touching legacy rendering specifically, consult `research/SOURCE_AUDIT.md` and `research/MOVING_VIDEO_SPEC.md`; source references are pedagogical evidence, not permission to expand scope or copy branding/assets.

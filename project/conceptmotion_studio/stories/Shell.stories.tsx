@@ -14,6 +14,8 @@ const meta = {
   title: 'Foundation/Shell',
   component: AppShell,
   parameters: {
+    docs: { description: { component: 'Fluent application shell, navigation and locale compositions. Consumers own routes; shared UI owns accessible landmarks and restrained chrome.' } },
+    datapass: { guide: 'docs/AUTHORING_DX.md', sourceFiles: ['packages/ui/src/index.ts'] },
     galleryBare: true,
   },
 } satisfies Meta<typeof AppShell>;

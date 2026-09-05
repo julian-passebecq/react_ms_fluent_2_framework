@@ -57,14 +57,16 @@ export const radialDiagramLayout: DiagramLayoutContract = {
   id: 'datapass.radial', version: '1.0.0', deterministic: true,
   layout(spec) {
     const ordered = validatedNodes(spec);
+    const width = spec.layout?.density === 'comfortable' ? 208 : nodeWidth;
+    const height = spec.layout?.density === 'comfortable' ? 90 : nodeHeight;
     const hubId = spec.layout?.hubId ?? [...ordered].sort((a, b) => compare(a.id, b.id))[0]?.id;
     const spokes = ordered.filter(n => n.id !== hubId);
     // Circumference guarantees enough room for each rectangle, including dense galaxies.
-    const radius = Math.max(190, spokes.length * 196 / (2 * Math.PI));
+    const radius = Math.max(190, spokes.length * (width + 42) / (2 * Math.PI));
     const nodes = ordered.map(n => {
       const index = spokes.findIndex(s => s.id === n.id);
       const angle = -Math.PI / 2 + (2 * Math.PI * index) / Math.max(1, spokes.length);
-      return { id: n.id, x: n.id === hubId ? -nodeWidth / 2 : radius * Math.cos(angle) - nodeWidth / 2, y: n.id === hubId ? -nodeHeight / 2 : radius * Math.sin(angle) - nodeHeight / 2, width: nodeWidth, height: nodeHeight };
+      return { id: n.id, x: n.id === hubId ? -width / 2 : radius * Math.cos(angle) - width / 2, y: n.id === hubId ? -height / 2 : radius * Math.sin(angle) - height / 2, width, height };
     });
     return finish(spec, nodes, this.version);
   },
@@ -75,6 +77,8 @@ export const layeredDiagramLayout: DiagramLayoutContract = {
   id: 'datapass.layered', version: '1.0.0', deterministic: true,
   layout(spec) {
     const ordered = validatedNodes(spec);
+    const width = spec.layout?.density === 'comfortable' ? 208 : nodeWidth;
+    const height = spec.layout?.density === 'comfortable' ? 90 : nodeHeight;
     const ranks = new Map(ordered.map(n => [n.id, n.preferredRank ?? spec.layout?.preferredRanks?.[n.id] ?? 0]));
     const incoming = new Map(ordered.map(n => [n.id, spec.edges.filter(e => e.to.nodeId === n.id).length]));
     const queue = ordered.filter(n => incoming.get(n.id) === 0).map(n => n.id).sort(compare);
@@ -100,7 +104,7 @@ export const layeredDiagramLayout: DiagramLayoutContract = {
       const lane = lanes.get(rank) ?? 0;
       lanes.set(rank, lane + 1);
       const major = reverse ? maxRank - rank : rank;
-      return { id: n.id, x: horizontal ? major * 205 : lane * 205, y: horizontal ? lane * 110 : major * 110, width: nodeWidth, height: nodeHeight };
+      return { id: n.id, x: horizontal ? major * (width + 51) : lane * (width + 51), y: horizontal ? lane * (height + 42) : major * (height + 42), width, height };
     }), this.version);
   },
 };

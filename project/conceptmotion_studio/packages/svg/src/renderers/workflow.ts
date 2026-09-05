@@ -12,6 +12,7 @@ import {
 } from '@conceptmotion/core';
 
 import { BaseSvgRenderer } from '../base-renderer.js';
+import { explanationPanelHeight, renderExplanationPanel, resolveSceneExplanation } from '../explanation.js';
 import { ensureChild, setAccessibleText, setAttributes, setText } from '../dom.js';
 import type { RendererRegistration } from '../types.js';
 import { renderGraph, type GraphEdgeModel, type GraphRenderModel } from './graph.js';
@@ -101,12 +102,13 @@ export class WorkflowRenderer extends BaseSvgRenderer<WorkflowRendererInput> {
     }
     const surface = this.surface!;
     const options = this.options;
+    const explanation = resolveSceneExplanation(input.spec, input.frame?.index ?? 0);
     const mode = input.mode ?? (input.frame ? 'run' : 'topology');
     const preset = input.preset ?? input.spec.preset ?? 'generic';
     const title = localText(input.title ?? input.spec.title, options) || input.spec.id;
     const running = Object.values(input.frame?.states ?? {}).filter((state) => state.status === 'running').length;
     const failed = Object.values(input.frame?.states ?? {}).filter((state) => state.status === 'failed').length;
-    const description =
+    const description = explanation ? localText(explanation.step.title, options) :
       localText(input.description ?? input.spec.description, options) ||
       (mode === 'run'
         ? `${presetLabel(preset)} · run ${input.frame?.runId ?? 'not selected'}, frame ${input.frame?.frameId ?? 'topology'} · ${running} running, ${failed} failed.`
@@ -155,6 +157,8 @@ export class WorkflowRenderer extends BaseSvgRenderer<WorkflowRendererInput> {
     });
 
     const model: GraphRenderModel = {
+      explanationFocusIds: explanation?.step.focus.entityIds,
+      availableHeight: explanation ? surface.viewport.height - explanationPanelHeight(explanation) - 24 : undefined,
       id: input.spec.id,
       direction: input.spec.layout?.direction ?? 'lr',
       focusedGroupId: input.focusedGroupId,
@@ -192,6 +196,7 @@ export class WorkflowRenderer extends BaseSvgRenderer<WorkflowRendererInput> {
         })),
     };
     renderGraph(surface, layer, model, options, this.reducedMotion, this.durationMs);
+    renderExplanationPanel(surface, explanation, surface.viewport.height - explanationPanelHeight(explanation) - 16, options.locale);
 
     const breadcrumb = ensureChild(layer, 'text[data-role="breadcrumb"]', 'text', {
       'data-role': 'breadcrumb',

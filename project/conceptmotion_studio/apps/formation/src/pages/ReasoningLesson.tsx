@@ -1,7 +1,7 @@
 import { FigurePlayer } from '@datapass/figure';
 import { AssessmentRunner } from '@datapass/learning';
 import { appendAssessmentAttempt, type ProgressStateV2 } from '@datapass/progress';
-import { useLocale } from '@datapass/ui';
+import { ContentDetails, useLocale } from '@datapass/ui';
 import { visualById } from '../../../../content/visuals';
 import { reasoningModules, reasoningSources } from '../data/reasoning';
 
@@ -17,15 +17,15 @@ export function ReasoningLesson({ lessonId, progress, updateProgress }: {lessonI
       const visual=section.visualId ? visualById(section.visualId) : undefined;
       return <section className="formation-reasoning-section" id={`section-${section.id}`} key={section.id}>
         <h2>{section.title}</h2><p>{section.text}</p>
-        {visual ? <FigurePlayer figure={visual.figure} captions={visual.captions} locale={locale}/> : null}
+        {visual ? <FigurePlayer figure={visual.figure} captions={visual.captions} locale={locale} presentationSize={visual.figure.rendererId === 'table.join' ? 'regular' : 'compact'} showInspector={false}/> : null}
         <p className="formation-checkpoint"><strong>Checkpoint</strong> {section.checkpoint}</p>
       </section>;
     })}
-    <AssessmentRunner assessment={module.assessment} questions={module.questions} locale={locale}
+    <AssessmentRunner headingLevel={2} assessment={module.assessment} questions={module.questions} locale={locale}
       attemptId={`${module.assessment.id}:attempt:${(progress.assessments[module.assessment.id]?.attempts.length??0)+1}`}
       onSubmit={submission=>updateProgress(current=>appendAssessmentAttempt(current,module.assessment.id,submission.attempt))}/>
-    <footer className="formation-sources"><h2>Sources and scope</h2><p>Original reasoning lessons. Reference behavior checked 4 September 2026; dialect-specific syntax is identified explicitly.</p>
+    <ContentDetails className="formation-sources" summary="Sources and scope"><p>Original reasoning lessons. Reference behavior checked 4 September 2026; dialect-specific syntax is identified explicitly.</p>
       <ul>{reasoningSources.filter(source=>module.lesson.sourceIds?.includes(source.id)).map(source=><li key={source.id}><a href={source.url} target="_blank" rel="noreferrer">{String(source.title)}</a></li>)}</ul>
-    </footer>
+    </ContentDetails>
   </div>;
 }

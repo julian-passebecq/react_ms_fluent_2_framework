@@ -1,6 +1,6 @@
 :root {
-  color: #162529;
-  background: #f4f7f7;
+  color: var(--dp-ink-primary);
+  background: var(--dp-canvas-warm);
   font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -8,7 +8,7 @@
 
 * { box-sizing: border-box; }
 html, body, #root { min-height: 100%; margin: 0; }
-body { min-width: 320px; overflow-x: hidden; }
+body { min-width: 320px; }
 button, input, textarea, select { font: inherit; }
 :focus-visible { outline: 3px solid #0b6f73; outline-offset: 2px; }
 
@@ -128,3 +128,27 @@ button, input, textarea, select { font: inherit; }
 .formation-sources { padding: 1rem 0; color: #4f5d64; font-size: .875rem; }
 .formation-sources h2 { font-size: 1rem; color: #102d43; }
 .formation-module-links { display: grid; gap: .5rem; }
+
+/* Consumer geometry stays local; color, surfaces and elevation use shared V4 tokens. */
+.dp-consumer .formation-side-note,
+.dp-consumer .formation-local-label,
+.dp-consumer .formation-sources,
+.dp-consumer .formation-advanced-exercise > p { color: var(--dp-ink-secondary); }
+.dp-consumer .formation-eyebrow,
+.dp-consumer .formation-reasoning-index a { color: var(--dp-accent-teal); }
+.dp-consumer .formation-objectives,
+.dp-consumer .formation-concept-explanation,
+.dp-consumer .formation-advanced-exercise,
+.dp-consumer .formation-breakdown,
+.dp-consumer .formation-progress-json,
+.dp-consumer .formation-reasoning-section {
+  background: var(--dp-surface-base);
+  border-color: var(--dp-border-subtle);
+  border-radius: var(--dp-radius-card);
+}
+.dp-consumer .formation-objectives { border: 0; padding-block: .5rem; background: transparent; }
+.dp-consumer .formation-reasoning-section { box-shadow: var(--dp-elevation-low); }
+.dp-consumer .formation-reasoning-section h2 { color: var(--dp-ink-primary); }
+.dp-consumer .formation-reasoning-index { background: transparent; border: 0; border-bottom: 1px solid var(--dp-border-subtle); padding-inline: 0; }
+.dp-consumer .formation-checkpoint { border-color: var(--dp-accent-amber); background: var(--dp-canvas-warm); border-radius: var(--dp-radius-control); }
+.dp-consumer .formation-progress-json { background: transparent; border: 0; padding-inline: 0; }

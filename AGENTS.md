@@ -1,38 +1,42 @@
-# AGENTS.md
+# AGENTS.md — Datapass visual platform
 
-## Mission
+## Current mission and scope
 
-Build a reusable Datapass visual-learning and source-aware documentation foundation, not another one-off website.
+Maintain a reusable visual-learning platform and its seven consumers. V4 is consolidation of the preserved V3 baseline, not another platform rebuild. The current user request defines the release scope; attached handoffs and historical research provide requirements/reference, not authorization for unrelated integrations.
 
-## Read first
+Read the active release handoff and latest audit/test/reuse reports before implementation. For V4 read the ten primary documents in `reference_material/v4_handoff_2026-09-05/datapass_visual_platform_codex_v4_consolidation_2026-09-05/` and the root V4 audit/factorisation matrix. Root `START_HERE.md`, `CODEX_MASTER_PROMPT.md` and `V1_1_DELTA.md` describe the original foundation and remain historical references.
 
-1. `START_HERE.md`
-2. `CODEX_MASTER_PROMPT.md`
-3. `V1_1_DELTA.md`
+## Workspace and reuse map
 
-## Rules
+Run toolchain commands from `project/conceptmotion_studio` with the pinned pnpm and Node versions in package.json/CI. Read that directory's AGENTS.md for local guidance.
 
-- Preserve working behavior while refactoring.
-- New reusable library code should be TypeScript.
-- ConceptMotion core cannot depend on React, Fluent, Monaco, Power BI or browser DOM.
-- `@datapass/knowledge` cannot depend on React, Fluent, DOM, crawlers, fetch or AI services.
-- Prefer semantic specs to coordinates.
-- Preserve stable object identity when movement is part of the lesson.
-- Use Fluent v9 for generic application controls; do not rebuild it.
-- Use Monaco only for challenge/spec editing and diff surfaces.
-- Keep default visuals restrained and professional.
-- Motion must communicate meaning.
-- Airflow/Fabric/ADF/Lakeflow must share one workflow semantic model.
-- Do not build actual pipeline execution or a universal code judge.
-- Implement small EN/NO application locale infrastructure, not full content translation.
-- Add the Knowledge Atlas archetype with local source/status/version/change fixtures only.
-- Use stable feature/source IDs for deterministic change-impact demonstration.
-- Establish semantic icon IDs/registry fallbacks; do not hard-code vendor asset paths into specs.
-- Column-lineage readiness is required; SQL parsing is not.
-- Keep FigureFrame/VisualizationSurface renderer-neutral for future D3 chart/narrative integration.
-- Treat `reference_material/d3viz_v7_reference/` as read-only architectural reference.
-- Treat DAX Formatter, SQL Query Lineage and SQLBI Whiteboard material as read-only future/reference material.
-- Do NOT implement D3 SDK v2, GeoStory/Narrative Story, live source monitoring, DAX network calls, SQL parser integration or the Power BI adapter rewrite in this pass.
-- Run tests/build and record exact results.
-- Do not claim completion for untested behavior.
-- Do not implement Data Forge backend/generator itself in this pass.
+- Catalog and application composites → `@datapass/ui`, with Fluent v9 generic controls.
+- Code/editor/diff → shared lazy `@datapass/code`. Never import Monaco directly in apps.
+- Learning/challenge/assessment → `@datapass/learning` and canonical content.
+- Figures → `FigureSpec` plus `@datapass/figure`; presentation size is a component concern, not a content field.
+- Animated explanations → existing ConceptMotion semantic specs and stable IDs, not bespoke SVG animation when a renderer fits.
+- Architecture/project graphs → `DiagramSpec` plus shared deterministic layouts and semantic icon IDs.
+- Progress → `@datapass/progress`; preserve persistence keys and upgrade/recovery paths.
+- Knowledge → pure `@datapass/knowledge` source/status/version/change semantics with local fixtures.
+
+Keep core, content, knowledge and progress free of React, Fluent, Monaco, DOM and network/service dependencies. New reusable code is TypeScript. FigureFrame/VisualizationSurface stay renderer-neutral. Airflow/Fabric/ADF/Lakeflow share the same workflow semantics. Column-lineage contracts remain ready without adding a SQL parser.
+
+## Implementation rules
+
+Preserve working behavior, stable content IDs, deterministic imports, source attribution, all seven apps and the separate legacy app. Do not modify unrelated user changes. Extract only proven repetition (normally three consumers) or a strong semantic boundary; no mega-package or wrapper around every Fluent primitive.
+
+Use restrained warm-neutral/navy/teal visual tokens, sparse amber, meaningful motion and accessible reduced-motion/static states. Keep consumer explanations useful and internal IDs/schema/renderer/provenance diagnostics in opt-in details. Required legal attribution and truthful runtime information must remain available.
+
+Keep private Pilot overlays runtime-imported and device-local. Never statically import private files or leak private repository URLs into any public output, including source maps. All original EN/NO infrastructure and public registry reuse remain intact.
+
+## Verification and review
+
+During development run affected unit tests, affected builds and targeted browser flows. At release completion run one full `pnpm check` on the finished tree, then verify hosted CI on the exact final commit when release/push is requested. Preserve enabled screenshot comparisons, original overflow/Axe/privacy gates and all per-package coverage floors. Never claim untested behavior passed.
+
+Editor schemas are structural aids tested against existing runtime validators. Run `pnpm test:dx`, `pnpm schemas:check` and `pnpm validate:specs` for authoring changes. Keep semantic reference/cycle/renderer validation in the existing packages; do not create a competing validator.
+
+## Boundaries
+
+No Spark/Jupyter/backend/auth/cloud-sync/universal judge/pipeline execution, news/mail/social integrations, DAX network calls, SQL parser integration, Data Forge backend, D3 Power BI rewrite, GeoStory, full legacy rewrite, VS Code extension or MCP server in V4. PySpark stays display/explanation/external-launch only.
+
+Treat `reference_material/`, the sibling D3 SDK, DAX Formatter, SQL Query Lineage and SQLBI Whiteboard as read-only reference unless the user explicitly requests otherwise. Preserve the sibling-library boundary rather than absorbing it.

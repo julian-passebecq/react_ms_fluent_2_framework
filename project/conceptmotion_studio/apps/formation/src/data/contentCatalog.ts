@@ -135,7 +135,9 @@ export const sqlFilterFigure: FigureSpec = {
 export const sqlNotebook: NotebookSpec = {
   ...importedSqlNotebook,
   cells: [
-    ...importedSqlNotebook.cells.slice(0, 1),
+    ...importedSqlNotebook.cells.slice(0, 1).map(cell => cell.id === 'notebook.dubreu.sql-where.cell.where-objective' && cell.type === 'markdown'
+      ? { ...cell, markdown: '# Filter rows with `WHERE`\nUse a predicate to retain only the rows that answer the question.' }
+      : cell),
     {
       id: 'notebook.dubreu.sql-where.cell.figure-introduction',
       type: 'markdown',
@@ -152,6 +154,7 @@ export const sqlNotebook: NotebookSpec = {
   ],
   metadata: toCanonicalJsonValue({
     importedSourceSha256: importedSqlNotebook.provenance.sourceSha256,
+    editorialOverrides: [{ cellId: 'notebook.dubreu.sql-where.cell.where-objective', reason: 'Public introduction uses Formation-neutral wording; the imported source is preserved unchanged.' }],
     editorialEnhancements: ['notebook.dubreu.sql-where.cell.figure-introduction', 'notebook.dubreu.sql-where.cell.figure'],
   }),
 };

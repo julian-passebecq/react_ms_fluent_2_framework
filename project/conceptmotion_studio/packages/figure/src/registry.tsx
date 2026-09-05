@@ -1,14 +1,19 @@
 import type { WorkflowSpec } from '@conceptmotion/core';
 import { ConceptScene, WorkflowScene } from '@conceptmotion/react';
-import { rendererIdForScene, type SvgSceneSpec } from '@conceptmotion/svg';
+import { recommendedSceneViewport, rendererIdForScene, type SvgSceneSpec } from '@conceptmotion/svg';
 import type { FigureSpec, LocalizedText } from '@datapass/content';
-import { FigureFrame } from '@datapass/ui';
+import { ContentDetails, datapassSurfaceTokens as surfaces, FigureFrame } from '@datapass/ui';
 import type { CSSProperties, ReactNode } from 'react';
+
+/** Consumer presentation, intentionally not part of the serializable FigureSpec. */
+export type FigurePresentationSize = 'compact' | 'regular' | 'expanded';
+export type FigureMetadataMode = 'consumer' | 'developer';
 
 export interface FigureRenderContext {
   figure: FigureSpec;
   locale: string;
   reducedMotion: boolean;
+  presentationSize?: FigurePresentationSize;
   frameIndex?: number;
   selectedId?: string;
   onSelect?: (entityId: string) => void;
@@ -70,13 +75,23 @@ function figureStateIndex(figure: FigureSpec, reducedMotion: boolean): number {
 }
 
 /** Small opt-in editorial profile; renderer-neutral content never embeds colors. */
-function figureOptions(figure: FigureSpec, locale: string) {
+function figureOptions(figure: FigureSpec, locale: string, presentationSize?: FigurePresentationSize) {
+  let viewport = { width: 960, height: 540 };
+  if (presentationSize) {
+    // Presentation must not bypass the renderer's guarded semantic resolution.
+    // A malformed legacy payload still reaches its existing accessible error.
+    try { viewport = recommendedSceneViewport(figure.spec as unknown as SvgSceneSpec | WorkflowSpec, presentationSize); }
+    catch { /* Leave validation/error reporting to the production renderer. */ }
+  }
   return {
+    // Legacy callers retain the original canvas. Opt-in sizes are content-aware
+    // and stable across all steps rather than dependent on the active frame.
+    ...viewport,
     locale: locale === 'no' ? 'no' as const : 'en' as const,
     theme: figure.profile === 'professional' ? {
-      ink: '#102d43', mutedInk: '#526270', surface: '#ffffff', surfaceRaised: '#f8f8f5',
-      accent: '#0b6870', accentSubtle: '#e9f3f1', border: '#cdd7d9',
-      dataBatch: '#0b6870', dataStream: '#0b6870', control: '#526270', lineage: '#526270', cdc: '#8a5a14',
+      ink: surfaces.inkPrimary, mutedInk: surfaces.inkSecondary, surface: surfaces.surfaceBase, surfaceRaised: surfaces.canvasWarm,
+      accent: surfaces.accentTeal, accentSubtle: '#e9f3f1', border: surfaces.borderSubtle,
+      dataBatch: surfaces.accentTeal, dataStream: surfaces.accentTeal, control: surfaces.inkSecondary, lineage: surfaces.inkSecondary, cdc: surfaces.accentAmber,
     } : undefined,
   };
 }
@@ -93,7 +108,7 @@ function conceptMotionAdapter(id: string): FigureRendererAdapter {
         return [error instanceof Error ? error.message : String(error)];
       }
     },
-    render({ figure, frameIndex, locale, onSelect, reducedMotion, selectedId }) {
+    render({ figure, frameIndex, locale, onSelect, reducedMotion, selectedId, presentationSize }) {
       return (
         <ConceptScene
           spec={figure.spec as unknown as SvgSceneSpec}
@@ -101,7 +116,7 @@ function conceptMotionAdapter(id: string): FigureRendererAdapter {
           reducedMotion={reducedMotion}
           selectedId={selectedId}
           onSelect={onSelect}
-          options={figureOptions(figure, locale)}
+          options={figureOptions(figure, locale, presentationSize)}
           ariaLabel={resolveText(figure.fallbackText, locale)}
           fallback={resolveText(figure.fallbackText, locale)}
         />
@@ -123,7 +138,7 @@ function workflowAdapter(mode: 'topology' | 'run'): FigureRendererAdapter {
       }
       return [];
     },
-    render({ figure, frameIndex, locale, onSelect, reducedMotion, selectedId }) {
+    render({ figure, frameIndex, locale, onSelect, reducedMotion, selectedId, presentationSize }) {
       const spec = figure.spec as unknown as WorkflowSpec;
       const runId = mode === 'run' ? spec.runs?.[0]?.id : undefined;
       return (
@@ -135,7 +150,7 @@ function workflowAdapter(mode: 'topology' | 'run'): FigureRendererAdapter {
           reducedMotion={reducedMotion}
           selectedId={selectedId}
           onSelect={onSelect}
-          options={figureOptions(figure, locale)}
+          options={figureOptions(figure, locale, presentationSize)}
           ariaLabel={resolveText(figure.fallbackText, locale)}
           fallback={resolveText(figure.fallbackText, locale)}
         />
@@ -184,6 +199,11 @@ const defaultFigureRegistry = createDefaultFigureRendererRegistry();
 
 export interface FigureViewProps {
   figure: FigureSpec;
+  presentationSize?: FigurePresentationSize;
+  metadataMode?: FigureMetadataMode;
+  /** Human-readable attribution; never infer a citation from an internal ID. */
+  source?: ReactNode;
+  note?: ReactNode;
   registry?: FigureRendererRegistry;
   locale?: string;
   reducedMotion?: boolean;
@@ -201,6 +221,10 @@ export interface FigureViewProps {
 
 export function FigureView({
   figure,
+  presentationSize,
+  metadataMode = 'consumer',
+  source,
+  note,
   registry = defaultFigureRegistry,
   locale = 'en',
   reducedMotion = false,
@@ -221,10 +245,18 @@ export function FigureView({
   const renderable = adapter && issues.length === 0;
   const resolvedFrameIndex = frameIndex ?? figureStateIndex(figure, reducedMotion);
   const metadata = [
+    `Figure: ${figure.id}`,
+    `Renderer: ${figure.rendererId}`,
     figure.kind,
     ...((figure.conceptIds ?? []).map((id) => `concept:${id}`)),
     ...((figure.featureIds ?? []).map((id) => `feature:${id}`)),
   ];
+  const contractDetails = <div className="dp-figure-contract-details">
+    <div className="dp-figure-contract-metadata">{metadata.map((item) => <span key={item}>{item}</span>)}</div>
+    {figure.sourceIds?.length ? <p>Source IDs: {figure.sourceIds.join(', ')}</p> : null}
+    {figure.verifiedAt ? <p>Verified {figure.verifiedAt}</p> : null}
+    {typeof figure.status === 'string' && figure.status ? <p>Status: {figure.status}</p> : null}
+  </div>;
 
   return (
     <FigureFrame
@@ -233,19 +265,22 @@ export function FigureView({
       title={resolveText(figure.title, locale)}
       subtitle={resolveOptionalText(figure.subtitle, locale)}
       takeaway={resolveOptionalText(figure.takeaway, locale)}
-      metadata={metadata.length ? <div className="dp-figure-contract-metadata">{metadata.map((item) => <span key={item}>{item}</span>)}</div> : undefined}
+      metadata={metadataMode === 'developer' ? contractDetails : undefined}
+      details={metadataMode === 'consumer' ? <ContentDetails>{contractDetails}</ContentDetails> : undefined}
       toolbar={toolbar}
       actions={actions}
       exportAction={exportAction}
-      source={figure.sourceIds?.length ? `Source IDs: ${figure.sourceIds.join(', ')}` : undefined}
-      note={figure.verifiedAt ? `Verified ${figure.verifiedAt}` : undefined}
+      source={source}
+      note={note}
       fallback={fallback}
       fallbackMode={fallbackMode}
-      minimumHeight={minimumHeight}
+      minimumHeight={minimumHeight ?? (presentationSize ? '0' : undefined)}
       data-figure-id={figure.id}
       data-figure-renderer={figure.rendererId}
+      data-presentation-size={presentationSize}
+      data-metadata-mode={metadataMode}
     >
-      {renderable ? adapter.render({ figure, frameIndex: resolvedFrameIndex, locale, onSelect, reducedMotion, selectedId }) : (
+      {renderable ? adapter.render({ figure, frameIndex: resolvedFrameIndex, locale, onSelect, reducedMotion, selectedId, presentationSize }) : (
         <div role="alert" className="dp-figure-adapter-error">
           <b>Figure unavailable.</b>
           <span>{issues[0] ?? `No adapter is registered for “${figure.rendererId}”.`}</span>

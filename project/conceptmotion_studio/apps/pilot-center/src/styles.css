@@ -68,3 +68,10 @@ body { min-width: 320px; }
   .pilot-app .dp-metric-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pilot-app .dp-top-bar__actions { max-width: 100%; }
 }
+.pilot-galaxy-legend{display:flex;gap:1rem 2.5rem;flex-wrap:wrap;padding:1rem 1.25rem;margin-bottom:1rem;background:var(--dp-surface-base);border:1px solid var(--dp-border-subtle);border-radius:var(--dp-radius-card)}
+.pilot-galaxy-legend h3{margin:0 0 .6rem;font-size:.8rem;color:var(--dp-ink-secondary);font-weight:600}
+.pilot-galaxy-legend ul{display:flex;flex-wrap:wrap;gap:.5rem 1rem;list-style:none;margin:0;padding:0}
+.pilot-galaxy-legend li{display:flex;gap:.5rem;align-items:center;font-size:.875rem;text-transform:capitalize}
+.pilot-galaxy-legend li span{background:var(--dp-surface-raised);border:1px solid var(--dp-border-subtle);border-radius:var(--dp-radius-control);min-width:1.4rem;text-align:center;font-variant-numeric:tabular-nums}
+.pilot-project-layout:has(.pilot-galaxy)[data-has-selection="true"]{grid-template-columns:minmax(0,1fr)}
+.pilot-project-layout:has(.pilot-galaxy)>.pilot-inspector{max-width:50rem;width:100%}

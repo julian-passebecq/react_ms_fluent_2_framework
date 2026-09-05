@@ -40,6 +40,7 @@ import { tableSceneSpec } from '../apps/studio/src/data/semanticFixtures';
 
 const meta = {
   title: 'Foundation/Product surfaces',
+  parameters: { docs: { description: { component: 'Preserved production learning, workflow and source-aware knowledge compositions. Keep domain/session policy in consumers; reuse shared learning/UI contracts.' } }, datapass: { guide: 'docs/AUTHORING_DX.md', sourceFiles: ['packages/learning/src/index.ts', 'packages/ui/src/index.ts'] } },
 } satisfies Meta;
 
 export default meta;

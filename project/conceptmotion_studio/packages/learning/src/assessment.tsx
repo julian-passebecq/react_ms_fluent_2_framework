@@ -298,7 +298,7 @@ function QuestionInput(props: QuestionInputProps) {
         const figureId = question.options.find((candidate) => candidate.id === option.id)?.figureId;
         const figure = figureId ? figures[figureId] : undefined;
         return figure
-          ? <FigureView figure={figure} locale={locale} reducedMotion={reducedMotion} minimumHeight="10rem" />
+          ? <FigureView figure={figure} locale={locale} reducedMotion={reducedMotion} presentationSize="compact" minimumHeight="10rem" />
           : <Text size={200}>Figure “{figureId}” is unavailable.</Text>;
       }}
     />
@@ -332,6 +332,8 @@ export interface AssessmentRunnerProps {
   readonly onAnswerChange?: (questionId: string, value: AssessmentAnswerValue) => void;
   readonly onSubmit?: (submission: AssessmentSubmission) => void;
   readonly className?: string;
+  /** Preserve standalone headings while allowing an assessment inside a titled consumer page. */
+  readonly headingLevel?: 1 | 2;
 }
 
 export function AssessmentRunner({
@@ -345,7 +347,9 @@ export function AssessmentRunner({
   onAnswerChange,
   onSubmit,
   className,
+  headingLevel = 1,
 }: AssessmentRunnerProps) {
+  const Heading = headingLevel === 2 ? 'h2' : 'h1';
   const titleId = useId();
   const questionsById = useMemo(() => new Map(questions.map((question) => [question.id, question])), [questions]);
   const availableFigures = useMemo(() => figureRecord(figures), [figures]);
@@ -379,7 +383,7 @@ export function AssessmentRunner({
       <header className="dp-assessment-runner__header">
         <div>
           <p className="dp-learning-eyebrow">{assessment.mode.replace('-', ' ').toUpperCase()}</p>
-          <h1 id={titleId}>{resolveLearningText(assessment.title, locale)}</h1>
+          <Heading id={titleId}>{resolveLearningText(assessment.title, locale)}</Heading>
         </div>
         <Badge appearance="outline">{assessment.questionIds.length} questions</Badge>
       </header>
@@ -404,6 +408,7 @@ export function AssessmentRunner({
                 figure={availableFigures[question.figureId]}
                 locale={locale}
                 reducedMotion={reducedMotion}
+                presentationSize={availableFigures[question.figureId].rendererId === 'table.join' ? 'regular' : 'compact'}
                 minimumHeight="12rem"
               />
             ) : null}

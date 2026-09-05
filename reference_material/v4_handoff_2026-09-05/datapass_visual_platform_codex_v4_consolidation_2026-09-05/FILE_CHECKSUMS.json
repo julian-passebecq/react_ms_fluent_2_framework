@@ -1,0 +1,132 @@
+[
+  {
+    "path": "CODEX_COPY_PASTE_PROMPT.txt",
+    "bytes": 1865,
+    "sha256": "f04574d06222111d66c425d5b249b4037cc898c596783ab586566169d956a74c"
+  },
+  {
+    "path": "CODEX_MASTER_PROMPT.md",
+    "bytes": 4912,
+    "sha256": "03d706c191dcaf1a35fdcd9ef2e05d54d26d72ffeab130f415444d8ac7b622a8"
+  },
+  {
+    "path": "MANIFEST.json",
+    "bytes": 512,
+    "sha256": "b41eba0b198023b6fbb9322c1a4b17e7e459889c7c3790c8135d89ec6cbc5845"
+  },
+  {
+    "path": "README.md",
+    "bytes": 1077,
+    "sha256": "7024025870fcc52d703d9784acb6b408856ea0ee02eb77f2024daaa1cec27566"
+  },
+  {
+    "path": "START_HERE.md",
+    "bytes": 1193,
+    "sha256": "d3250983d754ac9f6778e9de050f0b1a4de0dd5567c6e1141c6570760d972802"
+  },
+  {
+    "path": "V3_AUDIT_SNAPSHOT.md",
+    "bytes": 2638,
+    "sha256": "46ec0f17bb250c468cdd57664b66a106a511b943ecad8f2ce35d3ffe3a32384e"
+  },
+  {
+    "path": "V4_CONCEPTMOTION_REFINEMENT.md",
+    "bytes": 1549,
+    "sha256": "3ae4700f6cc7b7749223cf1817dccddc87fa8bffe40f641b5e06efbd6c10a330"
+  },
+  {
+    "path": "V4_CONSUMER_POLISH.md",
+    "bytes": 3129,
+    "sha256": "65388ba1d0bd24932bd78ce5c7db3c7775344e86cc265affdbee7c46972cc31b"
+  },
+  {
+    "path": "V4_DEVELOPER_EXPERIENCE.md",
+    "bytes": 2222,
+    "sha256": "5fa3b8d71b5dc4bb5d51359264da6bc9b4d1a0274cf3cc67ee8a51d88773c5a6"
+  },
+  {
+    "path": "V4_FACTORISATION.md",
+    "bytes": 1700,
+    "sha256": "49ee590d02ec470d48af699436d13f91ee62e412a82d9bc4644da55eb60b290b"
+  },
+  {
+    "path": "V4_QA_ACCEPTANCE.md",
+    "bytes": 1884,
+    "sha256": "e8c08e731cbb42ad676740e4ac02129c08adebf3bcd0b12d9ee033bc09eca691"
+  },
+  {
+    "path": "V4_SCOPE_AND_PRIORITIES.md",
+    "bytes": 3884,
+    "sha256": "d5e7cef0126daa5693c157d390f2f28a326ba536dc03695bd62367f982740f05"
+  },
+  {
+    "path": "V4_VISUAL_SYSTEM.md",
+    "bytes": 2166,
+    "sha256": "309f6ac11d0ed1414546fc5828bb91c7bfd580b9beeb181c9b39a2a2032f9b33"
+  },
+  {
+    "path": "V5_DEFERRED.md",
+    "bytes": 743,
+    "sha256": "c9e0d787bf3fa18b3886030cf27c64e2b81e499b3d7015412a016bb64080b3f4"
+  },
+  {
+    "path": "data/consumer_metadata_policy.json",
+    "bytes": 526,
+    "sha256": "3b9ceb920830024029e41f142cc54020ac26635da4ef5515744b8c74d7f633f8"
+  },
+  {
+    "path": "data/figure_presentation_examples.json",
+    "bytes": 637,
+    "sha256": "fee1c31be48bdd39d755b05c8e0eb9e953840299b053a9eea1f329620565f0b5"
+  },
+  {
+    "path": "data/v4_acceptance.json",
+    "bytes": 814,
+    "sha256": "503c32470ec7c1d1edf29ef96f69ad7602dd09ee258a927b180af672d3d9231d"
+  },
+  {
+    "path": "references/current-v3/README.md",
+    "bytes": 406,
+    "sha256": "6d125f12df63b1eb66450a46fad4517eb6010e3bf88fc850aa4b26ab0c76a1e8"
+  },
+  {
+    "path": "references/current-v3/algorithm-atlas.png",
+    "bytes": 149970,
+    "sha256": "b8ab7286e4af4d351f8f57471d84d8241b46dbb054e786425d4e1540390766ab"
+  },
+  {
+    "path": "references/current-v3/architecture-atlas.png",
+    "bytes": 208661,
+    "sha256": "8e8b3e83e6beefb778fc03bf0cc6753f90a701f550d66b6324420161ab0883dd"
+  },
+  {
+    "path": "references/current-v3/code-interview.png",
+    "bytes": 104203,
+    "sha256": "dc94950b865f49eca929cff5979607308a418aa48cbb2f29b5a540d668705bf4"
+  },
+  {
+    "path": "references/current-v3/code-sandbox.png",
+    "bytes": 79164,
+    "sha256": "55c5b8b4173b388e87a320bc7cbbb489e1d071c7c34fe569d64eddb7e3c0c985"
+  },
+  {
+    "path": "references/current-v3/formation-catalog.png",
+    "bytes": 173892,
+    "sha256": "87531ef7598a07c29ec3b8a2758adec9f7969dd0e480cc70a1ed1d5ec0a62ba3"
+  },
+  {
+    "path": "references/current-v3/formation-thinking.png",
+    "bytes": 770189,
+    "sha256": "9847a4934d5bd1e988956fdd4ffe00a88be700489dfffd7ccb6f9264cbab54e2"
+  },
+  {
+    "path": "references/current-v3/pilot-galaxy.png",
+    "bytes": 124184,
+    "sha256": "32372150b29d0f7d7ee6bd9af4340ffc2dff25c45aeb7856a976a298b0bbf977"
+  },
+  {
+    "path": "references/current-v3/visual-sandbox.png",
+    "bytes": 197752,
+    "sha256": "c37f45ce68d260811190ff62115a44c54b719e2498e8bc41196d11799e6bd3c3"
+  }
+]

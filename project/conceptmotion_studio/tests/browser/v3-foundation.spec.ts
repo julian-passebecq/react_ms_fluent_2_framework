@@ -11,8 +11,8 @@ test.beforeEach(async({page})=>page.emulateMedia({reducedMotion:'reduce'}));
 test('Formation retains courses and adds shared reasoning figures, predictions and progress',async({page},info)=>{
   await page.goto('http://127.0.0.1:4175/#/catalog');
   await expect(page).toHaveTitle('Formation');
-  fs.mkdirSync('qa/screenshots',{recursive:true});
-  await page.screenshot({path:`qa/screenshots/v3-formation-catalog-${info.project.name}.png`,fullPage:true,animations:'disabled'});
+  fs.mkdirSync('qa/v4-screenshots',{recursive:true});
+  await page.screenshot({path:`qa/v4-screenshots/v4-formation-catalog-${info.project.name}.png`,fullPage:true,animations:'disabled'});
   const think=page.getByRole('button',{name:'Think in SQL',exact:true});
   await think.press('Enter');
   await expect(page.getByTestId('formation-reasoning')).toBeVisible();
@@ -27,8 +27,8 @@ test('Formation retains courses and adds shared reasoning figures, predictions a
   await expect(page.locator('.dp-assessment-result')).toContainText('100%');
   await page.getByRole('button',{name:'Mark complete',exact:true}).click();
   await audit(page);
-  fs.mkdirSync('qa/screenshots',{recursive:true});
-  await page.screenshot({path:`qa/screenshots/v3-formation-thinking-${info.project.name}.png`,fullPage:true,animations:'disabled'});
+  fs.mkdirSync('qa/v4-screenshots',{recursive:true});
+  await page.screenshot({path:`qa/v4-screenshots/v4-formation-thinking-${info.project.name}.png`,fullPage:true,animations:'disabled'});
   await page.reload();
   await expect(page.getByRole('button',{name:'Completed',exact:true})).toBeVisible();
   await page.goto('http://127.0.0.1:4175/#/lesson/lesson.formation.think-python-de');
@@ -57,7 +57,8 @@ test('Visual Sandbox edits real Figure contracts, retains valid preview on error
   await page.getByRole('link',{name:'Export SVG',exact:true}).click();
   expect((await download).suggestedFilename()).toMatch(/\.svg$/);
   await audit(page);
-  await page.screenshot({path:`qa/screenshots/v3-visual-sandbox-${info.project.name}.png`,fullPage:true,animations:'disabled'});
+  fs.mkdirSync('qa/v4-screenshots',{recursive:true});
+  await page.screenshot({path:`qa/v4-screenshots/v4-visual-sandbox-${info.project.name}.png`,fullPage:true,animations:'disabled'});
   await page.getByLabel('Figure example',{exact:true}).selectOption('sandbox-unsupported');
   await expect(page.getByText('Figure unavailable.',{exact:true})).toBeVisible();
   await page.getByRole('button',{name:'Apply valid spec'}).click();

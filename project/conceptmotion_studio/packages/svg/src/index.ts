@@ -6,6 +6,7 @@ export * from './freeze.js';
 export * from './layout.js';
 export * from './registry.js';
 export * from './scene.js';
+export * from './explanation.js';
 export * from './theme.js';
 export * from './types.js';
 

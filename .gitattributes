@@ -2,3 +2,4 @@
 project/conceptmotion_studio/content/practice/*.json text eol=lf
 # Keep the supplied handoff's checksum-verified bytes unchanged on every OS.
 reference_material/v3_handoff_2026-09-04/** -text
+reference_material/v4_handoff_2026-09-05/** -text

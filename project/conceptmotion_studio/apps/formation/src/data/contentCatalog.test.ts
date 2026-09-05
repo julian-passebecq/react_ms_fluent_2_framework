@@ -3,6 +3,8 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { serializeContentCatalog, validateContentCatalog } from '@datapass/content';
+import importedSqlNotebook from '../generated/sql-where.notebook.json';
+import { useDubreuProgress, useFormationProgress } from '../lib/useDubreuProgress';
 import {
   advancedSqlNotebook,
   dubreuContentCatalog,
@@ -14,6 +16,15 @@ import {
 } from './contentCatalog';
 
 describe('Dubreu Formation V2 reference content', () => {
+  it('changes only public introductory wording while preserving historical keys and source provenance', () => {
+    expect(sqlNotebook.id).toBe(importedSqlNotebook.id);
+    expect(sqlNotebook.provenance).toEqual(importedSqlNotebook.provenance);
+    expect(sqlNotebook.runtimeTargetIds).toEqual(importedSqlNotebook.runtimeTargetIds);
+    expect(sqlNotebook.cells[0]).toMatchObject({ id: importedSqlNotebook.cells[0].id, sourceCellId: importedSqlNotebook.cells[0].sourceCellId });
+    expect(sqlNotebook.cells[0]).toMatchObject({ markdown: expect.not.stringMatching(/Dubreu/i) });
+    expect(importedSqlNotebook.cells[0]).toMatchObject({ markdown: expect.stringMatching(/Dubreu/i) });
+    expect(useFormationProgress).toBe(useDubreuProgress);
+  });
   it('is a connected canonical content catalog with deterministic interchange', () => {
     expect(validateContentCatalog(dubreuContentCatalog)).toMatchObject({ valid: true, issues: [] });
     expect(serializeContentCatalog(dubreuContentCatalog)).toBe(serializeContentCatalog(dubreuContentCatalog));

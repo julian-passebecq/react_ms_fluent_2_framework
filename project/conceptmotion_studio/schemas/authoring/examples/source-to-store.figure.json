@@ -1,0 +1,14 @@
+{
+  "id": "figure.source-to-store",
+  "kind": "diagram",
+  "rendererId": "diagram.flow",
+  "title": "Source to store",
+  "takeaway": "Each stage preserves an explicit contract.",
+  "fallbackText": "Source sends a batch to Store.",
+  "profile": "professional",
+  "spec": {
+    "kind": "diagram", "version": "1", "id": "diagram.source-store", "title": "Source to store",
+    "nodes": [{ "id": "source", "label": "Source" }, { "id": "store", "label": "Store" }],
+    "edges": [{ "id": "load", "from": { "nodeId": "source" }, "to": { "nodeId": "store" }, "flowKind": "data-batch" }]
+  }
+}

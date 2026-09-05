@@ -1,0 +1,82 @@
+# V4 test and release report
+
+## Scope and environment
+
+Baseline: exact final V3 `36c01d404e0acfd0bf9b55417ad48b4e9285586c`, clean `main`, with successful hosted baseline [run 33924063684](https://github.com/julian-passebecq/react_ms_fluent_2_framework/actions/runs/33924063684). V4 testing took place on 5 September 2026 using Windows, Node 24.19.0, pnpm 11.19.0, TypeScript 7.0.2, Vite 8.2.2, Vitest 5.0.0 and Playwright 1.62.1/Chrome.
+
+Commands below run from `project/conceptmotion_studio`. Development used affected tests/builds/browser flows, not repeated full release gates. The finished-tree local release was started once and resumed after one test-location correction, as documented below; an uninterrupted local `pnpm run check` success is not claimed.
+
+## Finished-tree local release evidence
+
+| Stage | Observed result |
+| --- | --- |
+| `pnpm install --frozen-lockfile` | PASS; all 20 workspace projects synchronized. |
+| `pnpm run test:practice-import` | PASS; deterministic 323 items / 500 variants, unchanged pinned corpus. |
+| `pnpm run test:legacy` | PASS; catalog 186 entries / 12 categories; 36 scenes; 16 printable sheets / 15 actions; three generator seeds; current v4.0.0 handoff with 28 renderers / 21 docs; Python helper four frames. |
+| `pnpm run import:reference` | PASS; two deterministic notebooks; no cell execution. |
+| `pnpm run test:unit` | PASS; **328 tests in 55 files**, 24.62 s, plus all six pure-package coverage floors. |
+| `pnpm run test:dx` | PASS; authoring and Storybook TypeScript, four byte-stable schemas, **22 tests in one file**, 7.11 s. These tests also appear in the full unit count; do not add them again. |
+| `pnpm run check:boundaries` | PASS; 109 package source files, 12 package boundaries, 81 app files checked for direct Monaco imports. |
+| `pnpm run test:scaffold` | PASS; four presets, nine files each; deterministic generation and generated type/build/baseline tests. |
+| `pnpm run build` | PASS after the test-location correction; all TypeScript project references, Studio production build and existing lazy-bundle assertions. |
+| `pnpm run build:consumer` | PASS; Formation production build. |
+| `pnpm run build:v3` | PASS; Sandbox, Interview, Algorithm, Architecture and Pilot production builds; all six consumer bundle/privacy boundaries. |
+| `pnpm run build:legacy` | PASS; preserved JavaScript/D3 application. |
+| `pnpm run build:storybook` | PASS; 3,364 transformed modules, Vite 6.57 s; all **46 required IDs**, including all 38 historical stories and eight V4 compositions. |
+| `pnpm run test:privacy` | PASS; nine outputs, 316 text artifacts, 15 binary exclusions, zero prohibited source-repository URLs, including source-map scanning. |
+| `pnpm run test:browser` | PASS; **50/50 tests**, 25 desktop + 25 phone, **5.4 min**; all four original screenshot comparisons retained. |
+
+The initial `pnpm run check` passed every offline gate, then stopped at TypeScript: the new CSS-token parity test imported `node:fs` inside the browser-oriented UI project. It exited 1 after **72.874 s**. The parity assertion was moved unchanged into the existing Node tooling-test layer (`scripts/check-ui-presentation.test.mjs`); no runtime code, coverage floor or application type boundary was loosened. The affected command `pnpm exec vitest run packages/ui/tests/presentation.test.tsx scripts/check-ui-presentation.test.mjs` passed **four tests in two files, 5.77 s**. This moves one test between files: the final tree has the same 328 tests in 56 files.
+
+The remaining release stages were resumed in their original order:
+
+```text
+pnpm run build && pnpm run build:consumer && pnpm run build:v3 &&
+pnpm run build:legacy && pnpm run build:storybook &&
+pnpm run test:privacy && pnpm run test:browser
+```
+
+The continuation completed with **exit 0 in 369.161 s**. All required local release stages therefore passed, with the single test-location correction explicitly accounted for. Local diagnostic logs are `qa/v4-release-gate.log` and `qa/v4-release-continuation.log` (ignored generated logs, not source artifacts). CI runs the full final test placement from a clean checkout.
+
+## Pure-package coverage
+
+Coverage remains based on aggregated V8 covered/total counters for each pure package, not an average of file percentages or an aggregate inflated with UI rendering. Every original package-specific statement/branch/function/line floor is unchanged. Missing or empty runtime packages fail. Machine-readable counters and the HTML report are emitted under `coverage/` and uploaded by CI.
+
+| Package | Statements | Branches | Functions | Lines |
+| --- | ---: | ---: | ---: | ---: |
+| core | 83.87% | 78.46% | 94.04% | 88.39% |
+| knowledge | 82.63% | 74.80% | 95.83% | 91.78% |
+| content | 86.01% | 80.94% | 96.58% | 91.84% |
+| notebook-import | 89.95% | 81.54% | 95.38% | 93.36% |
+| progress | 80.70% | 75.18% | 96.25% | 91.13% |
+| scaffold | 100.00% | 89.65% | 100.00% | 100.00% |
+
+Aggregate counters: 2,736/3,216 statements, 2,388/3,029 branches, 562/589 functions, 2,315/2,549 lines. New pure `explanation.ts` reaches 100% statements/functions/lines and 98.43% branches. These figures do not certify untested UI behavior or full schema/runtime equivalence.
+
+## Focused development regressions
+
+Final affected UI/Figure/Visual Sandbox checks passed **27 tests in five files (12.26 s)** before release; the later test-location-only recheck is recorded above. Four V4 presentation browser cases passed at desktop/phone widths (33.6 s), covering all sizes, stable/exported semantic content, metadata/attribution, native panning/keyboard use and valid-pending/invalid/applied authoring states.
+
+The visual partition passed **79 tests in nine files (10.09 s)**, its affected TypeScript/builds, and ten Atlas browser cases (48.2 s). Eleven existing scenes retain thirty-four semantic frames and thirty-seven code lines. Tests check algorithm outcomes, row grain/cardinality, retry identity, semantic code/entity/state references, deterministic viewports/exports, graph icon fallbacks, node-text containment and canonical Galaxy category/status/selection counts.
+
+The practice partition passed **32 tests in six files (10.42 s)**, three affected consumer type/build checks and fourteen browser cases (2.1 min). A reproduced Formation attempt-remount failure was fixed with a red/green component regression. Final targeted follow-ups passed two Sandbox native-panning cases (38.9 s) and two compact Interview prelude/reasoning cases (13.1 s). Existing draft/progress keys, grading, backup/import/export and no-execution controls remain checked.
+
+These targeted counts overlap the full matrix and are not additional unique tests. They record development evidence rather than imply multiple full release runs.
+
+## Storybook and visual evidence
+
+All eight new built-Storybook compositions received an isolated inline Node/Playwright smoke at 1440px and 390px: **16/16 cases passed**, no page overflow, no serious/critical Axe findings, no renderer/page errors. After final shared font/viewport refinements, the six affected Challenge/Architecture/Galaxy cases were refreshed and passed again. This is targeted manual browser evidence, not a newly checked-in release gate or complete historical Storybook accessibility certification.
+
+Checked-in automated DX coverage validates task/settings/snippet parsing and targets, four schema defaults and negatives, thirty Figure envelopes, runtime-only limits, app Monaco prohibitions, eight production story mappings and the 46-ID gallery guard. Details and precise manual-smoke qualifications are in `qa/v4-dx-notes.md` and [V4_DX_REPORT.md](V4_DX_REPORT.md).
+
+V4 captures are under `qa/v4-screenshots`; historical screenshots and handoff references are retained. The four existing Foundation screenshot comparisons keep their original 0.01 pixel-ratio threshold and Linux baselines. No screenshot gate, strict one-pixel page-overflow assertion, reduced-motion path or serious/critical Axe check was disabled. Intentionally updated V2/V3 consumer assertions follow reviewed public wording/metadata/presentation changes, not weaker functionality; [V4_VISUAL_REVIEW.md](V4_VISUAL_REVIEW.md) documents the comparison and limits.
+
+The preserved Foundation/Pilot smoke scripts also regenerate old evidence filenames (not assertion baselines). Four such generated images were restored to their pre-run tracked bytes after the suite; current Knowledge captures were retained under V4 names and current Galaxy captures already exist in the V4 gallery. No historical screenshot or Foundation assertion-baseline change is included in the release. All 26 attached handoff byte-count/SHA-256 records were rechecked successfully before commit.
+
+## Hosted verification and release identity
+
+The [Datapass visual platform CI workflow](https://github.com/julian-passebecq/react_ms_fluent_2_framework/actions/workflows/ci.yml) retains all old stages and adds explicit DX/schema verification. It uses a frozen install and clean Ubuntu checkout, keeps visual regression enabled, and uploads `v4-quality-evidence` with coverage, screenshots and bundle reports. The successful V3 baseline run above is **not** evidence for V4.
+
+This report is committed with the implementation, before that commit can trigger hosted CI. The exact final commit SHA, its matching Actions run URL and observed conclusion are supplied in the final delivery message after push/verification; they are not guessed here or recursively embedded by creating another report-only release commit. Completion requires that final run to conclude success.
+
+Known limits remain explicit: schemas are structural assistance, workflow explanation tracks currently align to the first declared run, dense graphs use panning/text alternatives/inspectors on phones, and browser tests are Chrome desktop/390px layouts rather than a cross-browser certification. No site deployment, backend, Spark/Jupyter execution, auth or cloud integration is claimed.

@@ -1,0 +1,31 @@
+{
+  "Datapass Figure envelope": {
+    "scope": "json,jsonc",
+    "prefix": "dp-figure",
+    "description": "Renderer-neutral Figure envelope. Save as *.figure.json; validate renderer semantics separately.",
+    "body": [
+      "{",
+      "  \"id\": \"figure.${1:source-to-store}\",",
+      "  \"kind\": \"diagram\",",
+      "  \"rendererId\": \"diagram.flow\",",
+      "  \"title\": \"${2:Source to store}\",",
+      "  \"takeaway\": \"Preserve the data contract across each stage.\",",
+      "  \"fallbackText\": \"Source sends a batch to Store.\",",
+      "  \"profile\": \"professional\",",
+      "  \"spec\": { \"kind\": \"diagram\", \"version\": \"1\", \"id\": \"diagram.source-store\", \"title\": \"Source to store\", \"nodes\": [{ \"id\": \"source\", \"label\": \"Source\" }, { \"id\": \"store\", \"label\": \"Store\" }], \"edges\": [{ \"id\": \"load\", \"from\": { \"nodeId\": \"source\" }, \"to\": { \"nodeId\": \"store\" }, \"flowKind\": \"data-batch\" }] }",
+      "}"
+    ]
+  },
+  "Datapass Diagram": {
+    "scope": "json,jsonc", "prefix": "dp-diagram", "description": "Stable IDs plus shared deterministic layout. Save as *.diagram.json.",
+    "body": ["{", "  \"kind\": \"diagram\", \"version\": \"1\", \"id\": \"diagram.${1:hub}\",", "  \"title\": \"${2:Shared project hub}\",", "  \"layout\": { \"provider\": \"radial\", \"hubId\": \"hub\" },", "  \"nodes\": [{ \"id\": \"hub\", \"label\": \"Project hub\", \"iconId\": \"project.framework\" }, { \"id\": \"project\", \"label\": \"Project\" }],", "  \"edges\": [{ \"id\": \"hub-project\", \"from\": { \"nodeId\": \"hub\" }, \"to\": { \"nodeId\": \"project\" }, \"flowKind\": \"dependency\" }]", "}"]
+  },
+  "Datapass AppRecipe": {
+    "scope": "json,jsonc", "prefix": "dp-app-recipe", "description": "AppRecipe metadata, not executable scaffold CLI options. Save as *.app-recipe.json.",
+    "body": ["{", "  \"id\": \"recipe.${1:my-catalog}\",", "  \"name\": \"${1:my-catalog}\",", "  \"packageName\": \"@datapass/${1:my-catalog}\",", "  \"title\": \"${2:My catalog}\",", "  \"preset\": \"catalog\", \"routes\": [\"/\", \"/catalog\"], \"locales\": [\"en\"], \"includeEditor\": false", "}"]
+  },
+  "Datapass authored challenge": {
+    "scope": "json,jsonc", "prefix": "dp-challenge", "description": "Authored non-executing practice subset. Save as *.challenge.json.",
+    "body": ["{", "  \"id\": \"challenge.${1:filter-active}\", \"title\": \"${2:Filter active rows}\",", "  \"domain\": \"SQL\", \"difficulty\": \"Easy\", \"tags\": [\"filter\"],", "  \"summary\": \"Keep only active rows.\", \"schema\": \"events(id, active)\", \"input\": \"(1, true), (2, false)\",", "  \"example\": \"Keep row 1.\", \"expectedOutput\": \"1\", \"hints\": [\"Use a predicate.\"], \"execution\": \"none\",", "  \"variants\": [{ \"id\": \"sql\", \"language\": \"sql\", \"label\": \"SQL\", \"monacoLanguage\": \"sql\", \"starter\": \"SELECT id FROM events;\", \"solution\": \"SELECT id FROM events WHERE active = TRUE;\" }]", "}"]
+  }
+}

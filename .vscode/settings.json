@@ -1,0 +1,19 @@
+{
+  "npm.packageManager": "pnpm",
+  "editor.tabSize": 2,
+  "files.eol": "\n",
+  "json.schemas": [
+    { "fileMatch": ["**/*.figure.json"], "url": "./project/conceptmotion_studio/schemas/authoring/figure.schema.json" },
+    { "fileMatch": ["**/*.diagram.json"], "url": "./project/conceptmotion_studio/schemas/authoring/diagram.schema.json" },
+    { "fileMatch": ["**/*.app-recipe.json"], "url": "./project/conceptmotion_studio/schemas/authoring/app-recipe.schema.json" },
+    { "fileMatch": ["**/*.challenge.json"], "url": "./project/conceptmotion_studio/schemas/authoring/challenge.schema.json" }
+  ],
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist*": true,
+    "**/coverage": true,
+    "**/test-results": true,
+    "**/playwright-report": true,
+    "**/storybook-static": true
+  }
+}

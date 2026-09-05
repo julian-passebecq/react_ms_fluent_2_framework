@@ -9,6 +9,7 @@ import { createSemanticSnapshot, type EntitySnapshot, type SemanticSnapshot } fr
 import { isFlowKind, type FlowKind } from './flow';
 import { isLocalizedText, type LocalizedText } from './localization';
 import { planTransitions, type TransitionPlan } from './transitions';
+import type { ExplanationTrack } from './explanation';
 import {
   createValidationResult,
   formatValidationIssues,
@@ -103,6 +104,7 @@ export interface WorkflowOverlay {
 }
 
 export interface WorkflowSpec {
+  readonly explanation?: ExplanationTrack;
   readonly kind: 'workflow';
   readonly version: string;
   readonly id: string;
