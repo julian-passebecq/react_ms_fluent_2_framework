@@ -107,6 +107,7 @@ jobs:
             project/conceptmotion_studio/qa/screenshots
             project/conceptmotion_studio/qa/v4-screenshots
             project/conceptmotion_studio/qa/v4-visual-explanations
+            project/conceptmotion_studio/qa/v4-data-platform
             project/conceptmotion_studio/qa/*bundle*.json
             project/conceptmotion_studio/qa/v4-external-consumer.json
           if-no-files-found: ignore

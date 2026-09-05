@@ -117,6 +117,11 @@ try {
         for (const entry of readdirSync(directory, { withFileTypes: true })) {
           const source = path.join(directory, entry.name);
           if (entry.isDirectory()) copyEvidence(source);
+          else if (/^data-platform-.+-(desktop|phone)\.png$/.test(entry.name)) {
+            const target = path.join(workspace, 'qa/v4-data-platform');
+            mkdirSync(target, { recursive: true });
+            cpSync(source, path.join(target, entry.name));
+          }
           else if (/^(sql-|algorithm-|de-|external-).+-(desktop|phone)\.png$/.test(entry.name)) cpSync(source, path.join(screenshots, entry.name));
         }
       }

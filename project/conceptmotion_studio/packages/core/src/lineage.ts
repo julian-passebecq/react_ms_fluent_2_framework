@@ -37,6 +37,9 @@ export interface LineageAsset {
   readonly source?: Readonly<Record<string, unknown>>;
   readonly target?: Readonly<Record<string, unknown>>;
   readonly metadata?: Readonly<Record<string, unknown>>;
+  /** Optional teaching semantics; facts require an explicit business grain. */
+  readonly model?: { readonly kind: 'fact'; readonly grain: LocalizedText }
+    | { readonly kind: 'dimension'; readonly grain?: LocalizedText };
 }
 
 export interface LineageEndpoint {
@@ -58,6 +61,11 @@ export interface LineageRelation {
   readonly changeType?: LineageChangeType;
   readonly sourceSpan?: SourceSpan;
   readonly metadata?: Readonly<Record<string, unknown>>;
+  /** A model relationship, not a derivation: source FK -> target dimension PK. */
+  readonly relationship?: {
+    readonly cardinality: 'many-to-one';
+    readonly filterDirection: 'dimension-to-fact' | 'both' | 'none';
+  };
 }
 
 export interface LineageSpec {
@@ -68,6 +76,10 @@ export interface LineageSpec {
   readonly description?: LocalizedText;
   readonly assets: readonly LineageAsset[];
   readonly relations: readonly LineageRelation[];
+  /** Omitted preserves historical permissiveness. Checks exact derivation endpoints. */
+  readonly cyclePolicy?: 'allow' | 'reject';
+  /** Opt-in shared semantic layout; presentation dimensions remain renderer-owned. */
+  readonly layout?: { readonly provider: 'layered'; readonly direction?: 'lr' | 'tb' };
 }
 
 interface IndexedRecord {
@@ -134,6 +146,13 @@ export function validateLineageSpec(input: unknown): ValidationResult {
     return createValidationResult([validationError('lineage.object.required', '$', 'LineageSpec must be an object.')]);
   }
   const spec = input;
+  if (spec.cyclePolicy !== undefined && !['allow', 'reject'].includes(spec.cyclePolicy as string)) {
+    issues.push(validationError('lineage.cyclePolicy.invalid', 'cyclePolicy', 'Cycle policy must be allow or reject.'));
+  }
+  if (spec.layout !== undefined && (!isRecord(spec.layout) || spec.layout.provider !== 'layered'
+    || (spec.layout.direction !== undefined && !['lr', 'tb'].includes(spec.layout.direction as string)))) {
+    issues.push(validationError('lineage.layout.invalid', 'layout', 'Use the layered layout with lr or tb direction.'));
+  }
   if (spec.kind !== 'lineage') issues.push(validationError('lineage.kind', 'kind', 'Lineage kind must be "lineage".'));
   if (typeof spec.version !== 'string' || !spec.version.trim()) issues.push(validationError('lineage.version.required', 'version', 'Lineage version is required.'));
   if (typeof spec.id !== 'string' || !spec.id.trim()) issues.push(validationError('lineage.id.required', 'id', 'Lineage id is required.'));
@@ -152,6 +171,14 @@ export function validateLineageSpec(input: unknown): ValidationResult {
   ));
   const columnIdsByAsset = new Map<string, Set<string>>();
   assetRecords.forEach(({ value: asset, index: assetIndex }) => {
+    if (asset.model !== undefined) {
+      const model = asset.model;
+      if (!isRecord(model) || !['fact', 'dimension'].includes(model.kind as string)) {
+        issues.push(validationError('lineage.model.kind.invalid', `assets[${assetIndex}].model`, 'Model kind must be fact or dimension.'));
+      } else if ((model.kind === 'fact' || model.grain !== undefined) && !isLocalizedText(model.grain)) {
+        issues.push(validationError('lineage.model.grain.required', `assets[${assetIndex}].model.grain`, 'A fact requires a non-empty localized grain.'));
+      }
+    }
     if (!isLocalizedText(asset.label)) issues.push(validationError('lineage.asset.label.invalid', `assets[${assetIndex}].label`, 'Asset label must be localized text.'));
     if (asset.source !== undefined && !isRecord(asset.source)) {
       issues.push(validationError('lineage.asset.source.invalid', `assets[${assetIndex}].source`, 'Asset source metadata must be an object.'));
@@ -202,6 +229,27 @@ export function validateLineageSpec(input: unknown): ValidationResult {
     }
     (Array.isArray(relation.sources) ? relation.sources : []).forEach((endpoint, sourceIndex) => validateEndpoint(endpoint, `relations[${relationIndex}].sources[${sourceIndex}]`));
     validateEndpoint(relation.target, `relations[${relationIndex}].target`);
+    if (relation.relationship !== undefined) {
+      const relationship = relation.relationship;
+      const relationshipPath = `relations[${relationIndex}].relationship`;
+      if (!isRecord(relationship) || relationship.cardinality !== 'many-to-one'
+        || !['dimension-to-fact', 'both', 'none'].includes(relationship.filterDirection as string)) {
+        issues.push(validationError('lineage.relationship.invalid', relationshipPath, 'Declare many-to-one and dimension-to-fact, both or none filtering.'));
+      }
+      const matches = (endpoint: unknown, kind: string, role: string): boolean => {
+        if (!isRecord(endpoint) || typeof endpoint.assetId !== 'string' || typeof endpoint.columnId !== 'string') return false;
+        const asset = assetById.get(endpoint.assetId);
+        return Boolean(asset && isRecord(asset.model) && asset.model.kind === kind
+          && Array.isArray(asset.columns) && asset.columns.some(column => isRecord(column) && column.id === endpoint.columnId && column.role === role));
+      };
+      if (!Array.isArray(relation.sources) || relation.sources.length !== 1
+        || !matches(relation.sources[0], 'fact', 'fk') || !matches(relation.target, 'dimension', 'pk')) {
+        issues.push(validationError('lineage.relationship.endpoints.invalid', relationshipPath, 'A model relationship requires one fact FK source and one dimension PK target.'));
+      }
+      if (['derivation', 'expression', 'changeType', 'statementType', 'sourceSpan'].some(key => relation[key] !== undefined)) {
+        issues.push(validationError('lineage.relationship.derivation.conflict', relationshipPath, 'Keep model relationships separate from data derivation metadata.'));
+      }
+    }
     if (relation.label !== undefined && !isLocalizedText(relation.label)) {
       issues.push(validationError('lineage.relation.label.invalid', `relations[${relationIndex}].label`, 'Relation label must be localized text.'));
     }
@@ -232,6 +280,34 @@ export function validateLineageSpec(input: unknown): ValidationResult {
       }
     }
   });
+  if (spec.cyclePolicy === 'reject' && issues.length === 0) {
+    // Model filter directions are not data derivations. Exact endpoint identities
+    // allow a -> b within one asset without inventing an asset-level self-cycle.
+    const outgoing = new Map<string, Set<string>>();
+    const incoming = new Map<string, number>();
+    for (const { value } of relationRecords) {
+      const relation = value as unknown as LineageRelation;
+      if (relation.relationship) continue;
+      const target = getLineagePortId(relation.target);
+      if (!incoming.has(target)) incoming.set(target, 0);
+      for (const endpoint of relation.sources) {
+        const source = getLineagePortId(endpoint);
+        if (!incoming.has(source)) incoming.set(source, 0);
+        const targets = outgoing.get(source) ?? new Set<string>();
+        if (!targets.has(target)) incoming.set(target, incoming.get(target)! + 1);
+        targets.add(target);
+        outgoing.set(source, targets);
+      }
+    }
+    const queue = [...incoming].filter(([, degree]) => degree === 0).map(([id]) => id);
+    for (let index = 0; index < queue.length; index++) {
+      for (const target of outgoing.get(queue[index]) ?? []) {
+        incoming.set(target, incoming.get(target)! - 1);
+        if (incoming.get(target) === 0) queue.push(target);
+      }
+    }
+    if (queue.length !== incoming.size) issues.push(validationError('lineage.relation.cycle', 'relations', 'Derivation endpoints must form an acyclic graph when cyclePolicy is reject.'));
+  }
   return createValidationResult(issues);
 }
 

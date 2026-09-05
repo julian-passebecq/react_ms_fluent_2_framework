@@ -4,6 +4,15 @@ import { fileURLToPath } from 'node:url';
 
 // Preserve all 38 V3 story IDs plus the eight approved V4 compositions.
 export const REQUIRED_STORIES = [
+  'v4-data-platform--star-schema',
+  'v4-data-platform--column-lineage',
+  'v4-data-platform--kpi-lineage',
+  'v4-data-platform--medallion-lineage',
+  'v4-data-platform--backfill-run',
+  'v4-data-platform--workflow-topology',
+  'v4-data-platform--provider-responsibilities',
+  'v4-data-platform--sales-lesson',
+  'v4-data-platform--topology-and-run',
   "v4-visual-explanations--pair-by-pair-join",
   "v4-visual-explanations--left-join-null",
   "v4-visual-explanations--cardinality",
@@ -70,7 +79,7 @@ export function checkStorybookIndex(index) {
   const actual = new Set(entries.map((entry) => entry.id));
   const missing = REQUIRED_STORIES.filter((id) => !actual.has(id));
   if (missing.length) throw new Error(`Storybook is missing required production compositions: ${missing.join(', ')}`);
-  return { storyCount: entries.length, preservedV3: 38, approvedV4: 8, visualExplanations: 14 };
+  return { storyCount: entries.length, preservedV3: 38, approvedV4: 8, visualExplanations: 14, dataPlatform: 9 };
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

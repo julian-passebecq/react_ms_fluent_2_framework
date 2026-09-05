@@ -30,3 +30,12 @@ import { visualExplanationFigures } from '@datapass/canonical/explanations';
 import { resolveSvgScene, resolveSceneExplanation, type SvgSceneSpec } from '@conceptmotion/svg';
 import { compileWorkflowRunFrame, type WorkflowSpec } from '@conceptmotion/core';
 import { figureStepCount } from '@datapass/figure';
+import { dataPlatformFigures } from '@datapass/canonical/data-platform';
+import { validateLineageSpec, validateDiagramSpec, validateWorkflowSpec } from '@conceptmotion/core';
+for (const figure of dataPlatformFigures) {
+  assert.equal(validateFigureSpec(figure).valid, true, figure.id);
+  const spec = figure.spec as unknown as SvgSceneSpec | WorkflowSpec;
+  const result = spec.kind === 'lineage' ? validateLineageSpec(spec) : spec.kind === 'diagram' ? validateDiagramSpec(spec) : validateWorkflowSpec(spec);
+  assert.equal(result.valid, true, `${figure.id}: ${JSON.stringify(result.issues)}`);
+}
+console.log('All 12 data-platform Figures passed production envelope and payload validators.');

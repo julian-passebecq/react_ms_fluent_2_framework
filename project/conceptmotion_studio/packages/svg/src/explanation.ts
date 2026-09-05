@@ -56,6 +56,10 @@ export function renderExplanationPanel(surface: SvgSurface, explanation: Resolve
 
 /** Content-derived, opt-in geometry; direct legacy renderers retain their defaults. */
 export function recommendedSceneViewport(spec: SvgSceneSpec | WorkflowSpec, size: 'compact' | 'regular' | 'expanded'): RendererViewport {
+  if (spec.kind === 'lineage' && spec.layout) {
+    const geometry = lineageGeometry(spec);
+    return { width: geometry.width, height: Math.max(280, geometry.height + 80) };
+  }
   if (spec.kind === 'diagram' && spec.layout?.provider) {
     // A wide layered flow should not inherit the square canvas of a galaxy.
     // Semantic frames change emphasis, not node bounds, so playback stays still.
@@ -85,3 +89,4 @@ export function recommendedSceneViewport(spec: SvgSceneSpec | WorkflowSpec, size
 import { compileCollectionFrame } from '@conceptmotion/core';
 import { collectionGeometry } from './renderers/collection.js';
 import { workflowGeometry } from './renderers/workflow.js';
+import { lineageGeometry } from './renderers/lineage.js';

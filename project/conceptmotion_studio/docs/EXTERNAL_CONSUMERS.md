@@ -51,10 +51,12 @@ Verification checks the exact Git HEAD, every selected blob hash, missing files,
 | --- | --- |
 | `@datapass/canonical/practice` | `practiceCatalog`, `practiceItems`, `practiceItemById` — same 323 items / 500 variants, sanitized public projection |
 | `@datapass/canonical/visuals` | `migratedVisuals`, `migratedFigures`, `visualById`, `figureForPracticeId`, `visualSources`, `refinedVisualIds`, `VisualMigration` type — same 30 Figures |
+| `@datapass/canonical/explanations` | `visualExplanationFigures`, `visualExplanationFigure` — 17 approved semantic teaching examples |
+| `@datapass/canonical/data-platform` | `dataPlatformFigures`, `dataPlatformFigure`, typed star/column/KPI/medallion specs, `lakehouseArchitecture`, `backfillWorkflow` and `backfillTopology` — 12 approved Figures using existing renderer families |
 | `@datapass/canonical/visual-availability` | `visualPracticeIds`, `hasPracticeVisual` — lightweight 18-ID metadata without compiled scene imports |
 | `@datapass/canonical/projects` | `projectRegistry`, version/review date, validation issues and entry notes — same ten public projects |
 
-Treat exported canonical records as read-only. Author local additions separately. Public entrypoints do not expose historical raw practice catalogs/source snapshots or private project overlays. Keep the shipped practice notices/license and visible attribution appropriate to the material used. No ProjectRegistry → Galaxy mapper or domain API extension is added.
+Treat exported canonical records as read-only. Author local additions separately. Public entrypoints do not expose historical raw practice catalogs/source snapshots or private project overlays. Keep the shipped practice notices/license and visible attribution appropriate to the material used. No ProjectRegistry → Galaxy mapper is supplied. The [data-platform guide](../../../V4_DATA_PLATFORM_AUTHORING_GUIDE.md) provides compact typed examples and invalid cases for the existing lineage, Diagram and Workflow validators.
 
 ## Release contract and proof
 

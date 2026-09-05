@@ -59,7 +59,7 @@ export function makeSelectable(
     tabindex: options.onSelect ? 0 : undefined,
     role: options.onSelect ? 'button' : 'group',
     'aria-label': label,
-    'aria-pressed': options.onSelect ? options.selectedId === id : undefined,
+    'aria-pressed': options.onSelect ? String(options.selectedId === id) : undefined,
     'data-selected': options.selectedId === id ? 'true' : undefined,
   });
   element.onclick = options.onSelect ? () => options.onSelect?.(id) : null;

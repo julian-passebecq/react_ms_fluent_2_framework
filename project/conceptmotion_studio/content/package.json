@@ -5,6 +5,7 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
+    "./data-platform": "./data-platform/index.ts",
     "./practice": "./practice/index.ts",
     "./visuals": "./visuals/index.ts",
     "./explanations": "./visuals/explanation-examples.ts",

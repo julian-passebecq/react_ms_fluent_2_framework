@@ -4,6 +4,8 @@ Open the repository root in VS Code to load `.vscode` settings, tasks and snippe
 
 ## Start small
 
+For star schemas, SQL/column/KPI lineage, medallion architecture and DAG/run behavior, start with the [data-platform authoring guide](../../../V4_DATA_PLATFORM_AUTHORING_GUIDE.md), `@datapass/canonical/data-platform`, and Storybook's [sales lesson](http://localhost:6006/?path=/story/v4-data-platform--sales-lesson). These reuse the production lineage, Diagram and Workflow contracts.
+
 - Affected tests: `pnpm exec vitest run packages/content` (substitute the affected path).
 - Storybook: `pnpm storybook`, then open [approved compositions](http://localhost:6006/?path=/story/v4-approved-compositions--compact-figure).
 - One browser flow: `pnpm test:browser tests/browser/v3-pilot.spec.ts`.
