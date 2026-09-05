@@ -35,7 +35,7 @@ describe('shared practice workbench and backup', () => {
     expect([...host.querySelectorAll('button')].some(control => /^(run|execute)$/i.test(control.textContent ?? ''))).toBe(false);
     await click('Hints'); expect(host.textContent).not.toContain('Use WHERE');
     await click('Reveal next hint'); expect(host.textContent).toContain('Use WHERE');
-    await click('Visualize'); expect(host.textContent).toContain('No semantic figure is attached');
+    await click('Visualize'); expect(host.textContent).toContain('This exercise has no visual walkthrough yet');
     await click('Compare'); expect(host.querySelector('[data-diff]')?.textContent).toContain('WHERE active');
     await click('Notes'); expect(host.textContent).toContain('Your reasoning notes');
   });

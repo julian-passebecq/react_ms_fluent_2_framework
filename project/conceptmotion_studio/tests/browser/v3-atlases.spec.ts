@@ -57,8 +57,8 @@ test('Architecture Atlas stage → provider lens → radial / shared workflow an
   await expect(page.getByRole('heading', { name: 'Stage Lens · Store' })).toBeVisible();
   const download = page.waitForEvent('download'); await page.getByRole('link', { name: 'Export SVG' }).click(); expect((await download).suggestedFilename()).toContain('architecture-medallion-fabric-radial');
   await audit(page, info, 'v3-architecture-radial');
-  await page.getByLabel('Semantic view').selectOption('workflow'); await expect(page.locator('[data-figure-renderer="workflow.run"] svg[data-conceptmotion]')).toBeVisible();
-  await page.getByLabel('Semantic view').selectOption('lineage'); await expect(page.locator('[data-figure-renderer="lineage.model"] svg[data-conceptmotion]')).toBeVisible();
+  await page.getByLabel('View', { exact: true }).selectOption('workflow'); await expect(page.locator('[data-figure-renderer="workflow.run"] svg[data-conceptmotion]')).toBeVisible();
+  await page.getByLabel('View', { exact: true }).selectOption('lineage'); await expect(page.locator('[data-figure-renderer="lineage.model"] svg[data-conceptmotion]')).toBeVisible();
   await expect(page.getByText('SVG export unavailable for this renderer')).toHaveCount(0);
   await audit(page, info, 'v3-architecture-lineage'); expect(errors).toEqual([]);
 });

@@ -56,6 +56,7 @@ test('V4 eleven scenes synchronize operation, entity and state without clipped f
       const box = await svg.evaluate(element => { const svg = element as SVGSVGElement; const bounds = svg.getBBox(); return { bottom: bounds.y + bounds.height, right: bounds.x + bounds.width, height: svg.viewBox.baseVal.height, width: svg.viewBox.baseVal.width }; });
       expect(box.bottom, `${id} step ${seen.length} bottom`).toBeLessThanOrEqual(box.height + 1);
       expect(box.right, `${id} step ${seen.length} right`).toBeLessThanOrEqual(box.width + 1);
+      if (id.startsWith('algorithm-')) expect(box.height - box.bottom, `${id} compact bottom gutter`).toBeLessThanOrEqual(24);
       await expect(svg).toHaveAttribute('viewBox', viewport!);
       const next = figure.getByRole('button', { name: 'Next', exact: true });
       if (!(await next.isEnabled())) break;
@@ -85,6 +86,16 @@ test('V4 Architecture uses semantic icons and keyboard stage paths in both layou
   await expect(svg.locator('[data-node-id="process"] [data-role="label"]')).toContainText('Fabric Spark');
   await assertNodeTextFits(page);
   await expect(page.locator('.architecture-source .dp-content-details')).not.toHaveAttribute('open');
+  if (info.project.name.includes('phone')) {
+    const canvas = page.getByRole('region', { name: 'Scrollable figure canvas', exact: true });
+    const hint = page.locator('.dp-figure-player__pan-hint');
+    await expect(hint).toBeVisible();
+    await expect(canvas).toHaveAccessibleDescription('Swipe or scroll sideways to explore the full figure. Keyboard: focus the canvas, then use Left/Right arrows.');
+    await canvas.focus();
+    await page.keyboard.press('ArrowRight');
+    await expect.poll(() => canvas.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
+    await canvas.evaluate(element => { element.scrollLeft = 0; });
+  }
   await audit(page, info, 'v4-architecture-layered');
   await page.locator('.architecture-canvas').screenshot({ path: `qa/v4-screenshots/v4-architecture-layered-figure-${info.project.name}.png`, animations: 'disabled' });
   await page.getByLabel('Layout', { exact: true }).selectOption('radial');

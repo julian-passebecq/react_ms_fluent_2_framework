@@ -58,10 +58,12 @@ export function FigurePlayer({ figure, captions, stepCount: explicitCount, showI
     if (!canvas) return;
     if (narrow && hasSvg) {
       canvas.tabIndex = 0; canvas.setAttribute('role', 'region'); canvas.setAttribute('aria-label', 'Scrollable figure canvas');
+      canvas.setAttribute('aria-describedby', `${accessibilityPrefix}-pan-hint`);
     } else {
       canvas.removeAttribute('tabindex'); canvas.removeAttribute('role'); canvas.removeAttribute('aria-label');
+      canvas.removeAttribute('aria-describedby');
     }
-  }, [narrow, hasSvg, figure.id]);
+  }, [narrow, hasSvg, figure.id, accessibilityPrefix]);
   useEffect(() => {
     if (!playing || reducedMotion || count <= 1) return;
     if (current >= count - 1) { setPlaying(false); return; }
@@ -101,7 +103,7 @@ export function FigurePlayer({ figure, captions, stepCount: explicitCount, showI
     setExportStatus('Current step exported as a static SVG.');
   };
   return <div ref={host} className="dp-figure-player" data-reduced-motion={String(reducedMotion)} data-frame-index={current} data-pannable={String(narrow && hasSvg)}>
-    {narrow && hasSvg ? <p className="dp-figure-player__pan-hint">Scroll the figure sideways to read its details. Keyboard selection and captions remain available.</p> : null}
+    {narrow && hasSvg ? <p id={`${accessibilityPrefix}-pan-hint`} className="dp-figure-player__pan-hint">{locale === 'no' ? 'Sveip eller rull sidelengs for å se hele figuren. Med tastatur: fokuser figuren og bruk venstre/høyre piltast.' : 'Swipe or scroll sideways to explore the full figure. Keyboard: focus the canvas, then use Left/Right arrows.'}</p> : null}
     <FigureView {...rest} figure={figure} locale={locale} metadataMode={metadataMode} presentationSize={presentationSize} reducedMotion={reducedMotion} frameIndex={current} selectedId={selectedId} onSelect={id => { setSelection(id); onSelect?.(id); }}
       toolbar={<>{toolbar}{hasSvg && count > 1 ? <TimelineControls currentStep={current} stepCount={count} isPlaying={playing} onPlayPause={() => { if (current >= count - 1) seek(0); setPlaying(value => !value); }} onPrevious={() => { setPlaying(false); seek(current - 1); }} onNext={() => { setPlaying(false); seek(current + 1); }} onSeek={value => { setPlaying(false); seek(value); }} onReset={() => { setPlaying(false); seek(0); }} speed={speed} onSpeedChange={setSpeed} playDisabled={reducedMotion} /> : null}</>}
       exportAction={exportAction ?? (hasSvg ? <a href="#figure-export" download={filename} onClick={download}>Export SVG</a> : <span>SVG export unavailable for this renderer</span>)} />

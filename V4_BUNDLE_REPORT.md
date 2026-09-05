@@ -1,5 +1,7 @@
 # V4 bundle and privacy report
 
+Small V4 polish follow-up from `c434bc2` (5 September 2026): the current `qa/v4-studio-bundle.json` and `qa/v4-bundles.json` were refreshed by the final release check. All existing byte ceilings, lazy-Monaco checks and the nine-output privacy scan passed; no dependency or package was added. The tables below preserve the preceding V4 consolidation measurements. The follow-up's test/release evidence is recorded at the top of `V4_TEST_REPORT.md`.
+
 Measured from fresh finished-tree production builds on 5 September 2026, including the hosted-failure fallback-font correction, Windows, Node 24.19.0 / pnpm 11.19.0 / Vite 8.2.2. All bundle assertions passed. Historical V3 JSON/reports remain unchanged; current machine-readable evidence is in `project/conceptmotion_studio/qa/v4-studio-bundle.json`, `v4-bundles.json` and `v4-bundle-privacy.json`.
 
 ## Initial static JavaScript

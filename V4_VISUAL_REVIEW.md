@@ -1,5 +1,21 @@
 # V4 visual and semantic refinement review
 
+## Small V4 polish pass — 5 September 2026
+
+This follow-up starts from `c434bc2aa8d74e44fc58a445af9b669c584e81cd`. It adds no application, package, renderer family or routing layer.
+
+| Requested polish | Reviewed outcome |
+| --- | --- |
+| Formation reasoning navigation | Existing section IDs now serve a compact Fluent section picker and explicit Jump button, including the assessment. Jumping focuses the destination without changing the hash route. Each section and assessment has a keyboard-accessible return to the picker. All six sections, questions, answers and progress behavior remain intact. |
+| Consumer copy | Source/UI audit of Formation, Sandbox and both Atlases; browser copy regression across 15 normal routes at desktop/phone widths. Product labels replace implementation-oriented loading, catalog, reference, assessment and status wording. Historical IDs, source records, filenames, notebook import projections, required attribution and truthful execution notices remain preserved. Developer metadata remains in existing ContentDetails. Dataset keys and technical teaching terms such as schema drift remain useful lesson content. |
+| Figure density | Small loop explanations had an extra 24 viewport units of bottom space. Only the existing recommended-viewport calculation changes; compact examples now retain a 15–20 unit gutter. All 34 refined frames remain within their unchanged containment assertions. Regular/expanded minimums, table/join presentation and graph geometry were reviewed and retained. |
+| Architecture on phones | The existing shared pan hint now names swipe/sideways scroll and Left/Right arrow operation, with an ARIA description linked to the focusable canvas. A quiet raised surface and teal edge improve discoverability. Label sizes, panning scale, stage content and the shared renderer remain unchanged. |
+| Visual consistency | Navigation uses existing Fluent controls and Datapass surface/border/radius/ink tokens; reasoning headings lose only their unnecessary top margin. The pan hint uses the same semantic palette. Checkpoint amber remains sparse. No new theme or decorative treatment. |
+
+Navigation evidence is `qa/v4-screenshots/v4-polish-think-{sql,python-de}-navigation-*`; refreshed compact Algorithm and Architecture phone captures use the existing V4 gallery names. Desktop and phone navigation captures, compact binary search and the phone Architecture figure were visually inspected. Existing tests additionally verify keyboard focus, unchanged lesson URLs, retained assessment answers, panning, all 34 refined frames, Axe and strict overflow. See the test report for final release results.
+
+No requested change required structural refactoring or migration. Larger reductions to long lesson content or dense architecture layouts remain outside this surgical pass; all content and readable horizontal panning are preserved.
+
 ## Evidence and visual system
 
 Before evidence is the supplied `references/current-v3/` gallery in the preserved V4 handoff plus unchanged V3 screenshots. After evidence is in [qa/v4-screenshots](project/conceptmotion_studio/qa/v4-screenshots). Browser tests regenerate the V4 evidence separately; the four existing Foundation screenshot comparisons remain enabled with their original tolerances and Linux baselines.

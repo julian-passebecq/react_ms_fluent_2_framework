@@ -1557,7 +1557,7 @@
 .dp-figure-player__motion { color: var(--datapass-slate); font-size: .875rem; }
 .dp-figure-player .dp-inspector-panel { margin-top: .75rem; overflow-wrap: anywhere; }
 .dp-figure-player a { color: var(--datapass-accent); }
-.dp-figure-player__pan-hint { color: var(--datapass-slate); font-size: .8rem; line-height: 1.5; }
+.dp-figure-player__pan-hint { color: var(--dp-ink-secondary); background: var(--dp-surface-raised); border-inline-start: 2px solid var(--dp-accent-teal); border-radius: var(--dp-radius-control); padding: .5rem .75rem; margin: 0 0 .75rem; font-size: .875rem; line-height: 1.5; }
 /* Only the reusable player opts into panning; Foundation V1/V2 figures retain their sizing. */
 .dp-figure-player[data-pannable="true"] .dp-visualization-surface__renderer { overflow-x: auto; overscroll-behavior-x: contain; min-height: 0; }
 .dp-figure-player[data-pannable="true"] .dp-visualization-surface__renderer > [data-conceptmotion-host] { min-width: 960px !important; }

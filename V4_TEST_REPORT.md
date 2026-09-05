@@ -1,5 +1,24 @@
 # V4 test and release report
 
+## Small V4 polish pass — 5 September 2026
+
+Started with clean local/fetched `main` at `c434bc2aa8d74e44fc58a445af9b669c584e81cd`, whose [hosted run 33932844984](https://github.com/julian-passebecq/react_ms_fluent_2_framework/actions/runs/33932844984) was observed completed/success. This pass changes existing consumer copy, Formation section navigation, shared pan guidance and the existing loop recommended viewport only. No shared API, package, renderer family, dependency, content ID or persistence key is added or migrated. Node 24.19.0 and pnpm 11.19.0 were used from the active workspace.
+
+| Verification | Observed result |
+| --- | --- |
+| Baseline affected Figure/content/reasoning/Architecture unit tests | 17 tests / four files passed. |
+| `pnpm exec vitest run packages/figure/tests packages/learning/tests/practice.test.tsx apps/formation/src/data/contentCatalog.test.ts apps/formation/src/data/reasoning.test.ts apps/formation/src/pages/PracticePage.test.tsx apps/algorithm-atlas/src/refinements.test.ts apps/architecture-atlas/src/data.test.ts` | 49 tests / nine files passed, 11.96 s. |
+| `pnpm exec tsc -b --pretty false`, then Vite builds for Formation, Code Sandbox, Algorithm Atlas and Architecture Atlas | Passed. |
+| Targeted browser selection across `v4-polish`, `v4-visuals`, `v3-atlases` and `v3-foundation` | 12 desktop/phone cases passed, 1.7 min; navigation focus/route/answer retention, 34 refined frames, Architecture paths/panning and existing Formation assessment/progress. |
+| `pnpm test:browser tests/browser/v4-polish.spec.ts --grep 'V4 consumer copy'` after adding practice/progress routes and the final assessment-title copy change | Two cases passed, 25.8 s, covering 15 normal routes at both widths. |
+| **One final `pnpm check` on the finished implementation** | **PASS, exit 0, 479.366 s**. 329 unit tests / 56 files (24.14 s), all six coverage floors, deterministic 323 items / 500 variants and two notebooks, legacy smoke, DX/schema/boundary/scaffold checks, all seven app builds plus legacy and 46-story Storybook, nine-output privacy scan, and **56/56 browser cases (6.0 min)**. |
+
+The full gate ran once without interruption or retries. Generated log: `project/conceptmotion_studio/qa/v4-polish-release.log` (ignored). Existing screenshot comparisons, one-pixel overflow thresholds, fallback-font checks, reduced-motion paths and serious/critical Axe assertions remain enabled and unchanged. New tests strengthen focus/route/answer continuity, compact bottom-space bounds and the pan region's accessible description. Only copy-based expectations changed in existing tests. No authoring contracts or validators changed.
+
+Seven representative polish screenshots are retained: four new reasoning-navigation captures, compact binary-search desktop/phone captures and the Architecture phone figure. Other automatically regenerated captures were restored to their prior tracked bytes to keep this pass small; the complete current evidence is uploaded by CI. Fresh V4 bundle JSON remains included, with unchanged budgets and lazy-editor/privacy boundaries. Reports were updated after the gate; implementation and tests were not changed afterward.
+
+The final delivery message records the exact pushed commit and its matching observed hosted CI result. The baseline run above is not evidence for the follow-up commit. Larger layout/content changes are deliberately outside this pass, as documented in the visual review.
+
 ## Scope and environment
 
 Baseline: exact final V3 `36c01d404e0acfd0bf9b55417ad48b4e9285586c`, clean `main`, with successful hosted baseline [run 33924063684](https://github.com/julian-passebecq/react_ms_fluent_2_framework/actions/runs/33924063684). V4 testing took place on 5 September 2026 using Windows, Node 24.19.0, pnpm 11.19.0, TypeScript 7.0.2, Vite 8.2.2, Vitest 5.0.0 and Playwright 1.62.1/Chrome.

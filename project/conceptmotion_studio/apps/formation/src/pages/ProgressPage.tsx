@@ -7,6 +7,8 @@ import { computeProgressBreakdown, type ProgressStateV2 } from '@datapass/progre
 import { ContentDetails, PageHeader, useLocale } from '@datapass/ui';
 import { lessons, sqlPracticeAssessment } from '../data/contentCatalog';
 
+const domainLabels: Record<string, string> = { sql: 'SQL', python: 'Python', pyspark: 'PySpark', 'data-engineering': 'Data engineering' };
+
 export interface ProgressPageProps {
   progress: ProgressStateV2;
   persisted: boolean;
@@ -61,7 +63,7 @@ export function ProgressPage({ progress, persisted, loadSource, warnings, export
         <span className="formation-eyebrow">ASSESSMENT BREAKDOWN</span>
         <h2 id="formation-breakdown-title">{locale === 'no' ? 'Etter emne' : 'By domain'}</h2>
         {breakdown.domains.length ? (
-          <dl>{breakdown.domains.map((metric) => <div key={metric.id}><dt>{metric.id}</dt><dd>{metric.correct}/{metric.answers} · {metric.percent}%</dd></div>)}</dl>
+          <dl>{breakdown.domains.map((metric) => <div key={metric.id}><dt>{domainLabels[metric.id] ?? (locale === 'no' ? 'Andre emner' : 'Other topics')}</dt><dd>{metric.correct}/{metric.answers} · {metric.percent}%</dd></div>)}</dl>
         ) : <p>{locale === 'no' ? 'Lever en vurdering for å se en oversikt.' : 'Submit an assessment to see a breakdown.'}</p>}
       </section>
       <ContentDetails summary={locale === 'no' ? 'Sikkerhetskopi og lagringsdetaljer' : 'Backup & storage details'}>

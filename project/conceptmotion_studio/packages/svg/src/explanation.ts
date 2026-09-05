@@ -71,7 +71,9 @@ export function recommendedSceneViewport(spec: SvgSceneSpec | WorkflowSpec, size
     const track = spec.explanation as ExplanationTrack;
     cue = Math.max(0, ...track.steps.map((_, index) => explanationPanelHeight(resolveSceneExplanation(spec, index))));
   }
-  if (spec.kind === 'loop') content = cue ? 205 + cue : Math.max(290, 100 + spec.codeLines.length * 24, 252 + Math.ceil(Math.max(0, ...spec.frames.map(frame => Object.keys(frame.variables ?? {}).length)) / 4) * 40);
+  // The cue panel already includes its bottom padding. Retain a readable gutter
+  // without reserving an extra empty line beneath these small explanations.
+  if (spec.kind === 'loop') content = cue ? 181 + cue : Math.max(290, 100 + spec.codeLines.length * 24, 252 + Math.ceil(Math.max(0, ...spec.frames.map(frame => Object.keys(frame.variables ?? {}).length)) / 4) * 40);
   else if (spec.kind === 'table') content = 120 + Math.max(0, ...spec.frames.map(frame => frame.rows.length)) * 42 + cue;
   else if (spec.kind === 'join') content = 124 + Math.max(spec.join.left.rows.length, spec.join.right.rows.length, compileTableJoin(spec.join).rows.length) * 31 + cue;
   else if (spec.kind === 'workflow') content = 300 + cue;

@@ -3,15 +3,15 @@
   "reports": [
     {
       "app": "formation",
-      "initialStaticBytes": 483416,
+      "initialStaticBytes": 483340,
       "initialBudget": 650000,
       "initialExcludesMonaco": true,
       "editorLazyChunks": [
-        "assets/MonacoSurfaces-DP5wOihV.js",
-        "assets/jsonMode--FnkwtYH.js",
+        "assets/MonacoSurfaces-BMQBYXRv.js",
+        "assets/jsonMode-I9VVfHmf.js",
         "assets/sql-NEE52Syq.js",
         "assets/shell-CC2rA5mh.js",
-        "assets/python-CJW_N4y_.js",
+        "assets/python-DLAHH0si.js",
         "assets/powershell-DmHpPYUd.js",
         "assets/csharp-BKxtCVv1.js"
       ],
@@ -19,15 +19,15 @@
     },
     {
       "app": "code-sandbox",
-      "initialStaticBytes": 366665,
+      "initialStaticBytes": 366657,
       "initialBudget": 550000,
       "initialExcludesMonaco": true,
       "editorLazyChunks": [
-        "assets/MonacoSurfaces-Bjr9daF9.js",
-        "assets/jsonMode-DBzdUWD2.js",
+        "assets/MonacoSurfaces-C0F0Nzdb.js",
+        "assets/jsonMode-Bfx3Jd29.js",
         "assets/sql-NEE52Syq.js",
         "assets/shell-CC2rA5mh.js",
-        "assets/python-CjV2j3Pl.js",
+        "assets/python-DiGmswNq.js",
         "assets/powershell-DmHpPYUd.js",
         "assets/csharp-BKxtCVv1.js"
       ],
@@ -39,11 +39,11 @@
       "initialBudget": 650000,
       "initialExcludesMonaco": true,
       "editorLazyChunks": [
-        "assets/MonacoSurfaces-D0G6BPJS.js",
-        "assets/jsonMode-oPDnqvK3.js",
+        "assets/MonacoSurfaces-CDdgLpnA.js",
+        "assets/jsonMode-DPezIAJp.js",
         "assets/sql-NEE52Syq.js",
         "assets/shell-CC2rA5mh.js",
-        "assets/python-DVCAlqyv.js",
+        "assets/python-C71d_6dm.js",
         "assets/powershell-DmHpPYUd.js",
         "assets/csharp-BKxtCVv1.js"
       ],
@@ -51,7 +51,7 @@
     },
     {
       "app": "algorithm-atlas",
-      "initialStaticBytes": 502646,
+      "initialStaticBytes": 502616,
       "initialBudget": 700000,
       "initialExcludesMonaco": true,
       "editorLazyChunks": [],
@@ -59,7 +59,7 @@
     },
     {
       "app": "architecture-atlas",
-      "initialStaticBytes": 460104,
+      "initialStaticBytes": 460076,
       "initialBudget": 650000,
       "initialExcludesMonaco": true,
       "editorLazyChunks": [],

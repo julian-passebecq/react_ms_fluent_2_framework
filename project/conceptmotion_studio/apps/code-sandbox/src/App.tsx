@@ -15,7 +15,7 @@ export default function App() {
   const navigate = (next: string) => { window.location.hash = next; setRoute(next); };
   return <AppShell className="dp-consumer" mainLabel="Code Sandbox" topBar={<TopBar brand="Code Sandbox" subtitle={locale === 'no' ? 'Datateknikk i praksis' : 'Data engineering practice'} localeControl={<LanguageToggle />} navigation={<>{[['learn', 'Learn'], ['practice', 'Practice'], ['cheatsheets', 'Cheat Sheets'], ['progress', 'Progress']].map(([id, label]) => <Button key={id} appearance={route === id ? 'primary' : 'subtle'} onClick={() => navigate(id)}>{label}</Button>)}</>} />}>
     {workspace.warning && <p role="alert">{workspace.warning}</p>}
-    <Suspense fallback={<p role="status">Loading practice surface…</p>}>
+    <Suspense fallback={<p role="status">Loading practice…</p>}>
       {route.startsWith('challenge/') ? <ChallengePage id={decodeURIComponent(route.slice(10))} workspace={workspace} onBack={() => navigate('practice')} />
         : route === 'progress' ? <ProgressPage workspace={workspace} />
           : route === 'learn' || route === 'cheatsheets' ? <ReferencePage mode={route} onPractice={(track?: string) => { window.location.href = `${window.location.pathname}${track ? `?facet.track=${encodeURIComponent(track)}` : ''}#practice`; }} />
