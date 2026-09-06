@@ -7,6 +7,7 @@ import { ContentDetails, PageHeader, useLocale } from '@datapass/ui';
 import { migratedVisuals } from '../../../../content/visuals';
 import figureSchema from '../../../../schemas/authoring/figure.schema.json';
 import { parseSandboxFigure } from '../data/visualSandbox';
+import { tableTraceSandboxExample } from '../data/tableTraceExample';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import './VisualSandboxPage.css';
 
@@ -15,7 +16,7 @@ const fallback: FigureSpec = {
   title: 'Unsupported adapter example', spec: {},
   fallbackText: 'This is the accessible textual fallback for an unregistered future renderer.',
 };
-const examples = [...migratedVisuals.map(entry => entry.figure), fallback];
+const examples = [...migratedVisuals.map(entry => entry.figure), tableTraceSandboxExample, fallback];
 const schemaHook = { uri: 'urn:datapass:schema:figure:1', schema: figureSchema, fileMatch: ['datapass://visual-sandbox/spec.figure.json'] };
 
 export function VisualSandboxPage() {
