@@ -57,6 +57,7 @@ describe('renderer registry and lifecycle', () => {
       'lineage.model',
       'statistics.regression',
       'table.join',
+      'table.trace',
       'table.transform',
       'workflow.topology',
     ]);
