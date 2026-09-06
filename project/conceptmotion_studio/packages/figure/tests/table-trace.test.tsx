@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 import type { FigureSpec } from '@datapass/content';
 import type { TableTraceSvgSceneSpec } from '@conceptmotion/svg';
-import { FigureView } from '../src/index.js';
+import { FigurePlayer, FigureView } from '../src/index.js';
 
 const containers: HTMLDivElement[] = [];
 
@@ -90,6 +90,15 @@ describe('FigureView table trace integration', () => {
     await act(async () => root.render(<FigureView figure={figure} frameIndex={1} reducedMotion />));
     expect(element.querySelector('figure')).toBe(figureNode);
     expect(element.querySelector('[data-trace-ref="trace:before:row:o2"]')?.getAttribute('data-trace-kinds')).toBe('drop');
+    await act(async () => root.unmount());
+  });
+
+  it('does not make semantic marks tabbable when FigurePlayer inspection is disabled', async () => {
+    const element = host();
+    const root = createRoot(element);
+    await act(async () => root.render(<FigurePlayer figure={figure} frameIndex={1} reducedMotion showInspector={false} />));
+    expect(element.querySelector('.dp-figure-player')?.getAttribute('data-selection-enabled')).toBe('false');
+    expect(element.querySelectorAll('[data-trace-ref][tabindex="0"]')).toHaveLength(0);
     await act(async () => root.unmount());
   });
 });
