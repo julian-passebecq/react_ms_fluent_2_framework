@@ -29,8 +29,9 @@ describe('production Visual Sandbox validation',()=>{
     expect(result.issues[0]).toContain('Preview join budget exceeded');
   });
   it('bounds table traces by total teaching cells before rendering',()=>{
-    const rows=Array.from({length:6000},(_,index)=>({id:`r${index}`,values:{value:index}}));
-    const figure={id:'large-trace',kind:'concept',rendererId:'table.trace',title:'Too large',fallbackText:'A bounded trace is required.',spec:{kind:'table-trace',version:'1',id:'large-trace',title:'Too large',views:[{id:'before',role:'input',table:{id:'t',columns:[{id:'value'}],rows}},{id:'after',role:'output',table:{id:'t',columns:[{id:'value'}],rows}}],relations:[]}};
+    const columns=Array.from({length:6},(_,index)=>({id:`c${index}`}));
+    const rows=Array.from({length:1000},(_,rowIndex)=>({id:`r${rowIndex}`,values:Object.fromEntries(columns.map((column,columnIndex)=>[column.id,rowIndex+columnIndex]))}));
+    const figure={id:'large-trace',kind:'concept',rendererId:'table.trace',title:'Too large',fallbackText:'A bounded trace is required.',spec:{kind:'table-trace',version:'1',id:'large-trace',title:'Too large',views:[{id:'before',role:'input',table:{id:'t',columns,rows}},{id:'after',role:'output',table:{id:'t',columns,rows}}],relations:[]}};
     const result=parseSandboxFigure(JSON.stringify(figure));
     expect(result.figure).toBeUndefined();
     expect(result.issues[0]).toContain('Preview table-trace budget exceeded');
