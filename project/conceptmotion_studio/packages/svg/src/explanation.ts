@@ -1,4 +1,4 @@
-import { compileTableJoin, layoutDiagram, resolveExplanationStep, resolveLocalizedText, type ExplanationTrack, type ResolvedExplanation, type WorkflowSpec } from '@conceptmotion/core';
+import { compileTableJoin, compileTableTrace, layoutDiagram, resolveExplanationStep, resolveLocalizedText, type ExplanationTrack, type ResolvedExplanation, type WorkflowSpec } from '@conceptmotion/core';
 import { ensureChild, keyedChildren, setAttributes, setSvgTransform, setText, type SvgSurface } from './dom.js';
 import type { SvgSceneSpec } from './scene.js';
 import type { RendererViewport } from './types.js';
@@ -9,6 +9,10 @@ export function resolveSceneExplanation(spec: SvgSceneSpec | WorkflowSpec, frame
   if (spec.kind === 'loop') return resolveExplanationStep(spec.explanation, frameIndex, { entityIds: spec.items.map(item => item.id), frameCount: spec.frames.length, codeLines: spec.codeLines });
   if (spec.kind === 'table') return resolveExplanationStep(spec.explanation, frameIndex, { entityIds: [...new Set(spec.frames.flatMap(frame => frame.rows.map(row => row.id)))], frameCount: spec.frames.length });
   if (spec.kind === 'join') return resolveExplanationStep(spec.explanation, frameIndex, { entityIds: [...spec.join.left.rows.map(row => `left:${row.id}`), ...spec.join.right.rows.map(row => `right:${row.id}`), ...compileTableJoin(spec.join).rowOrder], frameCount: spec.revealCounts?.length ?? 1 });
+  if (spec.kind === 'table-trace') {
+    const trace = compileTableTrace(spec);
+    return resolveExplanationStep(spec.explanation, frameIndex, { entityIds: trace.referenceKeys, frameCount: spec.frames?.length ?? 1 });
+  }
   if (spec.kind === 'workflow') return resolveExplanationStep(spec.explanation, frameIndex, { entityIds: spec.nodes.map(node => node.id), frameCount: spec.runs?.[0]?.frames.length ?? 1 });
   return undefined;
 }
@@ -76,6 +80,11 @@ export function recommendedSceneViewport(spec: SvgSceneSpec | WorkflowSpec, size
   if (spec.kind === 'loop') content = cue ? 181 + cue : Math.max(290, 100 + spec.codeLines.length * 24, 252 + Math.ceil(Math.max(0, ...spec.frames.map(frame => Object.keys(frame.variables ?? {}).length)) / 4) * 40);
   else if (spec.kind === 'table') content = 120 + Math.max(0, ...spec.frames.map(frame => frame.rows.length)) * 42 + cue;
   else if (spec.kind === 'join') content = 124 + Math.max(spec.join.left.rows.length, spec.join.right.rows.length, compileTableJoin(spec.join).rows.length) * 31 + cue;
+  else if (spec.kind === 'table-trace') {
+    const inputRows = spec.views.filter(view => view.role === 'input').reduce((sum, view) => sum + Math.min(8, view.table.rows.length), 0);
+    const outputRows = Math.min(8, spec.views.find(view => view.role === 'output')?.table.rows.length ?? 0);
+    content = 150 + Math.max(inputRows, outputRows) * 31 + Math.max(0, spec.views.filter(view => view.role === 'input').length - 1) * 22 + cue;
+  }
   else if (spec.kind === 'workflow') content = 300 + cue;
   else if (spec.kind === 'diagram' || spec.kind === 'lineage') content = 520;
   return { width: 960, height: Math.ceil(Math.max(content, size === 'expanded' ? 640 : size === 'regular' ? 420 : 280)) };
