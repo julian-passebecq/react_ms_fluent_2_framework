@@ -51,6 +51,8 @@ export interface TableTraceSvgFrame {
   readonly id: string;
   /** Relation IDs shown in this teaching step. Omitted means all relations. */
   readonly activeRelationIds?: readonly string[];
+  /** Optional learner-facing step caption consumed by FigurePlayer. */
+  readonly caption?: LocalizedText;
 }
 
 export type TableTraceSvgSceneSpec = TableTraceSpec & {
@@ -154,6 +156,7 @@ export function resolveSvgScene(
       input: {
         spec,
         trace,
+        frameId: frame?.id,
         activeRelationIds: frame?.activeRelationIds,
         explanation,
       },
