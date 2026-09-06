@@ -42,7 +42,7 @@ describe('table trace accessibility hierarchy', () => {
     if (resolved.rendererId !== 'table.trace') throw new Error('unexpected renderer');
     const host = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     const renderer = new TableTraceRenderer();
-    renderer.mount(host, resolved.input, { reducedMotion: true });
+    renderer.mount(host, resolved.input, { reducedMotion: true, onSelect: () => undefined });
 
     expect(host.querySelector('[data-role="trace-view"]')?.getAttribute('role')).toBeNull();
     expect(host.querySelector('[data-role="trace-row"]')?.getAttribute('role')).toBeNull();
