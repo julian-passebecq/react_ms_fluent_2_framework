@@ -37,7 +37,7 @@ export function parseSandboxFigure(source: string): { figure?: FigureSpec; issue
       });
       for(let index=0;index<Math.max(1,workflow.runs?.[0]?.frames.length??0);index++) resolveSceneExplanation(workflow,index);
     } else {
-      if(!['table','join','loop','regression','diagram','lineage'].includes(spec.kind)) throw new Error('Unknown semantic scene kind.');
+      if(!['table','join','table-trace','loop','regression','diagram','lineage'].includes(spec.kind)) throw new Error('Unknown semantic scene kind.');
       if(spec.kind==='diagram' || spec.kind==='lineage') {
         const validation=spec.kind==='diagram'?validateDiagramSpec(spec):validateLineageSpec(spec);
         if(!validation.valid) return {issues:validation.issues.map(issue=>issue.message)};
@@ -60,6 +60,10 @@ export function parseSandboxFigure(source: string): { figure?: FigureSpec; issue
           const ids=new Set(frame.rows.map(row=>row.id));
           if(frame.rowOrder.some(id=>!ids.has(id)) || frame.visibleRowIds.some(id=>!ids.has(id))) throw new Error('Table frame references an unknown row.');
         }
+      }
+      if(spec.kind==='table-trace') {
+        const totalCells=spec.views.reduce((sum,view)=>sum+view.table.rows.length*view.table.columns.length,0);
+        if(totalCells>10_000) throw new Error('Preview table-trace budget exceeded (10,000 cells across all views). Reduce the teaching example.');
       }
       for(let index=0;index<Math.max(1,frames?.length??0);index++) resolveSvgScene(spec,index);
     }
