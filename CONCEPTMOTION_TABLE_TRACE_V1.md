@@ -1,6 +1,6 @@
 # ConceptMotion Table Trace V1
 
-**Status:** experimental branch proof; not merged into the pinned V4 baseline  
+**Status:** verified experimental branch proof; not merged into the pinned V4 baseline  
 **Branch:** `conceptmotion-table-trace-v1`  
 **Base:** `ce8353ee0878ca74b2fe24a1af7de657a6ba61f2`  
 **Date:** 2026-09-06  
@@ -198,19 +198,22 @@ V1 references table/row/column/cell/group. It intentionally does not yet model p
 
 The first useful adapter experiment would likely be a bounded offline pandas/Polars/SQL trace generator that produces `TableTraceSpec`. Do not add it until the authored trace family has been validated in real lessons.
 
-## Branch gate
+## Verified branch gate
 
-During development the branch uses a temporary branch-only workflow to run:
+The implementation head `5bca1603fa0f4bea6165558c7c402ac7b6654628` passed GitHub Actions run `34061502042` on 2026-09-06 with:
 
-- frozen dependency install;
-- Table Trace core semantic tests;
-- SVG registry/renderer tests;
-- Figure adapter tests;
-- Visual Sandbox tests;
-- TypeScript project references;
-- production Studio build / bundle check before branch handoff.
+- frozen dependency install and supply-chain lockfile policy;
+- Table Trace core semantic tests: 6/6 passed;
+- SVG registry/renderer tests: 14/14 passed;
+- Figure adapter integration tests: 9/9 passed;
+- Visual Sandbox tests: 7/7 passed;
+- full TypeScript project references;
+- production Studio Vite build;
+- bundle policy check, including the existing lazy Monaco boundaries.
 
-The temporary workflow is removed before this branch is considered ready for integration. The verified workflow runs remain in GitHub Actions history.
+The production build completed with the repository's existing large-chunk warnings for Fluent/Monaco editor bundles; the bundle policy check itself passed. The implementation did not introduce a new editor runtime dependency.
+
+The temporary branch-only verification workflow was removed after the successful gate in cleanup commit `320e8ae8998b7262047e07e735103faf40c9999b`. The successful run remains in GitHub Actions history.
 
 ## Integration note
 
