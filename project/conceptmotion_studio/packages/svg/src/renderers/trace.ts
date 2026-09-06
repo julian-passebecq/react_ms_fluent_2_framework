@@ -437,8 +437,7 @@ export class TableTraceRenderer extends BaseSvgRenderer<TableTraceRendererInput>
       const label = ensureChild(viewGroup, 'text[data-role="view-label"]', 'text', { 'data-role': 'view-label', x: 0, y: 13, fill: surface.theme.mutedInk, 'font-size': 10, 'font-weight': 700, 'letter-spacing': .7 });
       setText(label, resolveLocalizedText(layout.view.label, locale) || `${layout.view.role.toUpperCase()} · ${layout.view.table.id}`);
       const outline = ensureChild(viewGroup, 'rect[data-role="table-outline"]', 'rect', { 'data-role': 'table-outline', x: 0, y: layout.headerTop, width: layout.width, height: layout.headerHeight + layout.rows.length * layout.rowHeight + 5, rx: surface.theme.radius, fill: surface.theme.surface, stroke: accentForKinds(tableKinds, surface.theme), 'stroke-width': tableKinds?.size ? 2 : 1 });
-      outline.setAttribute('aria-hidden', 'true');
-      makeSelectable(viewGroup, tableKey, `Table ${layout.view.table.id}, ${layout.view.role}`, options);
+      makeSelectable(outline, tableKey, `Table ${layout.view.table.id}, ${layout.view.role}`, options);
 
       keyedChildren(viewGroup, 'g[data-role="trace-column"]', 'g', layout.columns, (column) => column.id, (columnGroup, column, index) => {
         const key = tableTraceRefKey({ viewId: layout.view.id, kind: 'column', columnId: column.id });
@@ -458,8 +457,8 @@ export class TableTraceRenderer extends BaseSvgRenderer<TableTraceRendererInput>
         const rowKinds = kindsByKey.get(rowKey);
         setAttributes(rowGroup, { 'data-role': 'trace-row', 'data-row-id': row.id, 'data-trace-ref': rowKey, 'data-trace-kinds': rowKinds ? [...rowKinds].sort().join(' ') : '' });
         setSvgTransform(rowGroup, 0, layout.rowsTop + rowIndex * layout.rowHeight, this.reducedMotion, this.durationMs);
-        makeSelectable(rowGroup, rowKey, `Row ${row.id}`, options);
-        ensureChild(rowGroup, 'rect[data-role="row-outline"]', 'rect', { 'data-role': 'row-outline', width: layout.width, height: layout.rowHeight - 4, fill: surface.theme.surface, stroke: accentForKinds(rowKinds, surface.theme), 'stroke-width': rowKinds?.size ? 2 : 1 });
+        const rowOutline = ensureChild(rowGroup, 'rect[data-role="row-outline"]', 'rect', { 'data-role': 'row-outline', width: layout.width, height: layout.rowHeight - 4, fill: surface.theme.surface, stroke: accentForKinds(rowKinds, surface.theme), 'stroke-width': rowKinds?.size ? 2 : 1 });
+        makeSelectable(rowOutline, rowKey, `Row ${row.id}`, options);
         keyedChildren(rowGroup, 'g[data-role="trace-cell"]', 'g', layout.columns, (column) => column.id, (cellGroup, column, columnIndex) => {
           const cellKey = tableTraceRefKey({ viewId: layout.view.id, kind: 'cell', rowId: row.id, columnId: column.id });
           refElements.set(cellKey, cellGroup);
