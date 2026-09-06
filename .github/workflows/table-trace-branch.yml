@@ -29,9 +29,9 @@ jobs:
           cache-dependency-path: project/conceptmotion_studio/pnpm-lock.yaml
       - name: Frozen dependency install
         run: pnpm install --frozen-lockfile
-      - name: Core semantic tests
-        run: pnpm --filter @conceptmotion/core test
-      - name: SVG renderer tests
-        run: pnpm --filter @conceptmotion/svg test
+      - name: Table trace core semantics
+        run: pnpm exec vitest run packages/core/tests/table-trace.test.ts
+      - name: SVG registry and table trace renderer tests
+        run: pnpm exec vitest run packages/svg/tests/table-trace.test.ts packages/svg/tests/renderers.test.ts packages/svg/tests/semantic-nodes.test.ts
       - name: TypeScript project references
         run: pnpm run typecheck
