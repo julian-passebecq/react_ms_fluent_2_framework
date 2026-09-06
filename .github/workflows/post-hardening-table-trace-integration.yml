@@ -1,0 +1,37 @@
+name: Post-hardening Table Trace integration evidence
+
+on:
+  push:
+    branches: [experiment/post-hardening-table-trace-consumer-v1]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: project/conceptmotion_studio
+    steps:
+      - name: Check out exact integration branch
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.19.0
+          cache: pnpm
+          cache-dependency-path: project/conceptmotion_studio/pnpm-lock.yaml
+      - name: Frozen dependency install
+        run: pnpm install --frozen-lockfile
+      - name: Focused Table Trace plus canonical explanation tests
+        run: pnpm exec vitest run packages/core/tests/table-trace.test.ts packages/svg/tests/table-trace.test.ts packages/svg/tests/table-trace-a11y.test.ts packages/figure/tests/table-trace.test.tsx tests/visuals/explanation-examples.test.ts
+      - name: TypeScript project references
+        run: pnpm run typecheck
+      - name: Studio production build
+        run: pnpm run build
