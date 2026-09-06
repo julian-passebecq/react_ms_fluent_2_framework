@@ -1,5 +1,18 @@
-import { compileTableJoin, layoutDiagram, resolveExplanationStep, resolveLocalizedText, type ExplanationTrack, type ResolvedExplanation, type WorkflowSpec } from '@conceptmotion/core';
+import {
+  compileCollectionFrame,
+  compileTableJoin,
+  compileTableTrace,
+  layoutDiagram,
+  resolveExplanationStep,
+  resolveLocalizedText,
+  type ExplanationTrack,
+  type ResolvedExplanation,
+  type WorkflowSpec,
+} from '@conceptmotion/core';
 import { ensureChild, keyedChildren, setAttributes, setSvgTransform, setText, type SvgSurface } from './dom.js';
+import { collectionGeometry } from './renderers/collection.js';
+import { lineageGeometry } from './renderers/lineage.js';
+import { workflowGeometry } from './renderers/workflow.js';
 import type { SvgSceneSpec } from './scene.js';
 import type { RendererViewport } from './types.js';
 
@@ -10,6 +23,10 @@ export function resolveSceneExplanation(spec: SvgSceneSpec | WorkflowSpec, frame
   if (spec.kind === 'loop') return resolveExplanationStep(spec.explanation, frameIndex, { entityIds: spec.items.map(item => item.id), frameCount: spec.frames.length, codeLines: spec.codeLines });
   if (spec.kind === 'table') return resolveExplanationStep(spec.explanation, frameIndex, { entityIds: [...new Set(spec.frames.flatMap(frame => frame.rows.map(row => row.id)))], frameCount: spec.frames.length });
   if (spec.kind === 'join') return resolveExplanationStep(spec.explanation, frameIndex, { entityIds: [...spec.join.left.rows.map(row => `left:${row.id}`), ...spec.join.right.rows.map(row => `right:${row.id}`), ...compileTableJoin(spec.join).rowOrder], frameCount: spec.revealCounts?.length ?? 1 });
+  if (spec.kind === 'table-trace') {
+    const trace = compileTableTrace(spec);
+    return resolveExplanationStep(spec.explanation, frameIndex, { entityIds: trace.referenceKeys, frameCount: spec.frames?.length ?? 1 });
+  }
   if (spec.kind === 'workflow') return resolveExplanationStep(spec.explanation, frameIndex, { entityIds: spec.nodes.map(node => node.id), frameCount: spec.runs?.[0]?.frames.length ?? 1 });
   return undefined;
 }
@@ -61,8 +78,6 @@ export function recommendedSceneViewport(spec: SvgSceneSpec | WorkflowSpec, size
     return { width: geometry.width, height: Math.max(280, geometry.height + 80) };
   }
   if (spec.kind === 'diagram' && spec.layout?.provider) {
-    // A wide layered flow should not inherit the square canvas of a galaxy.
-    // Semantic frames change emphasis, not node bounds, so playback stays still.
     const layout = layoutDiagram(spec);
     const radial = spec.layout.provider === 'radial';
     const fittedHeight = 68 + layout.height * (radial ? 960 / layout.width : Math.min(1, 960 / layout.width));
@@ -76,17 +91,16 @@ export function recommendedSceneViewport(spec: SvgSceneSpec | WorkflowSpec, size
     const track = spec.explanation as ExplanationTrack;
     cue = Math.max(0, ...track.steps.map((_, index) => explanationPanelHeight(resolveSceneExplanation(spec, index))));
   }
-  // The cue panel already includes its bottom padding. Retain a readable gutter
-  // without reserving an extra empty line beneath these small explanations.
   if (spec.kind === 'loop') content = cue ? 181 + cue : Math.max(290, 100 + spec.codeLines.length * 24, 252 + Math.ceil(Math.max(0, ...spec.frames.map(frame => Object.keys(frame.variables ?? {}).length)) / 4) * 40);
   else if (spec.kind === 'table') content = 120 + Math.max(0, ...spec.frames.map(frame => frame.rows.length)) * 42 + cue;
   else if (spec.kind === 'collection') content = 100 + collectionGeometry(spec).height + cue;
   else if (spec.kind === 'join') content = 124 + Math.max(spec.join.left.rows.length, spec.join.right.rows.length, compileTableJoin(spec.join).rows.length) * 31 + cue;
+  else if (spec.kind === 'table-trace') {
+    const inputRows = spec.views.filter(view => view.role === 'input').reduce((sum, view) => sum + Math.min(8, view.table.rows.length), 0);
+    const outputRows = Math.min(8, spec.views.find(view => view.role === 'output')?.table.rows.length ?? 0);
+    content = 150 + Math.max(inputRows, outputRows) * 31 + Math.max(0, spec.views.filter(view => view.role === 'input').length - 1) * 22 + cue;
+  }
   else if (spec.kind === 'workflow') content = cue ? 92 + workflowGeometry(spec).height + cue : 300;
   else if (spec.kind === 'diagram' || spec.kind === 'lineage') content = 520;
   return { width: 960, height: Math.ceil(Math.max(content, size === 'expanded' ? 640 : size === 'regular' ? 420 : 280)) };
 }
-import { compileCollectionFrame } from '@conceptmotion/core';
-import { collectionGeometry } from './renderers/collection.js';
-import { workflowGeometry } from './renderers/workflow.js';
-import { lineageGeometry } from './renderers/lineage.js';
