@@ -1,9 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import type { WorkflowSpec } from '@conceptmotion/core';
 import { migratedFigures } from '../../../../content/visuals';
+import { tableTraceSandboxExamples } from './tableTraceExample';
 import { parseSandboxFigure } from './visualSandbox';
 describe('production Visual Sandbox validation',()=>{
   it('accepts every migrated production scene',()=>{for(const figure of migratedFigures)expect(parseSandboxFigure(JSON.stringify(figure)),figure.id).toMatchObject({figure,issues:[]});});
+  it('accepts all five editable table-trace motion examples',()=>{
+    expect(tableTraceSandboxExamples.map(figure=>figure.id)).toEqual(['sandbox-table-trace-filter','sandbox-table-trace-sort','sandbox-table-trace-group-sum','sandbox-table-trace-pivot','sandbox-table-trace-join']);
+    for(const figure of tableTraceSandboxExamples){
+      const result=parseSandboxFigure(JSON.stringify(figure));
+      expect(result.issues,figure.id).toEqual([]);
+      expect(result.figure?.id).toBe(figure.id);
+    }
+  });
   it('accepts a JSON-authored table trace and validates semantic references',()=>{
     const figure={id:'trace-filter',kind:'concept',rendererId:'table.trace',title:'Filter',fallbackText:'Filter rows.',spec:{kind:'table-trace',version:'1',id:'trace-filter',title:'Filter',views:[{id:'before',role:'input',table:{id:'orders',columns:[{id:'status'}],rows:[{id:'o1',values:{status:'late'}},{id:'o2',values:{status:'ok'}}]}},{id:'after',role:'output',table:{id:'orders',columns:[{id:'status'}],rows:[{id:'o1',values:{status:'late'}}]}}],relations:[{id:'predicate',kind:'use',from:[{viewId:'before',kind:'cell',rowId:'o1',columnId:'status'},{viewId:'before',kind:'cell',rowId:'o2',columnId:'status'}]},{id:'keep',kind:'map',from:[{viewId:'before',kind:'row',rowId:'o1'}],to:[{viewId:'after',kind:'row',rowId:'o1'}]},{id:'drop',kind:'drop',from:[{viewId:'before',kind:'row',rowId:'o2'}]}],frames:[{id:'read',activeRelationIds:['predicate']},{id:'result',activeRelationIds:['keep','drop']}]}};
     expect(parseSandboxFigure(JSON.stringify(figure))).toMatchObject({figure,issues:[]});
