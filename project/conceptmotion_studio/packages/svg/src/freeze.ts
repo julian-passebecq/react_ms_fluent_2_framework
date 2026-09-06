@@ -51,6 +51,10 @@ export function freezeSvgElement(
       }
       clone.removeAttribute('data-figure-player-a11y');
     }
+    // Motion overlays are decorative runtime cues. The authored semantic state,
+    // relation routes and highlights remain in frozen output; transient travelers
+    // do not become part of a deterministic/static export.
+    clone.querySelectorAll('[data-cm-transient="true"]').forEach((element) => element.remove());
     clone.querySelectorAll<SVGElement>('*').forEach((element) => {
       for (const attribute of RUNTIME_ATTRIBUTES) element.removeAttribute(attribute);
       element.style.removeProperty('transition');
