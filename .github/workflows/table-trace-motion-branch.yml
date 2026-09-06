@@ -44,4 +44,4 @@ jobs:
       - name: Bundle policy check
         run: pnpm run test:bundle
       - name: Browser and phone motion smoke
-        run: pnpm exec playwright test tests/browser/table-trace-motion.spec.ts
+        run: pnpm exec playwright test tests/browser/table-trace-motion.spec.ts --config=playwright.table-trace-motion.config.ts
