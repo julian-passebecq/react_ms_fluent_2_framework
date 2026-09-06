@@ -1,0 +1,37 @@
+name: ConceptMotion table trace branch gate
+
+on:
+  push:
+    branches: [conceptmotion-table-trace-v1]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: project/conceptmotion_studio
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.19.0
+          cache: pnpm
+          cache-dependency-path: project/conceptmotion_studio/pnpm-lock.yaml
+      - name: Frozen dependency install
+        run: pnpm install --frozen-lockfile
+      - name: Core semantic tests
+        run: pnpm --filter @conceptmotion/core test
+      - name: SVG renderer tests
+        run: pnpm --filter @conceptmotion/svg test
+      - name: TypeScript project references
+        run: pnpm run typecheck
