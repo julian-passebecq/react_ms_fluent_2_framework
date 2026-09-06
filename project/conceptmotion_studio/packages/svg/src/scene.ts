@@ -2,6 +2,7 @@ import {
   compileLoopFrame,
   compileRegressionFrame,
   compileTableJoin,
+  compileTableTrace,
   type CompiledTableState,
   type DiagramSpec,
   type EntityId,
@@ -10,6 +11,7 @@ import {
   type LoopSceneSpec,
   type RegressionSceneSpec,
   type TableJoinSpec,
+  type TableTraceSpec,
   type ExplanationTrack,
 } from '@conceptmotion/core';
 import { resolveSceneExplanation } from './explanation.js';
@@ -20,6 +22,7 @@ import type { LineageRendererInput } from './renderers/lineage.js';
 import type { LoopRendererInput } from './renderers/loop.js';
 import type { RegressionRendererInput } from './renderers/regression.js';
 import type { TableRendererInput } from './renderers/table.js';
+import type { TableTraceRendererInput } from './renderers/trace.js';
 
 export interface TableSvgSceneSpec {
   readonly explanation?: ExplanationTrack;
@@ -43,6 +46,17 @@ export interface JoinSvgSceneSpec {
   /** Optional output-row reveal count per frame; omitted renders the full result. */
   readonly revealCounts?: readonly number[];
 }
+
+export interface TableTraceSvgFrame {
+  readonly id: string;
+  /** Relation IDs shown in this teaching step. Omitted means all relations. */
+  readonly activeRelationIds?: readonly string[];
+}
+
+export type TableTraceSvgSceneSpec = TableTraceSpec & {
+  readonly explanation?: ExplanationTrack;
+  readonly frames?: readonly TableTraceSvgFrame[];
+};
 
 export interface DiagramSvgFrame {
   readonly id: string;
@@ -68,6 +82,7 @@ export type LineageSvgSceneSpec = LineageSpec & {
 export type SvgSceneSpec =
   | TableSvgSceneSpec
   | JoinSvgSceneSpec
+  | TableTraceSvgSceneSpec
   | LoopSceneSpec
   | RegressionSceneSpec
   | DiagramSvgSceneSpec
@@ -76,6 +91,7 @@ export type SvgSceneSpec =
 export type ResolvedSvgScene =
   | { rendererId: 'table.transform'; input: TableRendererInput }
   | { rendererId: 'table.join'; input: JoinRendererInput }
+  | { rendererId: 'table.trace'; input: TableTraceRendererInput }
   | { rendererId: 'algorithm.loop'; input: LoopRendererInput }
   | { rendererId: 'statistics.regression'; input: RegressionRendererInput }
   | { rendererId: 'diagram.flow'; input: DiagramRendererInput }
@@ -90,6 +106,7 @@ function indexFor(length: number, requested = 0): number {
 export function rendererIdForScene(spec: SvgSceneSpec): ResolvedSvgScene['rendererId'] {
   if (spec.kind === 'table') return 'table.transform';
   if (spec.kind === 'join') return 'table.join';
+  if (spec.kind === 'table-trace') return 'table.trace';
   if (spec.kind === 'loop') return 'algorithm.loop';
   if (spec.kind === 'regression') return 'statistics.regression';
   if (spec.kind === 'diagram') return 'diagram.flow';
@@ -126,6 +143,19 @@ export function resolveSvgScene(
         revealCount: revealIndex >= 0 ? spec.revealCounts?.[revealIndex] : result.rows.length,
         title: spec.title,
         description: spec.description,
+      },
+    };
+  }
+  if (spec.kind === 'table-trace') {
+    const trace = compileTableTrace(spec);
+    const frame = spec.frames?.length ? spec.frames[indexFor(spec.frames.length, frameIndex)] : undefined;
+    return {
+      rendererId: 'table.trace',
+      input: {
+        spec,
+        trace,
+        activeRelationIds: frame?.activeRelationIds,
+        explanation,
       },
     };
   }
