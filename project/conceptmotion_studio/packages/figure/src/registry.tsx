@@ -60,6 +60,7 @@ const conceptMotionRendererIds = [
   'lineage.model',
   'statistics.regression',
   'table.join',
+  'table.trace',
   'table.transform',
 ] as const;
 
