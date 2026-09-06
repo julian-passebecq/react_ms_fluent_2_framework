@@ -1,9 +1,12 @@
 # ConceptMotion Table Trace Motion V1
 
-**Status:** experimental motion branch; not merged  
+**Status:** verified experimental motion branch; not merged  
 **Branch:** `conceptmotion-table-trace-motion-v1`  
 **Parent:** `conceptmotion-table-trace-v1` @ `eaeac424428f9faecae6f939bd0051d4d84abbe6`  
 **Original V4 base:** `ce8353ee0878ca74b2fe24a1af7de657a6ba61f2`  
+**Verified implementation commit:** `47e7ce1eb2153f10be1a098eb2042ccab74ad9a6`  
+**Verified GitHub Actions run:** `34063105552`  
+**Temporary workflow cleanup commit:** `c9471c906fab98842ad802e3ed0ff83d4d5c7086`  
 **Date:** 2026-09-06  
 **Implementing model:** GPT-5.6 Sol
 
@@ -15,7 +18,7 @@ This branch answers the next question:
 
 > Can ConceptMotion derive useful educational motion from those semantic relations without adding authored coordinates or a second animation framework?
 
-The answer targeted by this branch is yes.
+For this branch, the answer is **yes**. The same authored `TableTraceSpec` now drives deterministic static meaning and optional browser choreography.
 
 ## Architecture
 
@@ -39,6 +42,13 @@ TableTraceSpec
 ```
 
 The transient overlay is decorative and disposable. It is not part of semantic identity and is removed from frozen/static SVG export.
+
+This preserves the framework responsibility split:
+
+- `@conceptmotion/core` owns semantic table/reference/relation meaning;
+- `@conceptmotion/svg` owns layout-derived presentation and choreography;
+- `@datapass/figure` / `FigurePlayer` owns step/play/reset and consumer chrome;
+- content remains JSON-first and language-neutral.
 
 ## Relation-to-motion grammar
 
@@ -73,6 +83,8 @@ Properties:
 - no timers, simulations or authored coordinates are stored in content.
 
 This is intentionally a small progressive-enhancement layer, not a replacement for ConceptMotion state or FigurePlayer timelines.
+
+The Playwright gate instruments the real browser `Element.prototype.animate` API and verifies that selecting a Table Trace motion example causes actual Web Animations calls. The branch therefore does not infer motion only from static `data-motion` attributes.
 
 ## Transient export contract
 
@@ -126,6 +138,27 @@ Reduced motion is structural, not cosmetic:
 
 The educational explanation therefore never depends on seeing an animation.
 
+## Accessibility correction found by the browser gate
+
+The first real Playwright/Axe pass found a serious `nested-interactive` problem in the new renderer: the original Table Trace implementation made table/view containers, row containers and cell/column descendants all interactive, producing nested button semantics.
+
+The production renderer was corrected instead of excluding or weakening Axe:
+
+- structural `trace-view` groups are non-interactive;
+- structural `trace-row` groups are non-interactive;
+- the table outline is the table selection handle;
+- the row outline is the row selection handle;
+- columns and cells remain leaf selection handles;
+- group overlays remain selectable without wrapping descendant controls.
+
+A focused SVG regression now runs with `onSelect` enabled and asserts:
+
+- structural view/row groups have no interactive role;
+- table outline, row outline, column and cell handles are interactive;
+- there are zero nested `[role="button"] [role="button"]` controls.
+
+The final desktop and phone Axe gates then pass with no serious/critical violations.
+
 ## What this branch does not do
 
 This branch does **not** add:
@@ -154,7 +187,7 @@ That keeps authoring simple and lets the consumer experiments reveal whether ove
 
 The current implementation moves a compact semantic traveler/token while source and target tables remain visible. It does not physically detach an entire source `<g>` row and morph it into the target table. This is intentional for V1 because before/after comparison remains visible throughout the explanation.
 
-If user testing shows that full row/cell ghost morphs teach better, they can be derived from the same ref geometry without changing the TableTrace contract.
+If user testing shows that full row/cell ghost morphs teach better, they can be derived from the same ref geometry without changing the Table Trace contract.
 
 ### Group choreography
 
@@ -168,18 +201,69 @@ More than 24 source/target motion pairs are bundled into one aggregate cue. Educ
 
 Cross-consumer feedback has identified page/global autoplay/pause policy as a framework-level concern. It is intentionally not solved in this branch because it affects every Figure family rather than Table Trace alone.
 
-## Verification plan
+## Verification evidence
 
-Temporary branch CI runs:
+The implementation checkpoint `47e7ce1eb2153f10be1a098eb2042ccab74ad9a6` passed GitHub Actions run `34063105552`.
 
-- frozen dependency install;
-- core Table Trace grammar tests;
-- SVG registry + Table Trace motion tests;
-- Figure adapter tests;
-- Visual Sandbox validation for all five examples;
-- full TypeScript project references;
-- production Studio build;
-- bundle policy;
-- Playwright browser smoke in desktop Chrome and 390px phone Chrome, including a real browser Web Animations call check, reduced-motion behavior, horizontal-overflow check and serious/critical Axe gate.
+### Focused tests
 
-The temporary branch workflow will be removed after a green final verification run. Its run history remains as evidence.
+| Gate | Result |
+| --- | --- |
+| Core Table Trace grammar | **6/6 passed** |
+| SVG registry + Table Trace motion + accessibility hierarchy | **17/17 passed** |
+| Figure integration | **9/9 passed** |
+| Visual Sandbox / five-example validation | **8/8 passed** |
+| Focused unit total | **40/40 passed** |
+
+### Repository/build gates
+
+- frozen `pnpm` install: **passed**;
+- supply-chain lockfile policy: **passed**;
+- full TypeScript project references: **passed**;
+- reference notebook deterministic import: **passed**;
+- production Studio build: **passed**, 3,341 modules transformed;
+- existing bundle policy: **passed**;
+- Catalog/Knowledge continue to exclude Monaco from their initial paths;
+- Workflow/Challenge continue to reach Monaco only dynamically.
+
+Bundle evidence at the verified checkpoint:
+
+```text
+initialStaticBytes   705500
+knowledgeStaticBytes 872491
+workflowStaticBytes  860428
+challengeStaticBytes 880217
+editorLazyBytes      3906487
+```
+
+The build still reports the repository's existing large Fluent/Monaco chunk warnings; the enforced bundle-boundary policy remains green.
+
+### Real-browser gate
+
+A dedicated Studio-only Playwright config avoids booting unrelated V3/V4 consumers for this focused branch test.
+
+Both profiles pass:
+
+- desktop Chrome: `1440 × 1000`;
+- phone Chrome: `390 × 844`, touch enabled.
+
+The browser test verifies:
+
+- all five editable Table Trace examples are present;
+- actual browser Web Animations calls occur;
+- sort creates three travel cues;
+- group/aggregate uses convergence across authored steps;
+- FigurePlayer `Next` advances semantic frame identity;
+- reduced motion removes transient travelers and preserves static steps;
+- no page-level horizontal overflow;
+- no serious/critical Axe violations.
+
+Playwright result: **2/2 passed**.
+
+## Cleanup / integration note
+
+The temporary branch-only CI workflow was removed after the green run in commit `c9471c906fab98842ad802e3ed0ff83d4d5c7086`. The run remains in GitHub Actions history as verification evidence.
+
+This branch is intentionally not merged. Its parent Table Trace branch itself remains based on the pinned V4 line, while repository `main` has moved forward. Any later integration should be a deliberate conflict-resolution/review pass rather than silently rebasing this experiment over newer framework work.
+
+The next useful evidence is **real lesson reuse**: use Table Trace Motion in Formation / Visual Algorithms concepts such as filtering, sorting, GROUP BY, ranking/window row movement, pivoting and join provenance. Only after that should we decide whether the framework needs full mark morphs, author-selectable choreography hints, or offline runtime trace generation.
