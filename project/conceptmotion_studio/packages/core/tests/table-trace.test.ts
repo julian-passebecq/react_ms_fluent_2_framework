@@ -76,12 +76,17 @@ describe('table trace semantics', () => {
   });
 
   it('rejects missing cells and malformed relation shapes before rendering', () => {
-    const missingCell = filterTrace();
-    missingCell.relations[0] = { id: 'bad', kind: 'use', from: [{ viewId: 'before', kind: 'cell', rowId: 'o1', columnId: 'missing' }] };
+    const base = filterTrace();
+    const missingCell: TableTraceSpec = {
+      ...base,
+      relations: [{ id: 'bad', kind: 'use', from: [{ viewId: 'before', kind: 'cell', rowId: 'o1', columnId: 'missing' }] }],
+    };
     expect(() => compileTableTrace(missingCell)).toThrow(/unknown column/i);
 
-    const malformed = filterTrace();
-    malformed.relations[0] = { id: 'bad-map', kind: 'map', from: [{ viewId: 'before', kind: 'row', rowId: 'o1' }] };
+    const malformed: TableTraceSpec = {
+      ...base,
+      relations: [{ id: 'bad-map', kind: 'map', from: [{ viewId: 'before', kind: 'row', rowId: 'o1' }] }],
+    };
     expect(() => compileTableTrace(malformed)).toThrow(/requires both from and to/i);
   });
 });
