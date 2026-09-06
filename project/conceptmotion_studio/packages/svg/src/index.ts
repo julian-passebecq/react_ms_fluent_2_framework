@@ -16,4 +16,5 @@ export * from './renderers/lineage.js';
 export * from './renderers/loop.js';
 export * from './renderers/regression.js';
 export * from './renderers/table.js';
+export * from './renderers/trace.js';
 export * from './renderers/workflow.js';
