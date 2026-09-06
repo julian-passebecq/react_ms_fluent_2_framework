@@ -35,5 +35,11 @@ jobs:
         run: pnpm exec vitest run packages/svg/tests/table-trace.test.ts packages/svg/tests/renderers.test.ts packages/svg/tests/semantic-nodes.test.ts
       - name: Figure adapter integration tests
         run: pnpm exec vitest run packages/figure/tests/registry.test.tsx packages/figure/tests/table-trace.test.tsx
+      - name: JSON Visual Sandbox integration
+        run: pnpm exec vitest run apps/studio/src/data/visualSandbox.test.ts
       - name: TypeScript project references
         run: pnpm run typecheck
+      - name: Production Studio build
+        run: pnpm exec vite build --config apps/studio/vite.config.ts
+      - name: Bundle policy check
+        run: pnpm run test:bundle
