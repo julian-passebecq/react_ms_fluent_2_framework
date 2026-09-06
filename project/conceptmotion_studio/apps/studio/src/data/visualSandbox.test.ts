@@ -4,6 +4,12 @@ import { migratedFigures } from '../../../../content/visuals';
 import { parseSandboxFigure } from './visualSandbox';
 describe('production Visual Sandbox validation',()=>{
   it('accepts every migrated production scene',()=>{for(const figure of migratedFigures)expect(parseSandboxFigure(JSON.stringify(figure)),figure.id).toMatchObject({figure,issues:[]});});
+  it('accepts a JSON-authored table trace and validates semantic references',()=>{
+    const figure={id:'trace-filter',kind:'concept',rendererId:'table.trace',title:'Filter',fallbackText:'Filter rows.',spec:{kind:'table-trace',version:'1',id:'trace-filter',title:'Filter',views:[{id:'before',role:'input',table:{id:'orders',columns:[{id:'status'}],rows:[{id:'o1',values:{status:'late'}},{id:'o2',values:{status:'ok'}}]}},{id:'after',role:'output',table:{id:'orders',columns:[{id:'status'}],rows:[{id:'o1',values:{status:'late'}}]}}],relations:[{id:'predicate',kind:'use',from:[{viewId:'before',kind:'cell',rowId:'o1',columnId:'status'},{viewId:'before',kind:'cell',rowId:'o2',columnId:'status'}]},{id:'keep',kind:'map',from:[{viewId:'before',kind:'row',rowId:'o1'}],to:[{viewId:'after',kind:'row',rowId:'o1'}]},{id:'drop',kind:'drop',from:[{viewId:'before',kind:'row',rowId:'o2'}]}],frames:[{id:'read',activeRelationIds:['predicate']},{id:'result',activeRelationIds:['keep','drop']}]}};
+    expect(parseSandboxFigure(JSON.stringify(figure))).toMatchObject({figure,issues:[]});
+    const invalid={...figure,spec:{...figure.spec,relations:[{id:'bad',kind:'use',from:[{viewId:'before',kind:'cell',rowId:'o1',columnId:'missing'}]}]}};
+    expect(parseSandboxFigure(JSON.stringify(invalid)).issues.join(' ')).toContain('unknown column');
+  });
   it('rejects malformed JSON, wrong contracts and invalid graph references',()=>{
     expect(parseSandboxFigure('{').figure).toBeUndefined();
     expect(parseSandboxFigure('{}').issues.length).toBeGreaterThan(0);
@@ -21,6 +27,13 @@ describe('production Visual Sandbox validation',()=>{
     const result=parseSandboxFigure(JSON.stringify(figure));
     expect(result.figure).toBeUndefined();
     expect(result.issues[0]).toContain('Preview join budget exceeded');
+  });
+  it('bounds table traces by total teaching cells before rendering',()=>{
+    const rows=Array.from({length:6000},(_,index)=>({id:`r${index}`,values:{value:index}}));
+    const figure={id:'large-trace',kind:'concept',rendererId:'table.trace',title:'Too large',fallbackText:'A bounded trace is required.',spec:{kind:'table-trace',version:'1',id:'large-trace',title:'Too large',views:[{id:'before',role:'input',table:{id:'t',columns:[{id:'value'}],rows}},{id:'after',role:'output',table:{id:'t',columns:[{id:'value'}],rows}}],relations:[]}};
+    const result=parseSandboxFigure(JSON.stringify(figure));
+    expect(result.figure).toBeUndefined();
+    expect(result.issues[0]).toContain('Preview table-trace budget exceeded');
   });
   it('validates workflow explanation references before replacing the last applied preview',()=>{
     const figure=migratedFigures.find(item=>item.id==='de-retry')!;
