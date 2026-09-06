@@ -48,6 +48,7 @@ interface ViewLayout {
 
 interface Point { x: number; y: number }
 type TraceMotionKind = 'travel' | 'converge' | 'fade' | 'enter' | 'pulse';
+type TraceLocale = 'en' | 'no';
 
 interface TraceMotionCue {
   key: string;
@@ -208,7 +209,7 @@ function refPoint(layout: ViewLayout, spec: TableTraceSpec, ref: TableTraceRef):
   return { x: edgeX, y: layout.y + layout.rowsTop + average * layout.rowHeight + (layout.rowHeight - 4) / 2 };
 }
 
-function refLabel(spec: TableTraceSpec, ref: TableTraceRef, locale: string): string {
+function refLabel(spec: TableTraceSpec, ref: TableTraceRef, locale: TraceLocale): string {
   const view = spec.views.find((candidate) => candidate.id === ref.viewId);
   if (!view) return ref.kind;
   if (ref.kind === 'table') return view.table.id;
@@ -263,7 +264,7 @@ function relationMotionCues(
   trace: CompiledTableTrace,
   active: ReadonlySet<string>,
   layoutByView: ReadonlyMap<string, ViewLayout>,
-  locale: string,
+  locale: TraceLocale,
   theme: SemanticTheme,
 ): TraceMotionCue[] {
   const cues: TraceMotionCue[] = [];
@@ -364,6 +365,7 @@ export class TableTraceRenderer extends BaseSvgRenderer<TableTraceRendererInput>
   protected render(input: TableTraceRendererInput, initial = false): void {
     const surface = this.surface!;
     const options = this.options;
+    const locale: TraceLocale = options.locale === 'no' ? 'no' : 'en';
     const trace = input.trace ?? compileTableTrace(input.spec);
     const allRelationIds = new Set(trace.relations.map((relation) => relation.id));
     const active = new Set(input.activeRelationIds?.filter((id) => allRelationIds.has(id)) ?? [...allRelationIds]);
@@ -373,8 +375,8 @@ export class TableTraceRenderer extends BaseSvgRenderer<TableTraceRendererInput>
     if (this.reducedMotion || choreographyChanged) this.motion.cancelAll();
 
     const kindsByKey = relationKinds(trace, active);
-    const title = resolveLocalizedText(trace.spec.title, options.locale ?? 'en');
-    const description = resolveLocalizedText(trace.spec.description, options.locale ?? 'en') || `${trace.spec.views.length} table views · ${active.size} active semantic relations.`;
+    const title = resolveLocalizedText(trace.spec.title, locale);
+    const description = resolveLocalizedText(trace.spec.description, locale) || `${trace.spec.views.length} table views · ${active.size} active semantic relations.`;
     const top = renderHeading(surface, title, description, options);
     setAccessibleText(surface, title, description);
 
@@ -433,7 +435,7 @@ export class TableTraceRenderer extends BaseSvgRenderer<TableTraceRendererInput>
       refElements.set(tableKey, viewGroup);
       const tableKinds = kindsByKey.get(tableKey);
       const label = ensureChild(viewGroup, 'text[data-role="view-label"]', 'text', { 'data-role': 'view-label', x: 0, y: 13, fill: surface.theme.mutedInk, 'font-size': 10, 'font-weight': 700, 'letter-spacing': .7 });
-      setText(label, resolveLocalizedText(layout.view.label, options.locale ?? 'en') || `${layout.view.role.toUpperCase()} · ${layout.view.table.id}`);
+      setText(label, resolveLocalizedText(layout.view.label, locale) || `${layout.view.role.toUpperCase()} · ${layout.view.table.id}`);
       const outline = ensureChild(viewGroup, 'rect[data-role="table-outline"]', 'rect', { 'data-role': 'table-outline', x: 0, y: layout.headerTop, width: layout.width, height: layout.headerHeight + layout.rows.length * layout.rowHeight + 5, rx: surface.theme.radius, fill: surface.theme.surface, stroke: accentForKinds(tableKinds, surface.theme), 'stroke-width': tableKinds?.size ? 2 : 1 });
       outline.setAttribute('aria-hidden', 'true');
       makeSelectable(viewGroup, tableKey, `Table ${layout.view.table.id}, ${layout.view.role}`, options);
@@ -447,7 +449,7 @@ export class TableTraceRenderer extends BaseSvgRenderer<TableTraceRendererInput>
         makeSelectable(columnGroup, key, `Column ${column.id}`, options);
         ensureChild(columnGroup, 'rect', 'rect', { width: layout.cellWidth, height: layout.headerHeight, fill: kinds?.size ? surface.theme.accentSubtle : surface.theme.surfaceRaised, stroke: accentForKinds(kinds, surface.theme) });
         const text = ensureChild(columnGroup, 'text', 'text', { x: 7, y: 19, fill: surface.theme.ink, 'font-size': 10, 'font-weight': 650 });
-        setText(text, truncate(resolveLocalizedText(column.label, options.locale ?? 'en') || column.id, 14));
+        setText(text, truncate(resolveLocalizedText(column.label, locale) || column.id, 14));
       });
 
       keyedChildren(viewGroup, 'g[data-role="trace-row"]', 'g', layout.rows, (row) => row.id, (rowGroup, row, rowIndex) => {
@@ -483,7 +485,7 @@ export class TableTraceRenderer extends BaseSvgRenderer<TableTraceRendererInput>
         setSvgTransform(groupNode, -4, y, true, 0);
         ensureChild(groupNode, 'rect', 'rect', { width: layout.width + 8, height: (last - first + 1) * layout.rowHeight, rx: surface.theme.radius, fill: 'none', stroke: surface.theme.info, 'stroke-width': 2, 'stroke-dasharray': '5 3' });
         const groupLabel = ensureChild(groupNode, 'text', 'text', { x: layout.width - 6, y: 12, fill: surface.theme.info, 'font-size': 9, 'font-weight': 700, 'text-anchor': 'end' });
-        setText(groupLabel, resolveLocalizedText(group.label, options.locale ?? 'en') || group.id);
+        setText(groupLabel, resolveLocalizedText(group.label, locale) || group.id);
         makeSelectable(groupNode, key, `Group ${group.id}`, options);
       }
 
@@ -500,7 +502,7 @@ export class TableTraceRenderer extends BaseSvgRenderer<TableTraceRendererInput>
       'pointer-events': 'none',
     });
     layer.append(motionLayer);
-    const cues = this.reducedMotion ? [] : relationMotionCues(trace, active, layoutByView, options.locale ?? 'en', surface.theme);
+    const cues = this.reducedMotion ? [] : relationMotionCues(trace, active, layoutByView, locale, surface.theme);
     const cueDuration = Math.max(420, Math.min(760, this.durationMs * 2.5));
     keyedChildren(motionLayer, 'g[data-role="trace-motion-token"]', 'g', cues, (cue) => cue.key, (token, cue) => {
       setAttributes(token, {
