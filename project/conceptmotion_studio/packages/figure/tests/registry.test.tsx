@@ -38,6 +38,7 @@ describe('FigureRendererRegistry', () => {
       'static.text',
       'statistics.regression',
       'table.join',
+      'table.trace',
       'table.transform',
       'workflow.run',
       'workflow.topology',
