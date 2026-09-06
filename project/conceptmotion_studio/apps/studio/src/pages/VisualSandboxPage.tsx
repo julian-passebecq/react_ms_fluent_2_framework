@@ -7,7 +7,7 @@ import { ContentDetails, PageHeader, useLocale } from '@datapass/ui';
 import { migratedVisuals } from '../../../../content/visuals';
 import figureSchema from '../../../../schemas/authoring/figure.schema.json';
 import { parseSandboxFigure } from '../data/visualSandbox';
-import { tableTraceSandboxExample } from '../data/tableTraceExample';
+import { tableTraceSandboxExamples } from '../data/tableTraceExample';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import './VisualSandboxPage.css';
 
@@ -16,7 +16,7 @@ const fallback: FigureSpec = {
   title: 'Unsupported adapter example', spec: {},
   fallbackText: 'This is the accessible textual fallback for an unregistered future renderer.',
 };
-const examples = [...migratedVisuals.map(entry => entry.figure), tableTraceSandboxExample, fallback];
+const examples = [...migratedVisuals.map(entry => entry.figure), ...tableTraceSandboxExamples, fallback];
 const schemaHook = { uri: 'urn:datapass:schema:figure:1', schema: figureSchema, fileMatch: ['datapass://visual-sandbox/spec.figure.json'] };
 
 export function VisualSandboxPage() {
@@ -74,7 +74,7 @@ export function VisualSandboxPage() {
         <ContentDetails summary="Authoring help">
           <p>Editor suggestions check the Figure envelope locally. Apply also checks renderer semantics and bounded input; runtime validation remains authoritative.</p>
           <p><a href="https://github.com/julian-passebecq/react_ms_fluent_2_framework/blob/main/project/conceptmotion_studio/docs/AUTHORING_DX.md" target="_blank" rel="noreferrer">Authoring documentation</a> · <a href="http://localhost:6006/?path=/story/v4-approved-compositions--compact-figure" target="_blank" rel="noreferrer">Storybook examples (local server)</a></p>
-          <p>Start the repository’s Storybook task to open the Golden Gallery. JSON download includes the editor draft, even when it is not yet valid. SVG export captures only the applied preview step.</p>
+          <p>Start the repository’s Storybook task to open the Golden Gallery. JSON download includes the editor draft, even when it is not yet valid. SVG export captures only the applied semantic step; transient motion travelers are omitted.</p>
         </ContentDetails>
       </section>
       <section className="visual-sandbox-preview" aria-label="Production Figure preview">
