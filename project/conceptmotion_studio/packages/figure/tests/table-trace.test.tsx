@@ -61,7 +61,7 @@ const figure: FigureSpec = {
   kind: 'concept',
   rendererId: 'table.trace',
   title: 'Filter late orders',
-  spec: trace,
+  spec: trace as unknown as FigureSpec['spec'],
   fallbackText: 'The status column is tested; o1 survives and o2 is removed.',
   staticState: 1,
   reducedMotionState: 1,
