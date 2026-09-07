@@ -24,7 +24,10 @@ describe('opt-in semantic Diagram nodes', () => {
     renderer.mount(host, { spec: legacy }, { reducedMotion: true });
     const node = host.querySelector('[data-node-id="source"]');
     expect(host.getAttribute('viewBox')).toBe('0 0 960 540');
-    expect(host.querySelectorAll('[data-role="port"]')).toHaveLength(6);
+    const ports = [...host.querySelectorAll('[data-role="port"]')];
+    expect(ports).toHaveLength(6);
+    expect(ports.every(port => port.getAttribute('aria-hidden') === 'true')).toBe(true);
+    expect(ports.every(port => !port.hasAttribute('aria-label'))).toBe(true);
     renderer.update({ spec });
     expect(host.querySelector('[data-node-id="source"]')).toBe(node);
     expect(node?.querySelector('[data-role="label"]')?.textContent).toBe('An explicitlylabelled data…');
