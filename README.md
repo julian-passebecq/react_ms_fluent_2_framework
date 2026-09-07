@@ -4,6 +4,18 @@ A reusable visual-learning and source-aware documentation platform with seven wo
 
 The runnable workspace is [project/conceptmotion_studio](project/conceptmotion_studio/README.md).
 
+## Current project coordination
+
+For current project-wide direction, read these before the historical version reports:
+
+- [Project documentation index](PROJECT_DOCS_INDEX.md) — current reading order and source-of-truth boundaries.
+- [Project audit summary — 2026-09-07](PROJECT_AUDIT_SUMMARY_2026-09-07.md) — current judgment across Datapass, ConceptMotion, ForgeViz and consumers.
+- [Master backlog](MASTER_BACKLOG.md) — completed/proven work plus current P0/P1/P2/deferred priorities.
+- [Technology landscape audit — 2026](TECH_LANDSCAPE_AUDIT_2026.md) — current external-library comparison and adopt/adapt/defer/reject decisions.
+- [Project pass log](PROJECT_PASS_LOG.md) — append-only major milestone ledger with dates, models, commits and CI evidence.
+
+These documents consolidate work performed after the original V4 reports. Historical V1/V2/V3/V4 reports remain evidence and are not rewritten as current decisions.
+
 Independent repositories use the [V4 external-consumer guide](project/conceptmotion_studio/docs/EXTERNAL_CONSUMERS.md): exact-commit selective bootstrap, consumer-owned frozen lockfile, canonical data exports, standalone scaffolds and production browser release gates. The [hardening report](V4_CONSUMER_HARDENING_REPORT.md), [consumer findings](V4_CONSUMER_FINDINGS.md) and [post-consumer backlog](V4_POST_CONSUMER_BACKLOG.md) record the release evidence and deliberate deferrals.
 
 ## Run
