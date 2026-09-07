@@ -89,6 +89,21 @@ type TableTraceRelationKind =
 
 Do not invent operation-specific kinds such as `shuffle`, `rank`, `pivot`, `filter`, `join`, `aggregate`, `repartition` or `coalesce`. Those are lesson concepts expressed by combinations of the six relations.
 
+### Runtime validation is authoritative
+
+`TableTraceSpec` is typed, but consumer Figure payloads are JSON-shaped. `compileTableTrace` therefore validates the serialized boundary too. It rejects:
+
+- view roles other than `input` / `output`;
+- relation kinds outside the six-relation grammar;
+- reference kinds outside table/row/column/cell/group;
+- duplicate view and relation IDs;
+- more or fewer than one output view;
+- unknown table/row/column/cell/group references;
+- duplicate row membership within a named group;
+- malformed relation direction/arity.
+
+Do not treat a TypeScript cast from arbitrary JSON as validation.
+
 ## Minimal filter example
 
 ```ts
@@ -270,7 +285,7 @@ import type { FigureSpec, JsonValue } from '@datapass/content';
 
 const figure: FigureSpec = {
   id: 'late-orders-trace',
-  kind: 'table',
+  kind: 'concept',
   rendererId: 'table.trace',
   title: 'Keep late orders',
   spec: JSON.parse(JSON.stringify(scene)) as JsonValue,
@@ -330,6 +345,7 @@ From `project/conceptmotion_studio`:
 ```sh
 pnpm exec vitest run \
   packages/core/tests/table-trace.test.ts \
+  packages/core/tests/table-trace-runtime-validation.test.ts \
   packages/svg/tests/table-trace.test.ts \
   packages/svg/tests/table-trace-a11y.test.ts \
   packages/svg/tests/renderers.test.ts \
