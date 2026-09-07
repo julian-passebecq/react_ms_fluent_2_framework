@@ -16,6 +16,7 @@ describe('external app recipes', () => {
       expect(files['scripts/consumer-release-gate.ts']).toBe(tools.releaseGateSource);
       expect(files).not.toHaveProperty('pnpm-lock.yaml');
       expect(JSON.parse(files['datapass.json']).commit).toBe(pin);
+      expect(Object.entries(files).filter(([, source]) => source.includes(pin)).map(([name]) => name)).toEqual(['datapass.json']);
       const manifest = JSON.parse(files['package.json']);
       expect(manifest.packageManager).toBe('pnpm@11.19.0');
       expect(manifest.dependencies['@datapass/canonical']).toBe('workspace:*');
@@ -30,9 +31,16 @@ describe('external app recipes', () => {
       expect(files['playwright.config.ts']).toContain('reuseExistingServer: false');
       expect(files['playwright.config.ts']).toContain('width: 1440');
       expect(files['playwright.config.ts']).toContain('width: 390');
-      expect(files['tests/browser/primary.spec.ts']).toContain('toBeLessThanOrEqual(1)');
+      expect(files['tests/browser/a11y.ts']).toContain("exclude(tabsterSentinelSelector)");
+      expect(files['tests/browser/a11y.ts']).toContain("toHaveAttribute('role', 'none')");
+      expect(files['tests/browser/a11y.ts']).toContain('expectTabsterSentinelCount');
+      expect(files['tests/browser/primary.spec.ts']).toContain("from './a11y'");
+      expect(files['tests/browser/primary.spec.ts']).not.toContain('AxeBuilder');
       expect(files['tests/browser/primary.spec.ts']).toContain("page.keyboard.press('Enter')");
+      expect(files['README.md']).toContain('only framework-commit source of truth');
       await expect(transformWithOxc(files['src/App.tsx'], 'external/App.tsx')).resolves.toHaveProperty('code');
+      await expect(transformWithOxc(files['tests/browser/a11y.ts'], 'external/tests/browser/a11y.ts')).resolves.toHaveProperty('code');
+      await expect(transformWithOxc(files['tests/browser/primary.spec.ts'], 'external/tests/browser/primary.spec.ts')).resolves.toHaveProperty('code');
     }
   });
 

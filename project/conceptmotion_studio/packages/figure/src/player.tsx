@@ -40,6 +40,9 @@ export function FigurePlayer({ figure, captions, stepCount: explicitCount, showI
   const current = Math.max(0, Math.min(count - 1, controlledFrame ?? index));
   const caption = captions?.length ? text(captions[Math.min(current, captions.length - 1)], locale) : sceneCaption(figure, current, locale);
   const selectedId = controlledSelection ?? selection;
+  // A hidden inspector must not silently turn every semantic mark into a tab stop.
+  // Explicit selection callbacks/controlled selection still opt callers into mark interaction.
+  const selectionEnabled = showInspector || Boolean(onSelect) || controlledSelection !== undefined;
   const seek = (value: number) => { const next = Math.max(0, Math.min(count - 1, value)); setIndex(next); onFrameChange?.(next); };
   useEffect(() => { setIndex(0); setSelection(undefined); setPlaying(false); setExportStatus(''); }, [figure.id]);
   useEffect(() => { if (reducedMotion) setPlaying(false); }, [reducedMotion]);
@@ -108,9 +111,9 @@ export function FigurePlayer({ figure, captions, stepCount: explicitCount, showI
     event.currentTarget.href = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(freezeSvgElement(svg))}`;
     setExportStatus('Current step exported as a static SVG.');
   };
-  return <div ref={host} className="dp-figure-player" data-reduced-motion={String(reducedMotion)} data-frame-index={current} data-pannable={String(narrow && hasSvg)}>
+  return <div ref={host} className="dp-figure-player" data-reduced-motion={String(reducedMotion)} data-frame-index={current} data-pannable={String(narrow && hasSvg)} data-selection-enabled={String(selectionEnabled)}>
     {narrow && hasSvg ? <p id={`${accessibilityPrefix}-pan-hint`} className="dp-figure-player__pan-hint">{locale === 'no' ? 'Sveip eller rull sidelengs for å se hele figuren. Med tastatur: fokuser figuren og bruk venstre/høyre piltast.' : 'Swipe or scroll sideways to explore the full figure. Keyboard: focus the canvas, then use Left/Right arrows.'}</p> : null}
-    <FigureView {...rest} figure={figure} locale={locale} metadataMode={metadataMode} presentationSize={presentationSize} reducedMotion={reducedMotion} frameIndex={current} selectedId={selectedId} onSelect={id => { setSelection(id); onSelect?.(id); }}
+    <FigureView {...rest} figure={figure} locale={locale} metadataMode={metadataMode} presentationSize={presentationSize} reducedMotion={reducedMotion} frameIndex={current} selectedId={selectedId} onSelect={selectionEnabled ? id => { setSelection(id); onSelect?.(id); } : undefined}
       toolbar={<>{toolbar}{hasRenderer && count > 1 ? <TimelineControls currentStep={current} stepCount={count} isPlaying={playing} onPlayPause={() => { if (current >= count - 1) seek(0); setPlaying(value => !value); }} onPrevious={() => { setPlaying(false); seek(current - 1); }} onNext={() => { setPlaying(false); seek(current + 1); }} onSeek={value => { setPlaying(false); seek(value); }} onReset={() => { setPlaying(false); seek(0); }} speed={speed} onSpeedChange={setSpeed} playDisabled={reducedMotion} /> : null}</>}
       exportAction={exportAction ?? (hasSvg ? <a href="#figure-export" download={filename} onClick={download}>Export SVG</a> : <span>SVG export unavailable for this renderer</span>)} />
     {caption ? <p className="dp-figure-player__caption" aria-live="polite">{caption}</p> : null}

@@ -1,25 +1,32 @@
 import {
+  compileCollectionFrame,
   compileLoopFrame,
   compileRegressionFrame,
   compileTableJoin,
+  compileTableTrace,
+  validateTableWindowFrame,
+  type CollectionFlowSpec,
   type CompiledTableState,
   type DiagramSpec,
   type EntityId,
+  type ExplanationTrack,
   type LineageSpec,
   type LocalizedText,
   type LoopSceneSpec,
   type RegressionSceneSpec,
   type TableJoinSpec,
-  type ExplanationTrack,
+  type TableTraceSpec,
+  type TableWindowFrame,
 } from '@conceptmotion/core';
 import { resolveSceneExplanation } from './explanation.js';
-
+import type { CollectionRendererInput } from './renderers/collection.js';
 import type { DiagramRendererInput } from './renderers/diagram.js';
 import type { JoinRendererInput } from './renderers/join.js';
 import type { LineageRendererInput } from './renderers/lineage.js';
 import type { LoopRendererInput } from './renderers/loop.js';
 import type { RegressionRendererInput } from './renderers/regression.js';
 import type { TableRendererInput } from './renderers/table.js';
+import type { TableTraceRendererInput } from './renderers/trace.js';
 
 export interface TableSvgSceneSpec {
   /** Optional moving ROWS frame, aligned one-to-one with table states. */
@@ -46,6 +53,19 @@ export interface JoinSvgSceneSpec {
   readonly revealCounts?: readonly number[];
 }
 
+export interface TableTraceSvgFrame {
+  readonly id: string;
+  /** Relation IDs shown in this teaching step. Omitted means all relations. */
+  readonly activeRelationIds?: readonly string[];
+  /** Optional learner-facing step caption consumed by FigurePlayer. */
+  readonly caption?: LocalizedText;
+}
+
+export type TableTraceSvgSceneSpec = TableTraceSpec & {
+  readonly explanation?: ExplanationTrack;
+  readonly frames?: readonly TableTraceSvgFrame[];
+};
+
 export interface DiagramSvgFrame {
   readonly id: string;
   readonly activeNodeIds?: readonly EntityId[];
@@ -71,6 +91,7 @@ export type SvgSceneSpec =
   | CollectionFlowSpec
   | TableSvgSceneSpec
   | JoinSvgSceneSpec
+  | TableTraceSvgSceneSpec
   | LoopSceneSpec
   | RegressionSceneSpec
   | DiagramSvgSceneSpec
@@ -80,6 +101,7 @@ export type ResolvedSvgScene =
   | { rendererId: 'collection.flow'; input: CollectionRendererInput }
   | { rendererId: 'table.transform'; input: TableRendererInput }
   | { rendererId: 'table.join'; input: JoinRendererInput }
+  | { rendererId: 'table.trace'; input: TableTraceRendererInput }
   | { rendererId: 'algorithm.loop'; input: LoopRendererInput }
   | { rendererId: 'statistics.regression'; input: RegressionRendererInput }
   | { rendererId: 'diagram.flow'; input: DiagramRendererInput }
@@ -95,6 +117,7 @@ export function rendererIdForScene(spec: SvgSceneSpec): ResolvedSvgScene['render
   if (spec.kind === 'collection') return 'collection.flow';
   if (spec.kind === 'table') return 'table.transform';
   if (spec.kind === 'join') return 'table.join';
+  if (spec.kind === 'table-trace') return 'table.trace';
   if (spec.kind === 'loop') return 'algorithm.loop';
   if (spec.kind === 'regression') return 'statistics.regression';
   if (spec.kind === 'diagram') return 'diagram.flow';
@@ -137,6 +160,20 @@ export function resolveSvgScene(
         revealCount: revealIndex >= 0 ? spec.revealCounts?.[revealIndex] : result.rows.length,
         title: spec.title,
         description: spec.description,
+      },
+    };
+  }
+  if (spec.kind === 'table-trace') {
+    const trace = compileTableTrace(spec);
+    const frame = spec.frames?.length ? spec.frames[indexFor(spec.frames.length, frameIndex)] : undefined;
+    return {
+      rendererId: 'table.trace',
+      input: {
+        spec,
+        trace,
+        frameId: frame?.id,
+        activeRelationIds: frame?.activeRelationIds,
+        explanation,
       },
     };
   }
@@ -184,6 +221,3 @@ export function resolveSvgScene(
     input: { spec, activeRelationIds: frame?.activeRelationIds },
   };
 }
-import { compileCollectionFrame, type CollectionFlowSpec } from '@conceptmotion/core';
-import type { CollectionRendererInput } from './renderers/collection.js';
-import { validateTableWindowFrame, type TableWindowFrame } from '@conceptmotion/core';

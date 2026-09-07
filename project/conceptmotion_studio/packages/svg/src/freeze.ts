@@ -51,6 +51,9 @@ export function freezeSvgElement(
       }
       clone.removeAttribute('data-figure-player-a11y');
     }
+    // Renderer-owned travelers are decorative runtime cues. Semantic relation
+    // routes and final table state remain in the deterministic frozen export.
+    clone.querySelectorAll('[data-cm-transient="true"]').forEach((element) => element.remove());
     clone.querySelectorAll<SVGElement>('*').forEach((element) => {
       for (const attribute of RUNTIME_ATTRIBUTES) element.removeAttribute(attribute);
       element.style.removeProperty('transition');

@@ -36,6 +36,8 @@ export function generateExternalAppFiles(options: ExternalAppOptions): Generated
     'release:gate': 'node --experimental-strip-types scripts/consumer-release-gate.ts',
   };
   files['package.json'] = json(manifest);
+  // This manifest is the single commit source of truth. Generated scripts read it;
+  // they must never embed a second framework SHA that can drift independently.
   files['datapass.json'] = json({ version: 1, repository: 'https://github.com/julian-passebecq/react_ms_fluent_2_framework.git', commit: options.frameworkCommit });
   files['pnpm-workspace.yaml'] = 'packages:\n  - "vendor/datapass-platform/project/conceptmotion_studio/packages/*"\n  - "vendor/datapass-platform/project/conceptmotion_studio/content"\n\nallowBuilds:\n  esbuild: true\n';
   files['.gitignore'] = 'node_modules/\nvendor/\ndist/\nplaywright-report/\ntest-results/\n*.tsbuildinfo\n';
@@ -59,6 +61,7 @@ export default defineConfig({ plugins: [react()], base: './', build: { outDir: '
 export default defineConfig({ test: { environment: 'node', include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'] } });
 `;
   files['playwright.config.ts'] = playwrightConfig;
+  files['tests/browser/a11y.ts'] = browserAuditHelper;
   files['tests/browser/primary.spec.ts'] = browserSmoke;
   files['scripts/validate-content.ts'] = `import assert from 'node:assert/strict';
 import { validateContentCatalog, validateProjectRecord } from '@datapass/content';
@@ -102,6 +105,8 @@ Use Node 24.19.0 (CI pin; framework minimum 22.12.0), pnpm 11.19.0 and Git. From
 3. Install Chrome with \`pnpm exec playwright install chrome\` (Linux CI uses \`--with-deps\`).
 4. Run \`pnpm release:gate\`. It verifies the exact pin and source bytes, installs frozen, typechecks, validates content, runs local tests, builds, and checks the production preview at 1440px/390px with Axe, overflow and keyboard assertions.
 
+\`datapass.json\` is the only framework-commit source of truth. Do not copy its SHA into a second check script; \`framework:verify\` and the release gate both read the manifest directly.
+
 Fresh checkout: \`pnpm framework:bootstrap\`, then \`pnpm install --frozen-lockfile\`. The gate refuses a missing lockfile. No framework install or node_modules symlink is needed. Source packages are private source exports, consumed by Vite/TypeScript/tsx, not plain Node JavaScript packages.
 
 Pin upgrades: retain your existing vendor directory until its old pin verifies; move that generated directory outside the repository, change \`datapass.json\` to the new exact commit, bootstrap, run \`pnpm install\`, review the lockfile delta and run the gate. Never edit vendored framework source.
@@ -129,8 +134,48 @@ export default defineConfig({
 });
 `;
 
-const browserSmoke = `import AxeBuilder from '@axe-core/playwright';
-import { expect, test } from '@playwright/test';
+const browserAuditHelper = `import AxeBuilder from '@axe-core/playwright';
+import { expect, type Page } from '@playwright/test';
+
+const tabsterSentinelSelector = '[data-tabster-dummy]';
+
+export interface DatapassPageAudit {
+  tabsterSentinelCount: number;
+}
+
+async function assertKnownTabsterSentinels(page: Page): Promise<number> {
+  const sentinels = page.locator(tabsterSentinelSelector);
+  const count = await sentinels.count();
+  for (let index = 0; index < count; index += 1) {
+    const sentinel = sentinels.nth(index);
+    expect(await sentinel.evaluate(element => element.tagName)).toBe('I');
+    await expect(sentinel).toHaveAttribute('role', 'none');
+    await expect(sentinel).toHaveAttribute('aria-hidden', 'true');
+  }
+  return count;
+}
+
+/**
+ * V4 browser accessibility contract. Fluent/Tabster focus sentinels are the only
+ * excluded infrastructure nodes; every application control remains in the Axe scan.
+ */
+export async function auditDatapassPage(page: Page, errors: readonly string[] = []): Promise<DatapassPageAudit> {
+  const tabsterSentinelCount = await assertKnownTabsterSentinels(page);
+  const results = await new AxeBuilder({ page }).exclude(tabsterSentinelSelector).analyze();
+  expect(results.violations.filter(item => item.impact === 'serious' || item.impact === 'critical')).toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+  expect(errors).toEqual([]);
+  return { tabsterSentinelCount };
+}
+
+/** Guard dynamic UI/renderer changes from introducing extra focus sentinels. */
+export async function expectTabsterSentinelCount(page: Page, expected: number): Promise<void> {
+  expect(await assertKnownTabsterSentinels(page)).toBe(expected);
+}
+`;
+
+const browserSmoke = `import { expect, test } from '@playwright/test';
+import { auditDatapassPage, expectTabsterSentinelCount } from './a11y';
 
 test.beforeEach(async ({ page }) => page.emulateMedia({ reducedMotion: 'reduce' }));
 
@@ -140,14 +185,7 @@ test('primary flow in the production bundle', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('main')).toBeVisible();
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  async function audit() {
-    // Match V4's existing narrow exception for Fluent/Tabster focus sentinels.
-    const results = await new AxeBuilder({ page }).exclude('[data-tabster-dummy]').analyze();
-    expect(results.violations.filter(item => item.impact === 'serious' || item.impact === 'critical')).toEqual([]);
-    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
-    expect(errors).toEqual([]);
-  }
-  await audit();
+  const baseline = await auditDatapassPage(page, errors);
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
   await page.keyboard.press('Enter');
@@ -156,7 +194,8 @@ test('primary flow in the production bundle', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Explore', exact: true })).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('heading', { name: 'Projects', exact: true })).toBeVisible();
-  await audit();
+  await auditDatapassPage(page, errors);
+  await expectTabsterSentinelCount(page, baseline.tabsterSentinelCount);
 });
 `;
 

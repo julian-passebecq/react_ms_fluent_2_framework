@@ -9,6 +9,7 @@ export * from './lineage';
 export * from './localization';
 export * from './serialization';
 export * from './table';
+export * from './table-trace';
 export * from './transitions';
 export * from './validation';
 export * from './workflow';

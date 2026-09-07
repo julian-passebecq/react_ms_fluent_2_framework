@@ -227,7 +227,6 @@ export function renderGraph(
       setText(label, `${(entry.group.kind ?? 'group').toUpperCase()} · ${truncate(entry.group.label, 25)}`);
     },
   );
-
   const routedEdges = model.edges.flatMap((edge) => {
     const sourceRect = layout.get(edge.from.nodeId);
     const targetRect = layout.get(edge.to.nodeId);
@@ -440,7 +439,8 @@ export function renderGraph(
             'data-port-id': port.id,
             'data-side': side,
             transform: `translate(${round(point.x)} ${round(point.y)})`,
-            'aria-label': `${port.label ?? port.id} port`,
+            'aria-hidden': 'true',
+            'aria-label': undefined,
           });
           const circle = ensureChild(portGroup, 'circle', 'circle', {
             r: 4,
