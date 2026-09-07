@@ -120,29 +120,36 @@ function assertRef(spec: TableTraceSpec, ref: TableTraceRef): void {
     if (!table.columns.some((column) => column.id === ref.columnId)) throw new Error(`Table trace cell references unknown column "${ref.columnId}" in view "${ref.viewId}".`);
     return;
   }
-  groupForRef(spec, ref);
+  if (ref.kind === 'group') {
+    groupForRef(spec, ref);
+    return;
+  }
+  throw new Error(`Table trace reference uses unsupported kind "${String((ref as { kind?: unknown }).kind)}".`);
 }
 
 function assertRelationShape(relation: TableTraceRelation): void {
   const fromCount = relation.from?.length ?? 0;
   const toCount = relation.to?.length ?? 0;
-  switch (relation.kind) {
+  const kind = (relation as { readonly kind?: unknown }).kind;
+  switch (kind) {
     case 'use':
     case 'drop':
-      if (fromCount < 1 || toCount !== 0) throw new Error(`Table trace relation "${relation.id}" (${relation.kind}) requires from references and no to references.`);
+      if (fromCount < 1 || toCount !== 0) throw new Error(`Table trace relation "${relation.id}" (${kind}) requires from references and no to references.`);
       break;
     case 'create':
       if (fromCount !== 0 || toCount < 1) throw new Error(`Table trace relation "${relation.id}" (create) requires to references and no from references.`);
       break;
     case 'map':
     case 'derive':
-      if (fromCount < 1 || toCount < 1) throw new Error(`Table trace relation "${relation.id}" (${relation.kind}) requires both from and to references.`);
+      if (fromCount < 1 || toCount < 1) throw new Error(`Table trace relation "${relation.id}" (${kind}) requires both from and to references.`);
       break;
     case 'group':
       if (fromCount < 1 || toCount !== 1 || relation.to?.[0]?.kind !== 'group') {
         throw new Error(`Table trace relation "${relation.id}" (group) requires source references and exactly one group target.`);
       }
       break;
+    default:
+      throw new Error(`Table trace relation "${relation.id}" uses unsupported kind "${String(kind)}".`);
   }
 }
 
@@ -163,7 +170,8 @@ export function compileTableTrace(spec: TableTraceSpec): CompiledTableTrace {
     if (viewIds.has(view.id)) throw new Error(`Table trace contains duplicate view id "${view.id}".`);
     viewIds.add(view.id);
     if (view.role === 'input') inputCount += 1;
-    else outputCount += 1;
+    else if (view.role === 'output') outputCount += 1;
+    else throw new Error(`Table trace view "${view.id}" uses unsupported role "${String((view as { role?: unknown }).role)}".`);
     compileTableState(view.table, `${spec.id}:${view.id}`);
   }
   if (inputCount < 1 || outputCount !== 1) throw new Error('Table trace requires at least one input view and exactly one output view.');
@@ -177,7 +185,10 @@ export function compileTableTrace(spec: TableTraceSpec): CompiledTableTrace {
     const view = spec.views.find((candidate) => candidate.id === group.viewId);
     if (!view) throw new Error(`Table trace group "${group.id}" uses unknown view "${group.viewId}".`);
     if (!group.rowIds.length) throw new Error(`Table trace group "${group.id}" must contain at least one row.`);
+    const rowIds = new Set<string>();
     for (const rowId of group.rowIds) {
+      if (rowIds.has(rowId)) throw new Error(`Table trace group "${group.id}" contains duplicate row "${rowId}".`);
+      rowIds.add(rowId);
       if (!view.table.rows.some((row) => row.id === rowId)) throw new Error(`Table trace group "${group.id}" references unknown row "${rowId}".`);
     }
   }
