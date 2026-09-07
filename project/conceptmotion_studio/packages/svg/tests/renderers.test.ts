@@ -26,6 +26,7 @@ import {
   RegressionRenderer,
   TableRenderer,
   WorkflowRenderer,
+  type RendererFamilyRegistrar,
   type RendererRegistration,
   type SvgRenderer,
 } from '../src/index.js';
@@ -49,26 +50,26 @@ const orders: TableData = {
 };
 
 describe('renderer registry and lifecycle', () => {
-  it('registers families explicitly and permits external family extension', () => {
-    const registry = createDefaultRendererRegistry();
+  it('registers every built-in family, including Table Trace, and permits additive external families', () => {
+    const extension: RendererRegistration<string> = {
+      id: 'future.chart',
+      family: 'chart',
+      create: () => ({ mount: vi.fn(), update: vi.fn(), destroy: vi.fn(), freeze: () => '<svg></svg>' }),
+    };
+    const registrar: RendererFamilyRegistrar = (registry) => { registry.register(extension); };
+    const registry = createDefaultRendererRegistry([registrar]);
     expect(registry.ids()).toEqual([
       'algorithm.loop',
       'collection.flow',
       'diagram.flow',
+      'future.chart',
       'lineage.model',
       'statistics.regression',
       'table.join',
+      'table.trace',
       'table.transform',
       'workflow.topology',
     ]);
-
-    const destroy = vi.fn();
-    const extension: RendererRegistration<string> = {
-      id: 'future.chart',
-      family: 'chart',
-      create: () => ({ mount: vi.fn(), update: vi.fn(), destroy, freeze: () => '<svg></svg>' }),
-    };
-    registry.register(extension);
     expect(registry.ids('chart')).toEqual(['future.chart']);
     expect(registry.create<string>('future.chart')).toBeDefined();
   });
@@ -227,9 +228,7 @@ describe('diagram, lineage, and workflow semantics', () => {
             { id: 'source', label: 'Source', kind: 'source', ports: [{ id: 'out', side: 'right' }] },
             { id: 'bronze', label: 'Bronze', kind: 'database', ports: [{ id: 'in', side: 'left' }] },
           ],
-          edges: [
-            { id: 'events', from: { nodeId: 'source', portId: 'out' }, to: { nodeId: 'bronze', portId: 'in' }, flowKind: 'data-stream' },
-          ],
+          edges: [{ id: 'events', from: { nodeId: 'source', portId: 'out' }, to: { nodeId: 'bronze', portId: 'in' }, flowKind: 'data-stream' }],
         },
         activeEdgeIds: ['events'],
       },
@@ -252,15 +251,13 @@ describe('diagram, lineage, and workflow semantics', () => {
         { id: 'orders', label: 'Orders', type: 'table', columns: [{ id: 'amount', label: 'amount', role: 'source' }] },
         { id: 'sales', label: 'Sales', type: 'table', columns: [{ id: 'revenue', label: 'revenue', role: 'derived' }] },
       ],
-      relations: [
-        {
-          id: 'revenue-expression',
-          sources: [{ assetId: 'orders', columnId: 'amount' }],
-          target: { assetId: 'sales', columnId: 'revenue' },
-          changeType: 'derive',
-          expression: 'SUM(amount)',
-        },
-      ],
+      relations: [{
+        id: 'revenue-expression',
+        sources: [{ assetId: 'orders', columnId: 'amount' }],
+        target: { assetId: 'sales', columnId: 'revenue' },
+        changeType: 'derive',
+        expression: 'SUM(amount)',
+      }],
     };
     const host = svg();
     const onSelect = vi.fn();
@@ -287,12 +284,10 @@ describe('diagram, lineage, and workflow semantics', () => {
         { id: 'notify', label: 'Notify', taskType: 'notify' },
       ],
       edges: [{ id: 'on-failure', from: 'copy', to: 'notify', condition: 'failure' }],
-      runs: [
-        {
-          id: 'failed-run',
-          frames: [{ id: 'failure', states: { copy: { status: 'failed' }, notify: { status: 'queued' } } }],
-        },
-      ],
+      runs: [{
+        id: 'failed-run',
+        frames: [{ id: 'failure', states: { copy: { status: 'failed' }, notify: { status: 'queued' } } }],
+      }],
     };
     const host = svg();
     new WorkflowRenderer().mount(
