@@ -1,10 +1,11 @@
 # Datapass / ConceptMotion / ForgeViz — master backlog
 
 **Current as of:** 2026-09-07  
-**Coordination scope:** Datapass/Fluent J framework, ConceptMotion, ForgeViz, independent consumer program, release engineering and deferred adapter work.  
-**Rule:** this ledger is the project-level source of truth for priorities. Subsystem backlogs remain authoritative for implementation detail.
+**Model maintaining this pass:** GPT-5.6 Sol  
+**Coordination scope:** Datapass/Fluent J, ConceptMotion, ForgeViz, six independent consumers, VizForge consumer, release engineering and evidence-driven future adapters.  
+**Rule:** this is the current project-level priority ledger. Subsystem backlogs/reports remain authoritative for implementation detail.
 
-This backlog intentionally includes **completed/proven work** as well as pending work so a future AI can understand what has already been paid for and should not be rebuilt.
+Read `PROJECT_COMPLETENESS_REAUDIT_2026-09-07.md` first for the verification vocabulary and consumer release-status matrix.
 
 ---
 
@@ -12,282 +13,331 @@ This backlog intentionally includes **completed/proven work** as well as pending
 
 | Status | Meaning |
 | --- | --- |
-| `PROVEN` | Implemented and supported by strong framework/consumer/release evidence. |
-| `IMPLEMENTED` | Code exists, but breadth of proof is incomplete. |
-| `PROMOTION CANDIDATE` | Proven on experiment branches and ready for an explicit shared-framework adoption decision. |
-| `IN PROGRESS` | Active scoped work exists. |
-| `P0` | Highest current priority; should precede broad new feature work. |
-| `P1` | High-value work after P0 stabilization. |
-| `P2` | Useful exploration after product/authoring basics are strong. |
-| `DEFERRED` | Deliberately postponed. Not authorization to implement opportunistically. |
-| `REJECTED` | Explicitly not part of the current architecture. |
+| `PROVEN` | Implemented and backed by strong framework/consumer/release evidence. |
+| `IMPLEMENTED` | Code/product exists, but final evidence breadth is incomplete. |
+| `PROMOTION CANDIDATE` | Experiment/shared branch is release-verified and awaits explicit adoption. |
+| `SOURCE-BLOCKED` | Source material is absent; do not invent it. |
+| `P0` | Highest current priority; precedes broad new feature families. |
+| `P1` | High-value product/framework work after P0 stabilization. |
+| `P2` | Measured specialist exploration. |
+| `DEFERRED` | Deliberately postponed. Not permission to start opportunistically. |
+| `REJECTED` | Explicitly outside the intended architecture. |
 
-### Promotion rule
+### Shared-abstraction promotion rule
 
-A shared framework abstraction should normally require either:
+Normally require either:
 
 1. repeated concrete evidence from at least two consumers; or
-2. one clearly new semantic category that existing contracts cannot represent truthfully.
+2. one clearly new semantic category existing contracts cannot represent truthfully.
 
-Consumer-specific CSS, copy, routing and one-off product composition remain local unless repeated evidence says otherwise.
+One-off CSS, copy, routing and product composition remain consumer-owned. Release/bootstrap bugs are exceptions because they affect every external consumer.
 
 ---
 
-# 2. Completed / proven foundation
-
-These items are here to prevent accidental reimplementation.
+# 2. Completed / proven work — do not rebuild
 
 | ID | Capability / decision | Status | Evidence / note |
 | --- | --- | --- | --- |
-| DONE-001 | Datapass package separation | `PROVEN` | UI/content/learning/code/progress/import/knowledge/scaffold/Figure boundaries survived V1–V4. |
-| DONE-002 | ConceptMotion core/SVG/React separation | `PROVEN` | Framework-neutral semantic core + SVG renderer + thin React host. |
-| DONE-003 | Stable semantic entity IDs | `PROVEN` | Algorithms, tables, joins, workflows and Table Trace rely on stable identity rather than DOM selectors. |
-| DONE-004 | Deterministic Figure/player model | `PROVEN` | Shared playback, reduced motion, state transitions and static export across consumers. |
-| DONE-005 | WorkflowSpec vs DiagramSpec responsibility split | `PROVEN` | Cloud Architecture validated behavior vs topology without another graph engine. |
-| DONE-006 | No fake runtime/execution policy | `PROVEN` | Code Lab, workflows and learning content remain explanatory/editorial rather than pretending to execute Spark/SQL/Python. |
-| DONE-007 | Lazy Monaco/shared code workbench | `PROVEN` | Monaco kept out of generic pages; code consumers share editor infrastructure. |
-| DONE-008 | 323-item / 500-variant deterministic practice corpus | `PROVEN` | Repeated framework release gates validate deterministic corpus. |
-| DONE-009 | Consumer/developer metadata separation | `PROVEN` | V4 disclosure/details patterns keep internal IDs/schema/importer metadata out of normal product copy. |
-| DONE-010 | Compact/regular/expanded Figure presentation | `PROVEN` | V4 consumer/product hardening. |
-| DONE-011 | External consumer release-gate pattern | `PROVEN` | Exact pin, frozen lock, typecheck, build, desktop/390px, keyboard/Axe/overflow. |
-| DONE-012 | Independent Cloud Architecture consumer validation | `PROVEN` | Main validation merge `3325cd099...` against framework `30e69639...`. |
-| DONE-013 | ForgeViz extracted to standalone repository | `PROVEN` | `julian-passebecq/fluent_forgeviz`, exact V1.2 source parity, standalone build/test/package smoke. |
-| DONE-014 | ForgeViz local backlog / feature matrix / pass log | `PROVEN` | `BACKLOG.md`, `FEATURE_MATRIX.md`, `PASS_LOG.md`. |
-| DONE-015 | Table Trace semantic relation grammar | `PROVEN` experimentally | `use/map/drop/create/derive/group`; five-operation Studio proof plus consumer evidence. |
-| DONE-016 | Table Trace native-browser choreography | `PROVEN` experimentally | map travel, derive/group convergence, drop/create/use motion, reduced-motion and export rules. |
-| DONE-017 | Formation Table Trace consumer proof | `PROVEN` experimentally | 9 real lesson traces; green Actions run `34064646300`; no consumer renderer code. |
-| DONE-018 | Visual Algorithms Table Trace consumer proof | `PROVEN` experimentally | 6 additional traces; green run `34066982354`; no consumer renderer code. |
-| DONE-019 | Cross-consumer Table Trace promotion candidate | `PROMOTION CANDIDATE` | Draft PR #3, candidate `6652930f...`, full promotion CI green. |
-| DONE-020 | Project-wide audit/backlog/landscape consolidation | `IN PROGRESS` | This documentation branch. |
+| DONE-001 | Datapass package separation | `PROVEN` | UI/content/learning/code/progress/notebook/knowledge/scaffold/Figure boundaries survived V1–V4. |
+| DONE-002 | ConceptMotion core/SVG/React separation | `PROVEN` | Framework-neutral semantic core and SVG runtime with thin React host. |
+| DONE-003 | Stable semantic identities | `PROVEN` | Algorithms, tables, joins, workflows, diagrams and Table Trace use stable IDs instead of DOM selectors. |
+| DONE-004 | Deterministic Figure/player + reduced motion/export | `PROVEN` | Shared playback/state/static export across framework and consumers. |
+| DONE-005 | WorkflowSpec vs DiagramSpec responsibility split | `PROVEN` | Cloud Architecture validates behavior vs topology without another graph engine. |
+| DONE-006 | No fake execution/runtime policy | `PROVEN` | SQL/Python/PySpark/code/workflow surfaces remain truthful explanatory/editing experiences. |
+| DONE-007 | Shared lazy Monaco/code workbench | `PROVEN` | Apps do not import Monaco directly. |
+| DONE-008 | Deterministic practice corpus | `PROVEN` | 323 items / 500 variants repeatedly validated. |
+| DONE-009 | Consumer vs developer metadata separation | `PROVEN` | V4 disclosure/details patterns. |
+| DONE-010 | Compact/regular/expanded Figure presentation | `PROVEN` | V4 shared presentation contract; wide-scene legibility still has follow-up. |
+| DONE-011 | External-consumer release-gate pattern | `PROVEN` | Exact pin, frozen install, typecheck, validation, build, desktop/390px, keyboard/Axe/overflow. |
+| DONE-012 | Cloud Architecture independent release | `PROVEN` | `Fluent2_J_CloudArchi@3325cd099...` against framework `30e69639...`. |
+| DONE-013 | ForgeViz standalone extraction | `PROVEN` | `fluent_forgeviz`; exact V1.2 source parity, standalone build/test/package smoke. |
+| DONE-014 | ForgeViz local governance | `PROVEN` | `BACKLOG.md`, `FEATURE_MATRIX.md`, `PASS_LOG.md`. |
+| DONE-015 | Table Trace semantic grammar | `PROVEN` experimentally | `use/map/drop/create/derive/group`; table/row/column/cell/group positions. |
+| DONE-016 | Table Trace semantic motion | `PROVEN` experimentally | use pulse, map travel, drop exit, create enter, derive/group convergence; no authored coordinates. |
+| DONE-017 | Formation Table Trace proof | `PROVEN` experimentally | Nine source-scoped SQL traces; run `34064646300`; zero consumer renderers. |
+| DONE-018 | Visual Algorithms Table Trace proof | `PROVEN` experimentally | Six distributed-data/ranking traces; run `34066982354`; zero consumer renderers. |
+| DONE-019 | Table Trace full promotion candidate | `PROMOTION CANDIDATE` | PR #3, candidate `6652930f...`, full framework run `34095496628` green. |
+| DONE-020 | Moving SQL `ROWS BETWEEN` semantics | `PROVEN` | Post-hardening table/window-frame semantics; do not replace with Table Trace. |
+| DONE-021 | DFS vertical worklist | `PROVEN` | `collection.flow`; generic arbitrary recursion remains separate. |
+| DONE-022 | VizForge V1.2 hosted consumer release | `PROVEN` | `Fluent2_J_Viz@7aaa8fa...`, run `34033499554`. |
+| DONE-023 | Project audit/backlog/landscape governance set | `PROVEN` documentation | Current docs + second completeness re-audit. |
 
 ---
 
-# 3. P0 — framework consolidation and AI authorability
+# 3. P0 — framework distribution, AI authorability and promotion
 
-These should happen before broad visual-family expansion.
+These are the highest-leverage next tasks.
 
-| ID | Owner | Work | Status | Acceptance / evidence required |
+| ID | Owner | Work | Priority | Acceptance |
 | --- | --- | --- | --- | --- |
-| DP-P0-001 | ConceptMotion/framework | **Explicit Table Trace promotion decision** | `P0` | Review draft PR #3; if promoted, merge deliberately with release/version note. Do not silently repin consumers. |
-| DP-P0-002 | ConceptMotion/framework | Canonical renderer-selection guide | `P0` | AI-facing decision table covering `table.trace`, `table.transform`, `table.join`, collection/loop, workflow and diagram. Include negative cases such as moving `ROWS BETWEEN`. |
-| DP-P0-003 | Datapass release | Built/versioned external-consumer package path | `P0` | Reduce current sparse-source bootstrap complexity; exact package provenance; independent consumer frozen install; no source-monorepo reconstruction requirement. |
-| DP-P0-004 | Datapass release | Single framework pin source of truth | `P0` | Generated/check scripts read the pin manifest rather than duplicate SHAs. Already proven on promotion candidate; make canonical. |
-| DP-P0-005 | Datapass release | Bootstrap closure/scaffold hardening | `P0` | Scaffold emits pnpm build-script policy, config closure, portable paths and required package/content closure automatically. |
-| DP-P0-006 | Datapass/ConceptMotion | **Agent capability registry** | `P0` | Machine-readable mapping: intent -> package/family -> canonical example -> validator -> supported semantics -> known exclusions. |
-| DP-P0-007 | Datapass/ConceptMotion | Concise AI authoring pack | `P0` | `AGENTS.md`/quickstart + canonical JSON examples + invalid examples + targeted commands. Future AI should not need historical architecture docs for normal work. |
-| DP-P0-008 | ConceptMotion | Synchronized code/rule focus for Table Trace | `P0` | WHERE/GROUP BY/PARTITION BY/routing rule can drive semantic code focus while visual relations animate. No new renderer family. |
-| DP-P0-009 | ConceptMotion | Serialized JSON validation hardening | `P0` | Unknown view/relation/reference values rejected structurally at runtime. Promotion candidate already includes first hardening; retain in canonical surface. |
-| DP-P0-010 | ConceptMotion/SVG | Additive renderer registration | `P0` | New bounded renderer families avoid central-file merge pressure where practical. Promotion candidate contains initial registrar API. |
-| DP-P0-011 | QA | Shared consumer accessibility audit helper | `P0` | Narrow documented Fluent/Tabster sentinel handling; all application/render marks remain blocking; desktop/phone overflow checks reusable. |
-| DP-P0-012 | Documentation | Current-doc reading order | `P0` | `PROJECT_DOCS_INDEX.md` clearly distinguishes current coordination docs from historical V1/V2/V3/V4 reports. |
+| DP-P0-001 | Framework/ConceptMotion | **Explicit Table Trace promotion decision** | `P0` | Review PR #3 and merge/version deliberately if approved. No silent consumer repins. |
+| DP-P0-002 | Framework | Built/versioned external package path | `P0` | External consumer installs exact provenance without rebuilding a monorepo source closure; frozen install proof. |
+| DP-P0-003 | Content/release | **Portable canonical content exports** | `P0` | Stable external entry points for canonical Figures/explanations, 323/500 practice data and public ProjectRegistry; separate lightweight metadata from full payloads. |
+| DP-P0-004 | Scaffold/release | Single framework pin source | `P0` | Pin checker/generated scripts read one manifest; no hard-coded second SHA. |
+| DP-P0-005 | Scaffold/release | External bootstrap closure hardening | `P0` | Generate pnpm 11 build-script policy, tsconfig/config closure, portable file paths and canonical package/content closure. |
+| DP-P0-006 | Datapass/ConceptMotion | AI capability registry | `P0` | Machine-readable intent -> package/family -> example -> validator -> semantics -> exclusions. |
+| DP-P0-007 | Datapass/ConceptMotion | Concise AI authoring pack | `P0` | Quickstart, canonical valid/invalid JSON, targeted commands and minimal historical reading. |
+| DP-P0-008 | ConceptMotion | Renderer-selection guide | `P0` | Positive/negative decisions for table.trace/table.transform/table.join/collection/loop/workflow/diagram; moving window frame explicitly excluded from Table Trace. |
+| DP-P0-009 | ConceptMotion | Synchronized code/rule focus | `P0` | WHERE/GROUP BY/PARTITION BY/routing rules synchronize with semantic visual relations without a new renderer family. |
+| DP-P0-010 | ConceptMotion | Runtime JSON hardening | `P0` | Retain promotion-candidate rejection of unknown serialized relation/view/reference values. |
+| DP-P0-011 | ConceptMotion/SVG | Additive renderer registration | `P0` | Retain promotion-candidate registrar; reduce central registry/scene merge pressure. |
+| DP-P0-012 | QA | Shared external-consumer browser audit helper | `P0` | Narrow Tabster sentinel policy, keyboard/reduced-motion/Axe/overflow; app/renderer marks remain blocking. |
+| DP-P0-013 | Figure/UI | **Wide technical Figure responsive strategy** | `P0` | Preserve label legibility on 390px: internal pan/contain/compact alternate; no success claim based only on absence of page overflow. Repeated in Portfolio + VizForge. |
+| DP-P0-014 | Documentation | Keep current source-of-truth reading order | `P0 maintenance` | Completeness report, audit summary, backlog, landscape, pass log stay synchronized. |
 
 ---
 
-# 4. P0 — ForgeViz stabilization
+# 4. P0 — ForgeViz stabilization before feature expansion
 
-Detailed acceptance criteria remain authoritative in `julian-passebecq/fluent_forgeviz/BACKLOG.md`. This project backlog only coordinates priorities.
+Detailed criteria live in `julian-passebecq/fluent_forgeviz/BACKLOG.md`.
 
-| ForgeViz ID | Work | Project priority | Note |
+| ID | Work | Priority | Acceptance / note |
 | --- | --- | --- | --- |
-| FV-P0-002 | Agent/AI authoring guide | `P0` | Highest-value ForgeViz next step. |
-| FV-P0-003 | Canonical fixture per family | `P0` | Needed for AI discovery/tests. |
-| FV-P0-004 | Family-level schema tests | `P0` | All 15 families positive + invalid cases. |
-| FV-P0-005 | Family-level render smoke | `P0` | All 15 render/destroy deterministically in standalone repo. |
-| FV-P0-006 | Public API/package consumer contract | `P0` | Pack/install/load like a real external consumer. |
-| FV-P0-008 | Player/playhead API hardening | `P0` | Explicit play/pause/reset/seek/autoplay/reduced-motion ownership. |
-| FV-P0-007 | Stable JSON presentation options | `P0 after player` | Controlled theming/motion/density; avoid arbitrary CSS/SVG coordinates. |
-| FV-P0-009 | Versioning/compatibility policy | `P0` | Define additive/breaking StorySpec changes and publication criteria. |
-| FV-P1-009 | Cross-repository consumer proof | `P0 before public publish` | Rewire one independent consumer only after package parity and release gate. |
-
-**Do not broaden ForgeViz renderer scope while these remain materially incomplete.**
+| FV-P0-002 | AI/agent authoring guide | `P0` | Explain StorySpec/VisualizationSpec/families/states/transitions with compact examples. |
+| FV-P0-003 | Canonical fixture per 15 families | `P0` | Valid fixtures usable by docs/tests. |
+| FV-P0-004 | Family-level schema tests | `P0` | Positive + meaningful invalid cases for all families. |
+| FV-P0-005 | Family-level runtime smoke | `P0` | All 15 render/destroy deterministically; today direct standalone smoke is mainly ranking. |
+| FV-P0-006 | Public package contract | `P0` | Pack/install/import root + React adapter from an independent host. |
+| FV-P0-007 | Stable JSON presentation/theme options | `P0 after fixtures` | Declarative bounded options, backward-compatible, no arbitrary CSS/coordinates. |
+| FV-P0-008 | Player/playhead/autoplay/cadence contract | `P0` | play/pause/reset/seek/next/previous/speed/autoplay ownership; reduced motion; reconcile authored `intervalMs` vs host cadence. |
+| FV-P0-009 | Versioning/compatibility policy | `P0` | Additive/breaking schema policy, deprecations, publication criteria. |
+| FV-P0-010 | Cross-repository consumer rewire | `P0 before publish/delete duplication` | One exact ForgeViz package pin passes consumer release gate before embedded engine removal. |
+| FV-P0-011 | Public naming/namespace audit | `P0 before public branding/publish` | Check npm/product/domain/confusion risk; unrelated `vizforge.ai` exists. Do not publish under a confusing public identity without decision. |
 
 ---
 
-# 5. P1 — consumer/product improvements
+# 5. P1 — Formation
 
-## 5.1 Cloud Architecture
+Do not invent absent lessons/solutions/media.
 
-These are product/visual improvements informed by real usage. They do **not** authorize a new graph engine.
-
-| ID | Work | Owner | Acceptance |
-| --- | --- | --- | --- |
-| CA-P1-001 | Autoplay policy | FigurePlayer/consumer | Animation can start automatically where pedagogically useful; page-level and local pause exist; reduced motion remains respected. |
-| CA-P1-002 | Ambient data-flow motion | ConceptMotion/Diagram renderer | Continuous particles/dashes derived from semantic edge paths for batch/stream/CDC/control/lineage/error/retry roles. No authored coordinates. |
-| CA-P1-003 | Global playback preference | Datapass/consumer | One page preference can pause/disable visual motion without replacing per-Figure controls. |
-| CA-P1-004 | Spec/text inspector below visuals | Consumer/shared developer surface | Human/AI can inspect/copy the canonical JSON/text for each architecture Figure. Internal metadata stays in details surface. |
-| CA-P1-005 | Export UX | Figure/shared host | SVG remains canonical; add user-facing PNG adapter only if reliable without semantic-core coupling. |
-| CA-P1-006 | Semantic architecture color roles | Diagram theme | Bronze/Silver/Gold and similar roles should be presentation tokens, not hard-coded provider semantics in the engine. |
-| CA-P1-007 | JSON lab | Consumer/Visual Sandbox | Last-page editable examples for architecture/workflow specs; no point-and-click graph editor required. |
-| CA-P1-008 | Motion differentiation | Diagram/Workflow | Data flow, control flow, retry, error and state transition should not all look identical. |
-
-## 5.2 Formation
-
-| ID | Work | Status / acceptance |
+| ID | Work | Acceptance / boundary |
 | --- | --- |
-| FORM-P1-001 | Reproducible course corpus acquisition | Needed before clean hosted full-course release gate; preserve original supplied corpus, do not invent missing lessons. |
-| FORM-P1-002 | Table Trace adoption decision | Only after framework promotion; preserve canonical V4 Figures as useful alternate lens where appropriate. |
-| FORM-P1-003 | Code/rule synchronization | Reuse shared Table Trace code focus once canonical. |
-| FORM-P1-004 | Notebook media/source mapping | Keep safe, deterministic, non-executing import path. |
-| FORM-P1-005 | Sectioned lesson composition | Promote only if repeated consumer need justifies shared API; otherwise keep local. |
+| FORM-P1-001 | Reproducible real course-corpus materialization | Clean hosted full-course gate using actual supplied corpus; experiment synthetic notebook does not substitute for this. |
+| FORM-P1-002 | Table Trace adoption | Only after framework promotion; retain canonical V4 conceptual Figures where they provide a different useful lens. |
+| FORM-P1-003 | Code/rule synchronization | Use shared code-focus semantics once canonical. |
+| FORM-P1-004 | Sectioned/lazy notebook primitive | First-class H1/H3/section composition only if framework extraction remains clean and reusable. |
+| FORM-P1-005 | `SolutionReference` / gated source-cell contract | Relate exercise cells/IDs to solution sources without exposing corrections by default. |
+| FORM-P1-006 | Source-cell editorial classification | Add metadata such as learner-hidden/source-note/solution while preserving raw notebook bytes. |
+| FORM-P1-007 | Exercise -> solution provenance | Deterministic `exerciseId -> solution source` for 72 applied solution files. |
+| FORM-P1-008 | Safe local-media discovery helper | Optional Node/build helper; notebook importer stays pure/non-executing. |
+| FORM-P1-009 | Safe notebook image/media rendering | Render trusted local source media without arbitrary HTML execution. |
+| FORM-BLOCK-001 | 19 missing QueryBook image references | `SOURCE-BLOCKED` — acquire original sources later; never fabricate replacements as source material. |
 
-## 5.3 Visual Algorithms
+---
 
-| ID | Work | Status / acceptance |
+# 6. P1 — Visual Algorithms / technical educational visuals
+
+| ID | Work | Acceptance / boundary |
 | --- | --- |
-| VA-P1-001 | Table Trace adoption for six proven alternates | Only after framework promotion; canonical Figure remains default where semantically stronger. |
-| VA-P1-002 | Better algorithm choreography | Use shared compare/swap/pointer/operation cues before new renderer families. |
-| VA-P1-003 | Code highlighting | Synchronize active code line/rule with semantic motion. |
-| VA-P1-004 | Git-state teaching proof | Test existing Diagram/scene semantics first; create `graph.state` only if Git pointer/working-tree state cannot fit cleanly. |
-| VA-P1-005 | Cheat-sheet/static mode | Same semantic specs should remain useful without animation. |
+| VA-P1-001 | Adopt six proven Table Trace alternates | Only after framework promotion; canonical renderer remains default where stronger. |
+| VA-P1-002 | Better operation choreography | Reuse compare/swap/pointer/group/travel cues before another renderer family. |
+| VA-P1-003 | Code highlighting | Active code/rule synchronized with semantic state. |
+| VA-P1-004 | ExplanationTrack authoring helpers | Small pure helpers/state-label definitions/one-call validation; do not introduce another runtime. |
+| VA-P1-005 | Recursion/stack presentation hint | Optional orientation/stack semantics; `collection.flow` already solves DFS worklist. |
+| VA-P1-006 | Git/system-state proof | Try Diagram/scene semantics first; add `graph.state` only if pointer/working-tree/commit state cannot fit cleanly. |
+| VA-P1-007 | Database/system internals lessons | Teach OLTP/OLAP, WAL/page ordering, storage/compute separation, cache, immutable/delta/image concepts using existing semantic families first. |
+| VA-P1-008 | Static/animated parity | Cheat-sheet/static mode and reduced motion remain complete; animate causality/state, not trivial syntax. |
 
-## 5.4 Code Lab
+### Technical visual style rule
+
+White/near-white surfaces, neutral strong outlines, few semantic accents, direct labels, whitespace and monospace where useful. No blurry pastel/watercolor look; no decorative gradient/shadow by default. Color and motion communicate state/cause, not decoration.
+
+---
+
+# 7. P1 — Data Engineering Code Lab
 
 | ID | Work | Acceptance |
 | --- | --- |
-| CODE-P1-001 | External-consumer hardening rerun | Frozen install/typecheck/build/desktop/390px/accessibility; no fake execution. |
-| CODE-P1-002 | Review/mastery polish | Reuse shared progress; keep Code/Solution/Compare/hints/notes deterministic. |
-| CODE-P1-003 | Visual mapping truthfulness | Visual tab only when a real canonical Figure mapping exists. |
-| CODE-P1-004 | Large-corpus authoring/diagnostic tooling | Make 323/500 corpus easier for AI to extend without breaking deterministic IDs. |
+| CODE-P1-001 | Full external-consumer release rerun | Frozen install/typecheck/content/build/desktop/390px/keyboard/Axe/overflow, no fake execution. |
+| CODE-P1-002 | Portable practice-data entrypoint | Covered by DP-P0-003; consumer must not import monorepo-private source paths. |
+| CODE-P1-003 | Lightweight visual-availability metadata | Cheap `hasPracticeVisual`/equivalent without loading full Figure registry. |
+| CODE-P1-004 | Full visual resolver entrypoint | Load actual Figure only when Visualize is opened. |
+| CODE-P1-005 | Mapped-only Visualize UX | Hide/disable visual tab when no real mapping exists; no empty capability theater. |
+| CODE-P1-006 | Review/mastery/hints/notes polish | Reuse shared progress and Code/Solution/Compare; deterministic IDs. |
+| CODE-P1-007 | Corpus authoring/diagnostics | Make 323/500 extension safe for AI without weakening deterministic validation. |
 
-## 5.5 Norsk
+Hard boundary: no browser Spark/SQL/Python judge unless explicitly authorized later.
+
+---
+
+# 8. P1 — Norsk Tech & Work Vocabulary
+
+| ID | Work | Acceptance / boundary |
+| --- | --- |
+| NO-P1-001 | Full external release rerun | Frozen production gate when environment is reproducible. |
+| NO-P1-002 | Arbitrary lexical language map | BCP-47 lexical translations independent of EN/NO UI locale; support Bokmål + English + French cleanly. |
+| NO-P1-003 | Entity-neutral mastery/review primitive | Promote only if reuse beyond vocabulary is demonstrated. |
+| NO-P1-004 | Source-less KnowledgeEntry guidance | Document taxonomy/reference entries that legitimately have no external source. |
+| NO-P1-005 | Optional content-validator CLI | Extract only if multiple consumers repeat the need. |
+| NO-P1-006 | Common-life vocabulary later | Additive future content path; initial professional themes remain stable. |
+| NO-BOUNDARY-001 | Audio/pronunciation | No invented audio/pronunciation. |
+
+Dense trilingual row presentation remains local unless repeated elsewhere.
+
+---
+
+# 9. P1 — Portfolio Consumer Lab
 
 | ID | Work | Acceptance |
 | --- | --- |
-| NO-P1-001 | External consumer release rerun | Frozen production gate. |
-| NO-P1-002 | Entity-neutral learning state | Candidate shared progress capability only if reuse beyond vocabulary is proven. |
-| NO-P1-003 | Lexical translation mapping | Bokmål + EN + FR content without confusing lexical translation with UI locale. |
-| NO-P1-004 | Keep compact scope | No invented audio/pronunciation/runtime. |
+| PF-P1-001 | Separate preview release | Never overwrite `datapassj.com` without explicit authorization. |
+| PF-P1-002 | Portable public ProjectRegistry | Covered by DP-P0-003; stable external entrypoint. |
+| PF-P1-003 | Pure ProjectRegistry -> Galaxy helper | Promote only if repeated; deterministic semantic mapping only. |
+| PF-P1-004 | Cross-repo `portfolio-hub` scaffold | External-repository mode without monorepo assumptions. |
+| PF-P1-005 | Optional Galaxy recipe discoverability | Make capability easy for agents without forcing it into every portfolio. |
+| PF-P1-006 | Responsive/static proof | Desktop + 390px + keyboard/Axe/no overflow and wide-Figure legibility policy. |
 
-## 5.6 Portfolio
+Career timeline, personal routing and product-specific CSS remain consumer-local.
+
+---
+
+# 10. P1 — Cloud Architecture product improvements
+
+These preserve WorkflowSpec/DiagramSpec; no new graph engine.
 
 | ID | Work | Acceptance |
 | --- | --- |
-| PF-P1-001 | Separate preview deployment | Never overwrite `datapassj.com` without explicit authorization. |
-| PF-P1-002 | ProjectRegistry -> Galaxy helper | Promote only as pure deterministic mapping if repeated. |
-| PF-P1-003 | Responsive/static release proof | Desktop + 390px + keyboard/Axe/no overflow. |
+| CA-P1-001 | Pedagogical autoplay | Useful behavior starts automatically where appropriate; reduced motion respected. |
+| CA-P1-002 | Local + page/global pause | One preference can pause/disable motion while local controls remain available. |
+| CA-P1-003 | Ambient semantic data-flow | Edge-derived particles/dashes; no authored geometry. |
+| CA-P1-004 | Distinct flow/motion roles | Batch, stream, CDC, control, retry/error/state change do not all animate identically. |
+| CA-P1-005 | Canonical JSON/text below visual | Copy/edit/inspect production semantic spec in developer/AI-friendly surface. |
+| CA-P1-006 | Export UX | SVG canonical; PNG through reliable host adapter, not semantic-core rasterization. |
+| CA-P1-007 | Semantic architecture colors | Bronze/Silver/Gold and similar roles are theme/presentation tokens. |
+| CA-P1-008 | JSON visual lab | Editable sample architectures/workflows; no point-and-click editor required. |
+| CA-P1-009 | Provider logo/icon strategy | Official icons/logos only with documented source/licensing/fallback; semantic fallback icons remain valid. |
 
 ---
 
-# 6. P1 — ForgeViz differentiated features
+# 11. P1 — ForgeViz differentiated product value
 
-These are the features that make ForgeViz worth owning rather than replacing it with ordinary chart libraries.
-
-| ID | Feature | Priority | Acceptance principle |
-| --- | --- | --- | --- |
-| FV-P1-001 | Event-annotated time-series | `P1` | Reusable across finance, BI KPI changes, pipeline incidents, releases and learning telemetry. Semantic events, not finance-only hard-coding. |
-| FV-P1-002 | Richer deterministic story choreography | `P1` | Reusable scene/focus/camera/annotation timing primitives; no generic video editor. |
-| FV-P1-003 | Spec inspector / diagnostics | `P1` | AI-friendly normalized spec + structured validation errors. |
-| FV-P1-004 | JSON authoring playground | `P1` | Source is canonical; edit/validate/render/inspect; not point-and-click state. |
-| FV-P1-005 | Export contract | `P1` | SVG first, PNG through adapter/host. |
-| FV-P1-006 | Accessibility breadth | `P1` | Meaningful summaries/fallbacks for all families. |
-| FV-P1-007 | Visual regression harness | `P1` | Representative desktop/narrow deterministic references. |
-| FV-P1-008 | React adapter integration proof | `P1` | Packed package in clean React host with lifecycle/timer cleanup. |
-
----
-
-# 7. P1 — DataForge Learn / Data Execution Atlas
-
-This is a **learning consumer only**, not a monitoring/observability product.
-
-| ID | Capability | Owner | Notes |
-| --- | --- | --- | --- |
-| DF-P1-001 | Logical -> physical execution lesson model | Consumer + ConceptMotion | SQL/pandas/Polars/PySpark operation -> physical operators. |
-| DF-P1-002 | Partitions/shuffle/skew/spill/cache visuals | ConceptMotion | Reuse Table Trace/collection/workflow semantics before new family. |
-| DF-P1-003 | Before/after performance evidence | ForgeViz | Histograms/time-series/distributions for teaching, not live telemetry. |
-| DF-P1-004 | Provider lenses | Consumer | Spark/Databricks/BigQuery/Fabric/Snowflake/DuckDB, conceptual and source-grounded. |
-| DF-P1-005 | Event annotations | ForgeViz | Show deployment/schema/repartition/cache events on metrics as educational fixtures. |
-| DF-P1-006 | ExecutionPlanSpec decision | DEFER until consumer evidence | Add only if WorkflowSpec/DiagramSpec cannot represent operators without semantic distortion. |
-| DF-P1-007 | No connectors/credentials | Hard boundary | No production monitoring, alerts, warehouse credentials or billing/telemetry backend. |
-
----
-
-# 8. P2 — measured technical exploration
-
-These are useful only after P0/P1 stabilization.
-
-| ID | Work | Decision gate |
+| ID | Feature | Acceptance principle |
 | --- | --- | --- |
-| EXP-P2-001 | D3FC SVG/Canvas/WebGL benchmark | Compare selected ForgeViz families under measured dense-data fixtures before writing our own alternate renderer. |
-| EXP-P2-002 | ECharts commodity/high-volume route | Use for ordinary dashboards/high-volume charts when it is clearly cheaper than ForgeViz; do not wrap merely for ownership. |
-| EXP-P2-003 | deck.gl geo proof | One serious temporal path/map story using StorySpec adapter; do not build custom map engine. |
-| EXP-P2-004 | Motion host/story experiment | Use only for page/story choreography where native WAAPI/D3 is insufficient; semantic state remains ours. |
-| EXP-P2-005 | Power BI `.pbiviz` proof | Thin Power BI host around framework-neutral ForgeViz engine; compare against Deneb before claiming differentiated value. |
-| EXP-P2-006 | Jupyter anywidget adapter proof | Optional thin host around JS engine; no Python rewrite. |
-| EXP-P2-007 | AI-vs-raw-stack benchmark | Compare AI implementation effort/quality for SQL join, retry/backfill, editorial ranking and ordinary dashboard using our stack vs normal libraries. |
+| FV-P1-001 | Event-annotated time series | General events for finance/BI/pipeline/releases, not finance-only hard-coding. |
+| FV-P1-002 | Richer deterministic story choreography | Reusable scene/focus/camera/annotation timing; no video-editor state. |
+| FV-P1-003 | Spec inspector/structured diagnostics | Normalized spec + AI-consumable validation issues. |
+| FV-P1-004 | JSON/text authoring playground | Source canonical; edit/validate/render/inspect; no point-and-click requirement. |
+| FV-P1-005 | Export contract | SVG first; PNG adapter/host. |
+| FV-P1-006 | All-family accessibility | Meaningful summary/data fallback semantics. |
+| FV-P1-007 | Visual regression matrix | Representative desktop/narrow/reduced-motion families. |
+| FV-P1-008 | React adapter integration proof | Packed package lifecycle/timer cleanup in clean host. |
+| FV-P1-009 | Responsive wide-scene behavior | Coordinate with shared Figure legibility strategy. |
+
+Existing event-map/geo support and real-data flagships are retained. GeoStory is later expansion, not a prerequisite for geography.
 
 ---
 
-# 9. Deferred V5 / future work
+# 12. P1 — DataForge Learn / Data Execution Atlas
 
-Tracked so ideas are not lost, but **do not start during current V4 stabilization unless explicitly re-authorized**.
+Learning consumer only; not a production observability tool.
 
-| ID | Item | Reason deferred |
+| ID | Capability | Notes |
 | --- | --- | --- |
-| V5-D-001 | `@datapass/charts` | Commodity chart problem is already well served; ForgeViz exists as specialized analytical layer. Revisit after consumer evidence. |
-| V5-D-002 | GeoStory / Visual Factory | Needs serious geo consumer + backend routing decision first. |
-| V5-D-003 | Earthquake temporal story family | Valuable flagship, but derive from generic time/map/story primitives. |
-| V5-D-004 | Paris/city flood story family | Same. |
-| V5-D-005 | Actor/movie movement map story | Same. |
-| V5-D-006 | Power BI D3 adapter/general generator | Start only after one narrow `.pbiviz` proof and Deneb comparison. |
-| V5-D-007 | Canvas renderer | Only after benchmarked SVG limits. |
-| V5-D-008 | WebGL renderer | Only after benchmark and D3FC/ECharts/deck.gl evaluation. |
-| V5-D-009 | Scroll-driven storytelling system | Need host/engine ownership proof first. |
-| V5-D-010 | Jupyter/Python productization | Low priority; adapter proof only. |
-| V5-D-011 | Universal visual grammar | Vega/Vega-Lite already own generic chart grammar. Our grammars remain bounded to semantic teaching/story problems. |
-| V5-D-012 | Generic monitoring/observability product | Outside learning-platform thesis; would introduce connectors/auth/alerts/backend/security. |
-| V5-D-013 | Universal code judge/runtime | Outside current scope; costly and easy to misrepresent. |
-| V5-D-014 | Point-and-click universal visual editor | JSON/source-first authoring is the project direction. |
+| DF-P1-001 | Logical -> physical execution lessons | SQL/pandas/Polars/PySpark operation to physical behavior. |
+| DF-P1-002 | Partition/shuffle/skew/spill/cache visuals | Reuse Table Trace/collection/workflow/diagram before new family. |
+| DF-P1-003 | Performance before/after evidence | ForgeViz histograms/time series/distributions using static educational fixtures. |
+| DF-P1-004 | Provider lenses | Spark/Databricks/BigQuery/Fabric/Snowflake/DuckDB; source-grounded. |
+| DF-P1-005 | Event annotations | Deployment/schema/repartition/cache events on metrics as lessons. |
+| DF-P1-006 | ExecutionPlanSpec decision | `DEFERRED` until consumer proves Workflow/Diagram cannot model operators truthfully. |
+| DF-BOUNDARY-001 | Connectors/credentials/alerts | No production monitoring, billing/telemetry backend or warehouse credentials. |
 
 ---
 
-# 10. Explicitly rejected architectural moves
+# 13. P2 — measured specialist/library experiments
 
-- Rebuild the entire platform in vanilla JS.
-- Let D3 own the whole React application DOM.
-- Merge ConceptMotion and ForgeViz into one universal renderer.
-- Build another generic graph engine inside ConceptMotion.
-- Add React Flow to core merely because it is good for editors.
-- Use Canvas/WebGL as a prestige feature rather than a measured requirement.
-- Make every consumer dependency a new repository.
-- Copy the full framework monorepo into each consumer.
-- Modify vendored framework source inside consumers to make them pass.
-- Treat visual animation as mandatory for trivial syntax.
-- Treat product-specific Bronze/Silver/Gold/provider conventions as universal engine semantics.
+Do these only after P0/P1 authoring/distribution work.
 
----
-
-# 11. Recommended execution order
-
-### Now
-
-1. Table Trace promotion decision.
-2. Canonical current-doc index and AI capability discovery.
-3. External packaging/bootstrap reduction.
-4. ForgeViz P0 fixtures/tests/authoring guide.
-5. ConceptMotion code/rule synchronization.
-
-### Then
-
-6. Cloud Architecture product-level motion/spec/export pass.
-7. Complete external Code Lab/Norsk/Portfolio hardening evidence.
-8. DataForge Learn vertical slice as the first deliberate ConceptMotion + ForgeViz cross-engine consumer.
-9. ForgeViz event-annotated time series and story/playhead hardening.
-
-### Only after evidence
-
-10. D3FC/ECharts high-volume benchmark.
-11. deck.gl geo proof.
-12. Power BI `.pbiviz` proof against Deneb baseline.
-13. Optional anywidget/Jupyter adapter.
+| ID | Experiment | Decision gate |
+| --- | --- | --- |
+| EXP-P2-001 | D3FC SVG/Canvas/WebGL benchmark | Measure representative ForgeViz dense families before custom backend. |
+| EXP-P2-002 | D3plus v4 scene-graph/backend benchmark | Compare serializable scene graph, SVG/Canvas backend and accessibility ideas; adapt only if it reduces our maintenance cost. |
+| EXP-P2-003 | ECharts commodity/high-volume routing | Use directly for standard dashboards/high-volume cases; do not wrap without differentiated value. |
+| EXP-P2-004 | ELK/elkjs layout adapter | Test layout-only integration before writing more custom DAG/architecture layout. |
+| EXP-P2-005 | Cytoscape.js graph consumer proof | Only for rich graph analysis/interaction beyond current explanatory specs. |
+| EXP-P2-006 | Sigma.js large-network proof | Only for measured large network need. |
+| EXP-P2-007 | deck.gl + MapLibre serious geo proof | Future scalable temporal maps/basemap; do not replace small SVG schematic maps. |
+| EXP-P2-008 | Power BI `.pbiviz` ForgeViz proof | One differentiated story; compare against Deneb/Vega-Lite first. |
+| EXP-P2-009 | anywidget/Jupyter thin adapter | Only if a notebook-host consumer appears; no Python rewrite. |
+| EXP-P2-010 | GSAP choreography proof | Only if WAAPI/Motion/D3 cannot express required host/story timing cleanly. |
+| EXP-P2-011 | PixiJS GPU 2D proof | Only after measured non-geo high-shape-count need. |
+| EXP-P2-012 | Pyodide/pandas/SQL trace adapter | Low priority; optional trace producer after semantic specs are stable, never prerequisite for authoring. |
+| EXP-P2-013 | AI productivity benchmark | Compare new consumer work using Datapass/ConceptMotion/ForgeViz vs ordinary React/library stack; measure code/reuse/QA friction. |
 
 ---
 
-# 12. Maintenance rule
+# 14. QA / release-engineering maintenance debt
 
-When a pass changes project status:
+| ID | Work | Priority |
+| --- | --- | --- |
+| QA-M-001 | GitHub Actions Node runtime deprecation cleanup | Maintenance; do not mix with feature pass unless necessary. |
+| QA-M-002 | React `act()` / Keyborg stderr cleanup | Maintenance; preserve assertions. |
+| QA-M-003 | Monaco lazy chunk measurement | Track; optimize only with evidence because it remains lazy and policy checks pass. |
+| QA-M-004 | Physical-device / broader browser coverage | P2 unless a consumer requires it; current automated emphasis is Chromium desktop + phone. |
+| QA-M-005 | Consumer release-status accuracy | Always distinguish source/audit/experiment/full release evidence. |
 
-1. update this file only for project-level priority/status changes;
-2. update the subsystem backlog/report where implementation lives;
-3. append the major pass to `PROJECT_PASS_LOG.md` if it materially changes architecture, evidence or release status;
-4. preserve old audit files as historical evidence rather than rewriting history;
-5. record exact commit/run evidence for anything marked `PROVEN` or `PROMOTION CANDIDATE`.
+---
+
+# 15. Deferred V5 / later systems
+
+Tracked so they are not forgotten; not authorized by this backlog alone.
+
+| ID | Work | Status / trigger |
+| --- | --- | --- |
+| D-V5-001 | `@datapass/charts` / Visual Factory | `DEFERRED` until consumer need exceeds direct Plot/ECharts/Vega/ForgeViz routing. |
+| D-V5-002 | GeoStory reusable system | `DEFERRED` until geo adapter/backend proof. |
+| D-V5-003 | Earthquake temporal geo flagship | `DEFERRED`; validate generic geo/time/story primitives first. |
+| D-V5-004 | City/Paris flood narrative | `DEFERRED`; same. |
+| D-V5-005 | Actor/movie movement story | `DEFERRED`; same. |
+| D-V5-006 | Generalized Power BI visual generation | `DEFERRED` until one differentiated `.pbiviz` proof and Deneb comparison. |
+| D-V5-007 | D3 -> Power BI adapter system | `DEFERRED`. |
+| D-V5-008 | Canvas/WebGL engine | `DEFERRED` until D3FC/ECharts/Pixi measurements fail requirements. |
+| D-V5-009 | Scroll-driven storytelling system | `DEFERRED` until StorySpec host responsibility is stable. |
+| D-V5-010 | Jupyter/Python adapter product | `DEFERRED`; thin host only after JS package contract proof. |
+
+---
+
+# 16. Explicitly rejected/current hard boundaries
+
+- backend/auth/cloud sync for the learning framework;
+- production monitoring/observability platform inside DataForge Learn;
+- fake in-browser Spark/SQL/Python execution;
+- universal code judge;
+- universal generic graph engine;
+- universal declarative chart grammar competing with Vega;
+- point-and-click universal diagram/chart editor;
+- arbitrary authored SVG coordinates as the normal AI API;
+- consumer apps importing Monaco directly;
+- framework hard-coding provider concepts such as Bronze/Silver/Gold into semantic core;
+- more repositories for ForgeViz core/renderers/React adapter without independent release-cycle evidence.
+
+---
+
+# 17. Recommended order of work
+
+Unless a concrete defect changes priority:
+
+1. Decide Table Trace promotion explicitly.
+2. Build the real external package + portable canonical-content path.
+3. Finish single-pin/bootstrap/scaffold closure.
+4. Add AI capability registry, concise authoring pack and renderer-selection guide.
+5. Solve repeated wide technical Figure mobile legibility.
+6. Add synchronized code/rule focus to proven Table Trace rather than new visual families.
+7. Complete ForgeViz P0 authorability/all-family/package/playhead/naming/cross-repo proof.
+8. Rerun/adopt consumers one by one with real source material and their own release gates.
+9. Improve consumer product/pedagogy: CloudArchi motion/spec/export, Formation solution/media metadata, VisualAlgo helpers, CodeLab visual entry points, Norsk lexical/progress, Portfolio portability.
+10. Run only measured P2 specialist experiments.
+11. Recompare consumer `FRAMEWORK_GAPS.md` files before defining any next framework generation.
+
+---
+
+# 18. Documentation discipline
+
+Every material pass must:
+
+1. update subsystem-local backlog/report first;
+2. record date/model/base/result commits and actual gates in the appropriate pass log;
+3. update this master backlog if project status/priority changed;
+4. preserve historical audits rather than rewriting history;
+5. keep release evidence labels conservative;
+6. never invent absent source material;
+7. never silently change framework/consumer pins.
